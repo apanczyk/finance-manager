@@ -1,6 +1,7 @@
 import React from 'react';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,22 +9,30 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import MenuIcon from '@material-ui/icons/Menu';
 
-type Anchor = 'left' | 'right';
 
-export default function Drawer() {
+const useStyles = makeStyles({
+    list: {
+        width: 250,
+    },
+    fullList: {
+        width: 'auto',
+    },
+});
+
+type Anchor = 'left';
+
+export default function TemporaryDrawer() {
+    const classes = useStyles();
     const [state, setState] = React.useState({
-        // top: false,
-        left: false,
-        // bottom: false,
-        right: false
+        left: false
     });
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (
         event: React.KeyboardEvent | React.MouseEvent,
     ) => {
         if (
-            event &&
             event.type === 'keydown' &&
             ((event as React.KeyboardEvent).key === 'Tab' ||
                 (event as React.KeyboardEvent).key === 'Shift')
@@ -38,8 +47,8 @@ export default function Drawer() {
         <div
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
         >
-            ////////////////////////////////////////////////////
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem button key={text}>
@@ -62,19 +71,16 @@ export default function Drawer() {
 
     return (
         <div>
-            {(['left', 'right'] as Anchor[]).map((anchor) => (
-                <React.Fragment key={anchor}>
-                    <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-                    <SwipeableDrawer
-                        anchor={anchor}
-                        open={state[anchor]}
-                        onClose={toggleDrawer(anchor, false)}
-                        onOpen={toggleDrawer(anchor, true)}
-                    >
-                        {list(anchor)}
-                    </SwipeableDrawer>
-                </React.Fragment>
-            ))}
+            {(['left'] as Anchor[]).map((anchor) => {
+                return (
+                    <React.Fragment key={anchor}>
+                        <MenuIcon onClick={toggleDrawer(anchor, true)} />
+                        <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                            {list(anchor)}
+                        </Drawer>
+                    </React.Fragment>
+                );
+            })}
         </div>
     );
 }
