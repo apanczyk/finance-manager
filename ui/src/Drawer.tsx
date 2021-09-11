@@ -1,6 +1,5 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -10,16 +9,24 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
 
 
-const useStyles = makeStyles({
-    list: {
-        width: 250,
-    },
-    fullList: {
-        width: 'auto',
-    },
-});
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+
+        list: {
+            width: 250,
+        },
+        menuButton: {
+            marginRight: theme.spacing(2),
+        },
+        fullList: {
+            width: 'auto',
+        },
+    }),
+);
 
 type Anchor = 'left';
 
@@ -30,16 +37,8 @@ export default function TemporaryDrawer() {
     });
 
     const toggleDrawer = (anchor: Anchor, open: boolean) => (
-        event: React.KeyboardEvent | React.MouseEvent,
+        event: React.MouseEvent,
     ) => {
-        if (
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' ||
-                (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-            return;
-        }
-
         setState({ ...state, [anchor]: open });
     };
 
@@ -47,7 +46,6 @@ export default function TemporaryDrawer() {
         <div
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
         >
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
@@ -74,7 +72,9 @@ export default function TemporaryDrawer() {
             {(['left'] as Anchor[]).map((anchor) => {
                 return (
                     <React.Fragment key={anchor}>
-                        <MenuIcon onClick={toggleDrawer(anchor, true)} />
+                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={toggleDrawer(anchor, true)}>
+                            <MenuIcon />
+                        </IconButton>
                         <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
                             {list(anchor)}
                         </Drawer>
