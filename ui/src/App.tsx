@@ -3,12 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import NavBar from './NavBar';
 import FinanceTable from './Table';
+import EnhancedTable from './NewTable';
 
 function App() {
   return (
     <div className="App">
       <NavBar />
-      <FinanceTable/>
+      {/* <FinanceTable/> */}
+      <EnhancedTable/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
