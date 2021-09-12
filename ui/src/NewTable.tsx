@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import api from '../src/api'
+import { ThumbDown } from '@material-ui/icons';
 
 interface Data {
     calories: number;
@@ -209,7 +211,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EnhancedTable() {
+this.state = {
+    operations: []
+}
+
+    function componentDidMount() {
+        api.get("/operations").then(response => this.setState({
+            
+        }))
+    }
+
+export default function EnhancedTable() {    
+
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
