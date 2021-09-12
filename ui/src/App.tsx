@@ -1,8 +1,6 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import NavBar from './NavBar';
-import FinanceTable from './Table';
 import EnhancedTable from './NewTable';
 
 function App() {
