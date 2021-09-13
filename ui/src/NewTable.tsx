@@ -11,6 +11,16 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import api from './api/api'
+import { ThumbDown } from '@material-ui/icons';
+
+interface Operation {
+    name: string;
+    amount: number;
+    place: string;
+}
+
+export type TOperationList = Operation[]
 
 interface Data {
     calories: number;
@@ -112,7 +122,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    
+
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -209,7 +219,9 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
 export default function EnhancedTable() {
+
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
@@ -279,7 +291,7 @@ export default function EnhancedTable() {
                                         // aria-checked={isItemSelected}
                                         tabIndex={-1}
                                         key={row.name}
-                                        // selected={isItemSelected}
+                                    // selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
                                             {/* <Checkbox
