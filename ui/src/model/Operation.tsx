@@ -1,6 +1,6 @@
 export default interface Operation {
     id?: any | null,
     name: string,
-    amount: number,
+    amount?: number | null,
     place: string,
 }
