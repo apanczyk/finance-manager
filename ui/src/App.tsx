@@ -1,32 +1,40 @@
 import logo from './logo.svg';
 import './App.css';
-import NavBar from './NavBar';
+import NavBar from './fragments/NavBar';
 import EnhancedTable from './NewTable';
 import OperationList from './model/OperationList';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom'
+import AddOperation from './routes/AddOperation';
 
 function App() {
   return (
-    <div className="App">
-      <NavBar />
-      {/* <FinanceTable/> */}
-      <EnhancedTable />
-      <OperationList />
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <NavBar />
+        <EnhancedTable />
+        <OperationList />
+        <Switch>
+          <Route exact path="/add" component={AddOperation} />
+        </Switch>
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+      </div>
+    </Router>
   );
 }
 
 export default App;
+
+  //      {/* <Route exact path="/add" component={AddOperation} />
+
+  //     </Switch>
+  //     <NavBar />
+  //     {/* <FinanceTable/> */}
+  //     <EnhancedTable />
+  //     <OperationList />
+  // */}

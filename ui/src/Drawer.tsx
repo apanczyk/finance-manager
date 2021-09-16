@@ -3,9 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
-import { IconButton, ListItemText, ListItemIcon, Divider, ListItem, List, Drawer } from '@material-ui/core'
-
-
+import { IconButton, ListItemText, ListItemIcon, Divider, ListItem, List, Drawer, Link } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +40,12 @@ export default function TemporaryDrawer() {
             onClick={toggleDrawer(anchor, false)}
         >
             <List>
+                <ListItem button component={Link} href="/add">
+                    <ListItemIcon><InboxIcon /></ListItemIcon>
+                    <ListItemText primary={`Google`} />
+                    {/* </Link> */}
+
+                </ListItem>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem button key={text}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
