@@ -94,7 +94,7 @@ class AddOperation extends Component<Props, State> {
         return (
             <React.Fragment>
                 <form noValidate autoComplete="off" >
-                    <TextField id="amount" label="Amount" value={amount} onChange={this.onChangeAmount} type="number" variant="filled" />
+                    <TextField id="amount" label="Amount" value={amount} onChange={this.onChangeAmount} variant="filled" />
                     <TextField id="name" label="Name" value={name} onChange={this.onChangeName} variant="filled" />
                     <TextField id="place" label="Place" value={place} onChange={this.onChangePlace} variant="filled" />
                 </form>
