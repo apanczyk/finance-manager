@@ -46,7 +46,7 @@ export default class OperationList extends Component<Props, State> {
                                 }
                                 key={index}
                             >
-                                {operation.name}
+                                {operation.name} {operation.place} {operation.amount} {operation.id}
                             </li>
                         ))}
                 </ul>

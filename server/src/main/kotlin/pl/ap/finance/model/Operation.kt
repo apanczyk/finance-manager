@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 @Document
 data class Operation(
     @Id
-    val id: ObjectId = ObjectId.get(),
+    val id: String = ObjectId.get().toString(),
     val name: String,
     val amount: Double,
     val date: LocalDateTime = LocalDateTime.now(),
