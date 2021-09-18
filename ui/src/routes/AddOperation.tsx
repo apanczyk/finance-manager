@@ -1,8 +1,8 @@
 import { Component, ChangeEvent } from "react";
 import DataService from "../api/DataService"
 import Operation from "../model/Operation";
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Button, Input, Switch, TextField, WithStyles, withStyles } from "@material-ui/core";
+import { createStyles } from '@material-ui/core/styles';
+import { Button, TextField, WithStyles, withStyles } from "@material-ui/core";
 import React from "react";
 
 const styles = (theme: any) => createStyles({

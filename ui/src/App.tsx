@@ -9,6 +9,7 @@ import {
   Route,
 } from 'react-router-dom'
 import AddOperation from './routes/AddOperation';
+import DeleteOperation from './routes/DeleteOperation';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <OperationList />
         <Switch>
           <Route exact path="/add" component={AddOperation} />
+          <Route exact path="/delete/:operationId" component={DeleteOperation} />
         </Switch>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
