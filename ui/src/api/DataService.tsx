@@ -3,15 +3,15 @@ import api from "./api";
 
 class DataService {
     getAll() {
-        return api.get(`/operations`)
+        return api.get(`/api/operations`)
     }
 
     create(data: Operation) {
-        return api.post(`/operations`, data)
+        return api.post(`/api/operations`, data)
     }
 
     delete(id: string) {
-        return api.delete(`/operations/${id}`)
+        return api.delete(`/api/operations/${id}`)
     }
 }
 export default new DataService();
