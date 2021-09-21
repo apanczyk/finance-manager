@@ -9,7 +9,7 @@ import pl.ap.finance.repository.OperationsRepository
 import pl.ap.finance.request.OperationRequest
 
 @RestController
-@RequestMapping("/operations")
+@RequestMapping("/api/operations")
 class OperationsController(val operationsRepository: OperationsRepository) {
 
     @GetMapping
