@@ -1,14 +1,14 @@
 package pl.ap.finance.model
 
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
+import javax.persistence.*
 
-@Document
-data class User(
+@Entity
+@Table(name = "users")
+class User(
     @Id
-    val id: String = ObjectId.get().toString(),
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
     val firstName: String,
     val lastName: String,
     val email: String,

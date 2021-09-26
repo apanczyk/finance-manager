@@ -1,13 +1,10 @@
 version: "3.7"
 services:
-  mongodb:
-    image : mongo
-    container_name: mongodb
-    environment:
-    - PUID=1000
-    - PGID=1000
-    volumes:
-    - /home/barry/mongodb/database:/data/db
+  postgres:
+    image: postgres:latest
     ports:
-    - 27017:27017
-    restart: unless-stopped
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finance
