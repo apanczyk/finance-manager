@@ -1,9 +1,8 @@
 package pl.ap.finance.repository
 
-import org.bson.types.ObjectId
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import pl.ap.finance.model.Operation
 
-interface OperationsRepository : MongoRepository<Operation, String> {
-    fun findOneById(id: ObjectId): Operation
+interface OperationsRepository : JpaRepository<Operation, Long> {
+    fun findOneById(id: Long): Operation
 }

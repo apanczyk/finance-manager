@@ -1,12 +1,10 @@
 package pl.ap.finance.controller
 
-import org.bson.types.ObjectId
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.Operation
 import pl.ap.finance.repository.OperationsRepository
-import pl.ap.finance.request.OperationRequest
 
 @RestController
 @RequestMapping("/api/operations")
@@ -19,13 +17,13 @@ class OperationsController(val operationsRepository: OperationsRepository) {
     }
 
     @GetMapping("/{id}")
-    fun getOneOperation(@PathVariable("id") id: String): ResponseEntity<Operation> {
-        val operation = operationsRepository.findOneById(ObjectId(id))
+    fun getOneOperation(@PathVariable("id") id: Long): ResponseEntity<Operation> {
+        val operation = operationsRepository.findOneById(id)
         return ResponseEntity.ok(operation)
     }
 
     @PostMapping
-    fun createOperation(@RequestBody request: OperationRequest): ResponseEntity<Operation> {
+    fun createOperation(@RequestBody request: Operation): ResponseEntity<Operation> {
         val operation = operationsRepository.save(Operation(
             name = request.name,
             amount = request.amount,
@@ -35,7 +33,7 @@ class OperationsController(val operationsRepository: OperationsRepository) {
     }
 
     @DeleteMapping("/{id}")
-    fun deleteOperation(@PathVariable("id") id: String): ResponseEntity<Operation> {
+    fun deleteOperation(@PathVariable("id") id: Long): ResponseEntity<Operation> {
         operationsRepository.deleteById(id)
         return ResponseEntity.ok().build()
     }
