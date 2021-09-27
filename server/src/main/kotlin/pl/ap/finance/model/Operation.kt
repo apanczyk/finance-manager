@@ -12,5 +12,20 @@ class Operation(
     val name: String,
     val amount: Double,
     val place: String,
-    val date: LocalDateTime = LocalDateTime.now()
-)
+    val date: LocalDateTime = LocalDateTime.now(),
+    @ManyToOne(fetch = FetchType.LAZY)
+    var _wallet: Wallet? = null,
+) {
+    var wallet: Wallet?
+        get() = _wallet
+        set(wallet) {
+            if(wallet == null) {
+                _wallet?.removeOperation(this)
+            } else {
+                wallet.addOperation(this)
+            }
+            _wallet = wallet
+        }
+
+
+}

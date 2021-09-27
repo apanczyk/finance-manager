@@ -22,7 +22,9 @@ class Wallet(
         inverseJoinColumns = [JoinColumn(name = "user_id")]
     )
     @JsonIgnoreProperties("wallets")
-    val users: MutableSet<User> = mutableSetOf()
+    val users: MutableSet<User> = mutableSetOf(),
+    @OneToMany(mappedBy = "_wallet", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
+    val operations: MutableSet<Operation> = mutableSetOf()
 ) {
     fun addUser(user: User) {
         if (!users.contains(user)) {
@@ -35,6 +37,20 @@ class Wallet(
         if (users.contains(user)) {
             users.remove(user)
             user.removeWallet(this)
+        }
+    }
+
+    fun addOperation(operation: Operation) {
+        if (!operations.contains(operation)) {
+            operations.add(operation)
+            operation.wallet = this
+        }
+    }
+
+    fun removeOperation(operation: Operation) {
+        if(operations.contains(operation)) {
+            operations.remove(operation);
+            operation.wallet = null
         }
     }
 }

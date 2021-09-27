@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.Operation
+import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.repository.OperationRepository
 
 @RestController
@@ -23,7 +24,7 @@ class OperationController(val operationsRepository: OperationRepository) {
     }
 
     @PostMapping
-    fun createOperation(@RequestBody request: Operation): ResponseEntity<Operation> {
+    fun createOperation(@RequestBody request: OperationDto): ResponseEntity<Operation> {
         val operation = operationsRepository.save(Operation(
             name = request.name,
             amount = request.amount,
