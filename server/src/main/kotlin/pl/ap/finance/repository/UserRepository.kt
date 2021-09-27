@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository
 import pl.ap.finance.model.User
 
 @Repository
-interface UserRepository : JpaRepository<User, Long>
+interface UserRepository : JpaRepository<User, Long> {
+    fun findUserByEmail(email: String): User?
+}
