@@ -21,7 +21,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     lateinit var userAuthService: UserAuthService
 
-    @Throws(java.lang.Exception::class)
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
         http.headers().disable()
@@ -45,7 +44,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         return BCryptPasswordEncoder()
     }
 
-    @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userAuthService).passwordEncoder(passwordEncoder())
     }

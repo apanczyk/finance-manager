@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.Operation
-import pl.ap.finance.repository.OperationsRepository
+import pl.ap.finance.repository.OperationRepository
 
 @RestController
 @RequestMapping("/api/operations")
-class OperationsController(val operationsRepository: OperationsRepository) {
+class OperationController(val operationsRepository: OperationRepository) {
 
     @GetMapping
     fun getAllOperations(): ResponseEntity<List<Operation>> {

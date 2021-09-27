@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import pl.ap.finance.IntegrationTest
 import pl.ap.finance.exceptions.EmailExistsException
 import pl.ap.finance.repository.UserRepository
-import pl.ap.finance.security.UserService
+import pl.ap.finance.service.UserService
 import pl.ap.finance.util.TestData.Companion.EMAIL
 import pl.ap.finance.util.TestData.Companion.FIRST_NAME
 import pl.ap.finance.util.TestData.Companion.LAST_NAME
 import pl.ap.finance.util.TestData.Companion.USER
+import pl.ap.finance.util.TestData.Companion.WALLET
 
 @IntegrationTest
 class UserIT {
@@ -38,9 +39,9 @@ class UserIT {
         val response = userRepository.findById(result.id).get()
 
         //then
-        assertThat(FIRST_NAME).isEqualTo(response.firstName)
-        assertThat(LAST_NAME).isEqualTo(response.lastName)
-        assertThat(EMAIL).isEqualTo(response.email)
+        assertThat(response.firstName).isEqualTo(FIRST_NAME)
+        assertThat(response.lastName).isEqualTo(LAST_NAME)
+        assertThat(response.email).isEqualTo(EMAIL)
     }
 
     @Test
@@ -54,5 +55,20 @@ class UserIT {
 
         //then
         assertThat(result.message).isEqualTo("Account with given email address exists:" + request.email)
+    }
+
+    @Test
+    fun `should add wallet for user`() {
+        //given
+        val request = USER
+        val response = userService.registerUser(request)
+
+        //when
+        userService.addWallet(response.id, WALLET)
+
+        //then
+        assertThat(response.wallets.any { it.amount == WALLET.amount })
+        assertThat(response.wallets.any { it.name == WALLET.name })
+        assertThat(response.wallets.any { it.currency == WALLET.currency })
     }
 }
