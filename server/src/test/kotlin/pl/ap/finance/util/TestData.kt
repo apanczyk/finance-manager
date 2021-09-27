@@ -1,6 +1,8 @@
 package pl.ap.finance.util
 
 import pl.ap.finance.model.User
+import pl.ap.finance.model.dto.WalletDto
+import java.util.*
 
 class TestData {
 
@@ -15,6 +17,12 @@ class TestData {
             lastName = LAST_NAME,
             email = EMAIL,
             password = PASSWORD
+        )
+
+        val WALLET = WalletDto(
+            name = "Wallet",
+            currency = Currency.getInstance("USD"),
+            amount = 200.0
         )
     }
 }
