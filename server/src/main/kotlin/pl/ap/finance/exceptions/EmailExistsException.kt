@@ -7,3 +7,5 @@ sealed class UserException(message: String? = null, cause: Exception? = null) : 
 class EmailExistsException(message: String? = null, cause: Exception? = null) : UserException(message, cause)
 
 class UserNotFoundException(message: String? = null, cause: Exception? = null) : UserException(message, cause)
+
+class WalletNotFoundException(message: String? = null, cause: Exception? = null) : UserException(message, cause)

@@ -6,19 +6,27 @@ import pl.ap.finance.exceptions.EmailExistsException
 import pl.ap.finance.exceptions.UserNotFoundException
 import pl.ap.finance.model.User
 import pl.ap.finance.model.Wallet
+import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
 import pl.ap.finance.repository.UserRepository
 import pl.ap.finance.repository.WalletRepository
 
 @Service
-class UserService(private val passwordEncoder: PasswordEncoder, private val userRepository: UserRepository, private val walletRepository: WalletRepository) {
+class UserService(private val passwordEncoder: PasswordEncoder,
+                  private val userRepository: UserRepository,
+                  private val walletRepository: WalletRepository) {
 
-    fun registerUser(user: User): User {
-        if(userRepository.findUserByEmail(user.email) != null) {
-            throw EmailExistsException("Account with given email address exists:" + user.email)
+    fun registerUser(newUser: UserDto): User {
+        if(userRepository.findUserByEmail(newUser.email) != null) {
+            throw EmailExistsException("Account with given email address exists:" + newUser.email)
         }
-        user.password = passwordEncoder.encode(user.password)
-
+        val encodedPassword =  passwordEncoder.encode(newUser.password)
+        val user = User(
+                firstName = newUser.firstName,
+                lastName = newUser.lastName,
+                email = newUser.email,
+                password = encodedPassword
+        )
         return userRepository.save(user)
     }
 
