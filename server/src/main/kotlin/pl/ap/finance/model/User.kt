@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_table")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,13 @@ class User(
     val registrationDate: LocalDateTime = LocalDateTime.now(),
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "users")
     @JsonIgnoreProperties("users")
-    val wallets: MutableSet<Wallet> = mutableSetOf()
+    val wallets: MutableSet<Wallet> = mutableSetOf(),
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles_table",
+            joinColumns = [JoinColumn(name = "user_id")],
+            inverseJoinColumns = [JoinColumn(name = "role_id")])
+    val roles: MutableSet<Role> = mutableSetOf(),
+
 ) {
     fun addWallet(wallet: Wallet) {
         if (!wallets.contains(wallet)) {

@@ -6,16 +6,24 @@ import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.User
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
+import pl.ap.finance.model.requests.AuthRequest
+import pl.ap.finance.model.response.JwtResponse
 import pl.ap.finance.service.UserService
 
 @RestController
 @RequestMapping("/api")
 class UserController(private val userService: UserService) {
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     fun registerUser(@RequestBody newUser: UserDto): ResponseEntity<User> {
         val user = userService.registerUser(newUser)
         return ResponseEntity(user, HttpStatus.CREATED)
+    }
+
+    @PostMapping("/auth/login")
+    fun registerUser(@RequestBody authRequest: AuthRequest): ResponseEntity<JwtResponse> {
+        val response = userService.logUser(authRequest)
+        return ResponseEntity(response, HttpStatus.OK)
     }
 
     @PostMapping("/user/{id}")

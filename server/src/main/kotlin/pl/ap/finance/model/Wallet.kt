@@ -6,7 +6,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "wallets")
+@Table(name = "wallet_table")
 class Wallet(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ class Wallet(
     val date: LocalDateTime = LocalDateTime.now(),
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "user_wallet",
+        name = "user_wallet_table",
         joinColumns = [JoinColumn(name = "wallet_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")]
     )
