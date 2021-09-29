@@ -43,21 +43,17 @@ class UserDetailsImpl(
         return true
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val user = o as UserDetailsImpl
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val user = other as UserDetailsImpl
         return Objects.equals(id, user.id)
     }
 
     companion object {
-        private const val serialVersionUID = 1L
 
         fun build(user: User): UserDetailsImpl {
-            val authorities: List<GrantedAuthority> = listOf(SimpleGrantedAuthority(user.roles.name))
-//                    user.roles.stream()
-//                    .map { role -> SimpleGrantedAuthority(role.name.name) }
-//                    .collect(Collectors.toList())
+            val authorities = listOf(SimpleGrantedAuthority(user.role.name))
             return UserDetailsImpl(
                     user.id,
                     user.email,

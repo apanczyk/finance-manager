@@ -24,7 +24,7 @@ class AuthTokenFilter : OncePerRequestFilter() {
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {
             val jwt = parseJwt(request)
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            if (jwtUtils.validateJwtToken(jwt)) {
                 val username = jwtUtils.getUserNameFromJwtToken(jwt)
                 val userDetails: UserDetails = userDetailsService.loadUserByUsername(username)
                 val authentication = UsernamePasswordAuthenticationToken(
@@ -33,15 +33,15 @@ class AuthTokenFilter : OncePerRequestFilter() {
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (e: Exception) {
-            Companion.logger.error("Cannot set user authentication: {}", e)
+            Companion.logger.error("Cannot set user authentication: $e")
         }
         filterChain.doFilter(request, response)
     }
 
     private fun parseJwt(request: HttpServletRequest): String? {
         val headerAuth = request.getHeader("Authorization")
-        return if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            headerAuth.substring(7, headerAuth.length)
+        return if (StringUtils.hasText(headerAuth)) {
+            headerAuth
         } else null
     }
 

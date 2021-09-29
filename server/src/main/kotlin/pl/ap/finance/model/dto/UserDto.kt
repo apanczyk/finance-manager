@@ -5,5 +5,5 @@ class UserDto(
         val lastName: String,
         val email: String,
         var password: String,
-        var roles: String
+        var role: String
 )

@@ -1,6 +1,5 @@
 package pl.ap.finance.service
 
-import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -32,17 +31,16 @@ class UserService(private val passwordEncoder: PasswordEncoder,
                   private val jwtUtils: JwtUtils) {
 
     fun registerUser(newUser: UserDto): User {
-        if(userRepository.findUserByEmail(newUser.email) != null) {
+        if (userRepository.findUserByEmail(newUser.email) != null) {
             throw EmailExistsException("Account with given email address exists:" + newUser.email)
         }
-        val encodedPassword =  passwordEncoder.encode(newUser.password)
+        val encodedPassword = passwordEncoder.encode(newUser.password)
         val user = User(
                 firstName = newUser.firstName,
                 lastName = newUser.lastName,
                 email = newUser.email,
                 password = encodedPassword,
-                roles = Role.RoleType.roleOf(newUser.roles)
-//                roles = setOf(Role(name = Role.RoleType.USER)) as MutableSet<Role>
+                role = Role.roleOf(newUser.role)
         )
         return userRepository.save(user)
     }
@@ -72,9 +70,9 @@ class UserService(private val passwordEncoder: PasswordEncoder,
             throw UserNotFoundException("User with id $userId doesn't exist")
         }
         val wallet = Wallet(
-            name = walletDto.name,
-            currency = walletDto.currency,
-            amount = walletDto.amount
+                name = walletDto.name,
+                currency = walletDto.currency,
+                amount = walletDto.amount
         )
         wallet.addUser(user)
         walletRepository.save(wallet)

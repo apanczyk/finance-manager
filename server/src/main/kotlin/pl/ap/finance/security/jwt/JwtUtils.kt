@@ -1,5 +1,6 @@
 package pl.ap.finance.security.jwt
 
+import io.jsonwebtoken.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 
 import java.util.Date
-import io.jsonwebtoken.*
 import pl.ap.finance.security.service.UserDetailsImpl
 
 @Component
@@ -37,13 +37,13 @@ class JwtUtils {
             Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken)
             return true
         } catch (e: MalformedJwtException) {
-            logger.error("Invalid JWT token: {}", e.message)
+            logger.error("Invalid JWT token: ${e.message}")
         } catch (e: ExpiredJwtException) {
-            logger.error("JWT token is expired: {}", e.message)
+            logger.error("JWT token is expired: ${e.message}")
         } catch (e: UnsupportedJwtException) {
-            logger.error("JWT token is unsupported: {}", e.message)
+            logger.error("JWT token is unsupported: ${e.message}")
         } catch (e: IllegalArgumentException) {
-            logger.error("JWT claims string is empty: {}", e.message)
+            logger.error("JWT claims string is empty: ${e.message}")
         }
         return false
     }

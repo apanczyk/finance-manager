@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import pl.ap.finance.security.jwt.AuthEntryPointJwt
+import pl.ap.finance.security.jwt.AuthJwt
 import pl.ap.finance.security.jwt.AuthTokenFilter
 import pl.ap.finance.security.service.UserDetailsServiceImpl
 
@@ -23,11 +23,12 @@ import pl.ap.finance.security.service.UserDetailsServiceImpl
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
     @Autowired
     lateinit var userDetailsService: UserDetailsServiceImpl
 
     @Autowired
-    lateinit var unauthorizedHandler: AuthEntryPointJwt
+    lateinit var unauthorizedHandler: AuthJwt
 
     @Bean
     fun authenticationJwtTokenFilter(): AuthTokenFilter {
@@ -53,7 +54,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated()
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
     }
