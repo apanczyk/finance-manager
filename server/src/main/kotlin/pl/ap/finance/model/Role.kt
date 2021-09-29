@@ -1,5 +1,6 @@
 package pl.ap.finance.model
 
+import pl.ap.finance.exceptions.UserRoleNotFoundException
 import javax.persistence.*
 
 @Entity
@@ -13,6 +14,16 @@ class Role(
         val name : RoleType
 ) {
     enum class RoleType {
-        USER, ADMIN
+        USER, ADMIN;
+
+        companion object {
+            fun roleOf(role: String): RoleType {
+                return when(role) {
+                    "User" -> USER
+                    "Admin" -> ADMIN
+                    else -> throw UserRoleNotFoundException()
+                }
+            }
+        }
     }
 }

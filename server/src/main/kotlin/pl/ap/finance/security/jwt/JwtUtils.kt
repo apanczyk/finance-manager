@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 
 import java.util.Date
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.*
 import pl.ap.finance.security.service.UserDetailsImpl
 
 @Component

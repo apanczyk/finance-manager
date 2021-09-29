@@ -41,8 +41,8 @@ class UserService(private val passwordEncoder: PasswordEncoder,
                 lastName = newUser.lastName,
                 email = newUser.email,
                 password = encodedPassword,
-//                roles = newUser.roles
-                roles = setOf(Role(name = Role.RoleType.USER)) as MutableSet<Role>
+                roles = Role.RoleType.roleOf(newUser.roles)
+//                roles = setOf(Role(name = Role.RoleType.USER)) as MutableSet<Role>
         )
         return userRepository.save(user)
     }

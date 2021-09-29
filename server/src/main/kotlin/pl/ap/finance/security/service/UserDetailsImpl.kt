@@ -1,12 +1,11 @@
 package pl.ap.finance.security.service
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.util.stream.Collectors
-import com.fasterxml.jackson.annotation.JsonIgnore
 import pl.ap.finance.model.User
-import java.util.Objects
+import java.util.*
 
 class UserDetailsImpl(
         val id: Long,
@@ -25,7 +24,7 @@ class UserDetailsImpl(
     }
 
     override fun getUsername(): String {
-        return username
+        return email
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -52,10 +51,13 @@ class UserDetailsImpl(
     }
 
     companion object {
+        private const val serialVersionUID = 1L
+
         fun build(user: User): UserDetailsImpl {
-            val authorities: List<GrantedAuthority> = user.roles.stream()
-                    .map { role -> SimpleGrantedAuthority(role.name.name) }
-                    .collect(Collectors.toList())
+            val authorities: List<GrantedAuthority> = listOf(SimpleGrantedAuthority(user.roles.name))
+//                    user.roles.stream()
+//                    .map { role -> SimpleGrantedAuthority(role.name.name) }
+//                    .collect(Collectors.toList())
             return UserDetailsImpl(
                     user.id,
                     user.email,

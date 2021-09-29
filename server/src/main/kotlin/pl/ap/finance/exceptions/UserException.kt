@@ -9,3 +9,5 @@ class EmailExistsException(message: String? = null, cause: Exception? = null) : 
 class UserNotFoundException(message: String? = null, cause: Exception? = null) : UserException(message, cause)
 
 class WalletNotFoundException(message: String? = null, cause: Exception? = null) : UserException(message, cause)
+
+class UserRoleNotFoundException(message: String? = null, cause: Exception? = null) : UserException(message, cause)
