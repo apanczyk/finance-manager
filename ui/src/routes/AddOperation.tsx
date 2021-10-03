@@ -89,7 +89,7 @@ class AddOperation extends Component<Props, State> {
     }
 
     render() {
-        const { submitted, name, amount, place } = this.state;
+        const { name, amount, place } = this.state;
 
         return (
             <React.Fragment>

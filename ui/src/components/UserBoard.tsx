@@ -9,7 +9,7 @@ type State = {
   content: string;
 }
 
-export default class BoardUser extends Component<Props, State> {
+export default class UserBoard extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
