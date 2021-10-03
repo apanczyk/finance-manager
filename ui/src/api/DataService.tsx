@@ -1,5 +1,5 @@
 import Operation from "../model/Operation";
-import authHeader from "../service/auth.header";
+import authHeader from "../service/AuthHeader";
 import api from "./api";
 
 class DataService {
@@ -8,7 +8,7 @@ class DataService {
     }
 
     create(data: Operation) {
-        return api.post(`/api/operations`, data, { headers: authHeader() } )
+        return api.post(`/api/operations`, data, { headers: authHeader() })
     }
 
     delete(id: string) {

@@ -2,7 +2,7 @@ import { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
 
-import AuthService from "../service/auth.service";
+import AuthService from "../service/AuthService";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
 interface RouterProps {

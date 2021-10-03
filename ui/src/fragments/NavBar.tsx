@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Drawer from '../Drawer';
 import { Link } from '@material-ui/core';
+import IUser from '../model/types/UserType';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,9 +22,15 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function NavBar() {
-    const classes = useStyles();
+interface Props {
+    currentUser: IUser | undefined
+    logOut: () => void;
+}
 
+
+export default function NavBar(props: React.PropsWithChildren<Props>) {
+    const classes = useStyles();
+    const { currentUser, logOut } = props;
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -34,7 +41,26 @@ export default function NavBar() {
                             {"Finance"}
                         </Link>
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {currentUser ? (
+                        <>
+                            <Button color="inherit" href="/profile">
+                                {currentUser.email}
+                            </Button>
+                            <Button color="inherit" onClick={logOut}>
+                                LogOut
+                            </Button>
+
+                        </>
+                    ) : (
+                        <>
+                            <Button color="inherit" href="/login">
+                                Login
+                            </Button>
+                            <Button color="inherit" href="/register">
+                                Sign Up
+                            </Button>
+                        </>
+                    )}
                 </Toolbar>
             </AppBar>
         </div>
