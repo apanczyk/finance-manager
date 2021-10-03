@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import * as formik from "formik";
 import * as Yup from "yup";
 
 import AuthService from "../service/auth.service";

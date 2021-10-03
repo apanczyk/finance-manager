@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Drawer from '../Drawer';
+import { Link } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,7 +30,9 @@ export default function NavBar() {
                 <Toolbar>
                     <Drawer />
                     <Typography variant="h6" className={classes.title}>
-                        News
+                        <Link href={"/"} underline="none" color="inherit">
+                            {"Finance"}
+                        </Link>
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
