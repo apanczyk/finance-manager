@@ -53,15 +53,15 @@ class UserService(private val passwordEncoder: PasswordEncoder,
         val jwt: String = jwtUtils.generateJwtToken(authentication)
 
         val userDetails = authentication.principal as UserDetailsImpl
-        val roles = userDetails.authorities.stream()
+        val role = userDetails.authorities.stream()
                 .map { item: GrantedAuthority -> item.authority }
                 .collect(Collectors.toList())
 
         return JwtResponse(
-                token = jwt,
+                accessToken = jwt,
                 id = userDetails.id,
                 email = userDetails.email,
-                roles = roles
+                role = role[0]
         )
     }
 

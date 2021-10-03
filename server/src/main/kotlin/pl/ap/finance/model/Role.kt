@@ -6,10 +6,10 @@ enum class Role {
     USER, ADMIN;
 
     companion object {
-        fun roleOf(role: String): Role {
+        fun roleOf(role: String?): Role {
             return when (role) {
-                "User" -> USER
-                "Admin" -> ADMIN
+                "USER" -> USER
+                "ADMIN" -> ADMIN
                 else -> throw UserRoleNotFoundException()
             }
         }

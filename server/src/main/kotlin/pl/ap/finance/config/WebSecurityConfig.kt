@@ -21,7 +21,7 @@ import pl.ap.finance.security.service.UserDetailsServiceImpl
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Autowired
@@ -54,6 +54,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated()
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
     }
