@@ -18,8 +18,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
 import EventBus from './util/EventBus';
-import IUser from './model/types/user.type';
-import AuthService from './service/auth.service';
+import IUser from './model/types/UserType';
+import AuthService from './service/AuthService';
 import { Component } from 'react';
 import AuthVerifier from './util/AuthVerifier.js';
 
@@ -64,6 +64,7 @@ class App extends Component<Props, State> {
       showAdminBoard: false,
       currentUser: undefined,
     });
+    window.location.reload();
   }
 
   render() {
@@ -72,7 +73,7 @@ class App extends Component<Props, State> {
     return (
       <Router>
         <div>
-          <NavBar />
+          <NavBar currentUser={this.state.currentUser} logOut={this.logOut} />
           <EnhancedTable />
           <OperationList />
 
@@ -107,7 +108,7 @@ class App extends Component<Props, State> {
               )}
             </div>
 
-            {currentUser ? (
+            {/* {currentUser ? (
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
@@ -134,7 +135,7 @@ class App extends Component<Props, State> {
                   </Link>
                 </li>
               </div>
-            )}
+            )} */}
           </nav>
 
           <div className="container mt-3">
