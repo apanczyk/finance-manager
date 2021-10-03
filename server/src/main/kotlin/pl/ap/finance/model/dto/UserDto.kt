@@ -1,9 +1,11 @@
 package pl.ap.finance.model.dto
 
+import pl.ap.finance.model.Role
+
 class UserDto(
-        val firstName: String,
-        val lastName: String,
+        val firstName: String?,
+        val lastName: String?,
         val email: String,
         var password: String,
-        var role: String
+        var role: String = Role.USER.name
 )

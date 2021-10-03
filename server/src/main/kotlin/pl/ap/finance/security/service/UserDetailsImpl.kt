@@ -53,7 +53,7 @@ class UserDetailsImpl(
     companion object {
 
         fun build(user: User): UserDetailsImpl {
-            val authorities = listOf(SimpleGrantedAuthority(user.role.name))
+            val authorities = listOf(SimpleGrantedAuthority(user.role?.name))
             return UserDetailsImpl(
                     user.id,
                     user.email,
