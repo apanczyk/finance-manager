@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import NavBar from './fragments/NavBar';
 import EnhancedTable from './NewTable';
@@ -7,7 +6,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from 'react-router-dom'
 import AddOperation from './routes/AddOperation';
 import DeleteOperation from './routes/DeleteOperation';
@@ -68,75 +66,10 @@ class App extends Component<Props, State> {
   }
 
   render() {
-    const { currentUser, showAdminBoard } = this.state;
-
     return (
       <Router>
         <div>
-          <NavBar currentUser={this.state.currentUser} logOut={this.logOut} />
-          <EnhancedTable />
-          <OperationList />
-
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-          </header>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <Link to={"/"} className="navbar-brand">
-              Aplikacja
-            </Link>
-            <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/home"} className="nav-link">
-                  Home
-                </Link>
-              </li>
-
-              {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Admin Board
-                  </Link>
-                </li>
-              )}
-
-              {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/user"} className="nav-link">
-                    User
-                  </Link>
-                </li>
-              )}
-            </div>
-
-            {/* {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/profile"} className="nav-link">
-                    {currentUser.email}
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
-                    LogOut
-                  </a>
-                </li>
-              </div>
-            ) : (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/login"} className="nav-link">
-                    Login
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link to={"/register"} className="nav-link">
-                    Sign Up
-                  </Link>
-                </li>
-              </div>
-            )} */}
-          </nav>
+          <NavBar currentUser={this.state.currentUser} showAdminBoard={this.state.showAdminBoard} logOut={this.logOut} />
 
           <div className="container mt-3">
             <Switch>
@@ -151,7 +84,9 @@ class App extends Component<Props, State> {
               <Route exact path="/delete/:operationId" component={DeleteOperation} />
             </Switch>
           </div>
-
+          
+          <EnhancedTable />
+          <OperationList />
           <AuthVerifier logOut={() => this.logOut()} />
         </div>
       </Router>

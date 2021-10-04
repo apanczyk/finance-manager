@@ -5,7 +5,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Drawer from '../Drawer';
-import { Link } from '@material-ui/core';
+import {
+    Link
+} from 'react-router-dom'
 import IUser from '../model/types/UserType';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,26 +26,37 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     currentUser: IUser | undefined
+    showAdminBoard: boolean
     logOut: () => void;
 }
 
 
 export default function NavBar(props: React.PropsWithChildren<Props>) {
     const classes = useStyles();
-    const { currentUser, logOut } = props;
+    const { currentUser, showAdminBoard, logOut } = props;
     return (
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
                     <Drawer />
                     <Typography variant="h6" className={classes.title}>
-                        <Link href={"/"} underline="none" color="inherit">
+                        <Button component={Link} to="/" color="inherit" >
                             {"Finance"}
-                        </Link>
+                        </Button>
+                        {currentUser && (
+                            <Button component={Link} to="/user" color="inherit">
+                                User
+                            </Button>
+                        )}
+                        {showAdminBoard && (
+                            <Button component={Link} to="/admin" color="inherit">
+                                Admin Board
+                            </Button>
+                        )}
                     </Typography>
                     {currentUser ? (
                         <>
-                            <Button color="inherit" href="/profile">
+                            <Button component={Link} to="/profile" color="inherit" >
                                 {currentUser.email}
                             </Button>
                             <Button color="inherit" onClick={logOut}>
@@ -53,10 +66,10 @@ export default function NavBar(props: React.PropsWithChildren<Props>) {
                         </>
                     ) : (
                         <>
-                            <Button color="inherit" href="/login">
+                            <Button component={Link} to="/login" color="inherit" >
                                 Login
                             </Button>
-                            <Button color="inherit" href="/register">
+                            <Button component={Link} to="/register" color="inherit" >
                                 Sign Up
                             </Button>
                         </>
