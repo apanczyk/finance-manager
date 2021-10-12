@@ -80,16 +80,17 @@ export default class Login extends Component<Props, State> {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
+      this.handleLogin({
+        email: data.get('email') as string,
+        password: data.get('password') as string
+      })
     };
 
     const initialValues = {
       email: "",
       password: "",
     };
+
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
