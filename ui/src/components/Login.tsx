@@ -1,14 +1,14 @@
 import { Component } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
 
 import AuthService from "../service/AuthService";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Checkbox, Container, CssBaseline, FormControlLabel, Grid, TextField, ThemeProvider, Typography } from "@material-ui/core";
+import { Field, Form, Formik } from "formik";
+import { TextField } from 'formik-material-ui';
+import { Container, ThemeProvider, Typography } from "@material-ui/core";
 import { createTheme } from '@mui/material/styles';
 import { Avatar, Box, Button } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
 
 interface RouterProps {
   history: string
@@ -19,7 +19,6 @@ type Props = RouteComponentProps<RouterProps>;
 type State = {
   email: string,
   password: string,
-  loading: boolean,
   message: string
 };
 
@@ -31,7 +30,6 @@ export default class Login extends Component<Props, State> {
     this.state = {
       email: "",
       password: "",
-      loading: false,
       message: ""
     };
   }
@@ -47,8 +45,7 @@ export default class Login extends Component<Props, State> {
     const { email, password } = formValue;
 
     this.setState({
-      message: "",
-      loading: true
+      message: ""
     });
 
 
@@ -66,7 +63,6 @@ export default class Login extends Component<Props, State> {
           error.toString();
 
         this.setState({
-          loading: false,
           message: resMessage
         });
       }
@@ -76,15 +72,7 @@ export default class Login extends Component<Props, State> {
 
   render() {
     const theme = createTheme();
-    const { loading, message } = this.state;
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      this.handleLogin({
-        email: data.get('email') as string,
-        password: data.get('password') as string
-      })
-    };
+    const { message } = this.state;
 
     const initialValues = {
       email: "",
@@ -94,7 +82,6 @@ export default class Login extends Component<Props, State> {
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
           <Box
             sx={{
               marginTop: 8,
@@ -109,112 +96,38 @@ export default class Login extends Component<Props, State> {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link to="#">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link to="#">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={this.validationSchema}
+              onSubmit={this.handleLogin}
+            >
+              <Form>
+                <div>
+                  <Field component={TextField} name="email" type="text" label="Email" disabled="" />
+                </div>
+
+                <div>
+                  <Field component={TextField} name="password" type="password" label="Password" disabled="" />
+                </div>
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 1.5, mb: 1.5 }}
+                >
+                  Login
+                </Button>
+
+                {message && (
+                  <Typography component="h2" variant="h6">{message}</Typography>
+                )}
+
+              </Form>
+            </Formik>
           </Box>
         </Container>
       </ThemeProvider>
     );
-
-    // return (
-    //   <div className="col-md-12">
-    //     <div className="card card-container">
-    //       <img
-    //         src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-    //         alt="profile-img"
-    //         className="profile-img-card"
-    //       />
-
-    //       <Formik
-    //         initialValues={initialValues}
-    //         validationSchema={this.validationSchema}
-    //         onSubmit={this.handleLogin}
-    //       >
-    //         <Form>
-    //           <div className="form-group">
-    //             <label htmlFor="email">Email</label>
-    //             <Field name="email" type="text" className="form-control" />
-    //             <ErrorMessage
-    //               name="email"
-    //               component="div"
-    //               className="alert alert-danger"
-    //             />
-    //           </div>
-
-    //           <div className="form-group">
-    //             <label htmlFor="password">Password</label>
-    //             <Field name="password" type="password" className="form-control" />
-    //             <ErrorMessage
-    //               name="password"
-    //               component="div"
-    //               className="alert alert-danger"
-    //             />
-    //           </div>
-
-    //           <div className="form-group">
-    //             <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-    //               {loading && (
-    //                 <span className="spinner-border spinner-border-sm"></span>
-    //               )}
-    //               <span>Login</span>
-    //             </button>
-    //           </div>
-
-    //           {message && (
-    //             <div className="form-group">
-    //               <div className="alert alert-danger" role="alert">
-    //                 {message}
-    //               </div>
-    //             </div>
-    //           )}
-    //         </Form>
-    //       </Formik>
-    //     </div>
-    //   </div>
-    // );
   }
 }
