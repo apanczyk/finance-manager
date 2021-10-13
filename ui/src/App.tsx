@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css"
 import NavBar from './fragments/NavBar';
 import EnhancedTable from './NewTable';
 import OperationList from './model/OperationList';
@@ -84,7 +84,7 @@ class App extends Component<Props, State> {
               <Route exact path="/delete/:operationId" component={DeleteOperation} />
             </Switch>
           </div>
-          
+
           <EnhancedTable />
           <OperationList />
           <AuthVerifier logOut={() => this.logOut()} />

@@ -1,8 +1,14 @@
 import { Component } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 
+import { Container, ThemeProvider, Typography } from "@material-ui/core";
 import AuthService from "../service/AuthService";
+import { TextField } from 'formik-material-ui';
+import { createTheme } from '@mui/material/styles';
+import { Avatar, Box, Button } from "@mui/material";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
 
 type Props = {};
 
@@ -47,7 +53,6 @@ export default class Register extends Component<Props, State> {
   handleRegister(formValue: { email: string; password: string }) {
     const { email, password } = formValue;
 
-    console.log("XDDDDDDDDDDdd")
     this.setState({
       message: "",
       successful: false
@@ -80,6 +85,7 @@ export default class Register extends Component<Props, State> {
   }
 
   render() {
+    const theme = createTheme();
     const { successful, message } = this.state;
 
     const initialValues = {
@@ -88,69 +94,59 @@ export default class Register extends Component<Props, State> {
     };
 
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
-
-          <Formik
-            initialValues={initialValues}
-            validationSchema={this.validationSchema}
-            onSubmit={this.handleRegister}
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            <Form>
-              {!successful && (
-                <div>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Register in
+            </Typography>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={this.validationSchema}
+              onSubmit={this.handleRegister}
+            >
+              <Form>
+                {!successful && (
+                  <div>
+                    <div>
+                      <Field component={TextField} name="email" type="text" label="Email" disabled="" fullWidth />
+                    </div>
 
-                  <div className="form-group">
-                    <label htmlFor="email"> Email </label>
-                    <Field name="email" type="email" className="form-control" />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="alert alert-danger"
-                    />
-                  </div>
+                    <div>
+                      <Field component={TextField} name="password" type="password" label="Password" disabled="" fullWidth />
+                    </div>
 
-                  <div className="form-group">
-                    <label htmlFor="password"> Password </label>
-                    <Field
-                      name="password"
-                      type="password"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="alert alert-danger"
-                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 1.5, mb: 1.5 }}
+                    >
+                      Register in
+                    </Button>
+                    {message && (
+                      <Typography component="h2" variant="h6">{message}</Typography>
+                    )}
                   </div>
-
-                  <div className="form-group">
-                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
-                  </div>
-                </div>
-              )}
-
-              {message && (
-                <div className="form-group">
-                  <div
-                    className={
-                      successful ? "alert alert-success" : "alert alert-danger"
-                    }
-                    role="alert"
-                  >
-                    {message}
-                  </div>
-                </div>
-              )}
-            </Form>
-          </Formik>
-        </div>
-      </div>
+                )}
+                {successful && (
+                  <Typography component="h2" variant="h6">{"User registered"}</Typography>
+                )}
+              </Form>
+            </Formik>
+          </Box>
+        </Container>
+      </ThemeProvider >
     );
   }
 }
