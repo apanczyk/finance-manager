@@ -94,37 +94,36 @@ export default class Register extends Component<Props, State> {
     };
 
     return (
-      <div>
-        {!successful && (
-          <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-              <Box
-                sx={{
-                  marginTop: 8,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                  Register in
-                </Typography>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={this.validationSchema}
-                  onSubmit={this.handleRegister}
-                >
-                  <Form>
-
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Register in
+            </Typography>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={this.validationSchema}
+              onSubmit={this.handleRegister}
+            >
+              <Form>
+                {!successful && (
+                  <div>
                     <div>
-                      <Field component={TextField} name="email" type="text" label="Email" disabled="" />
+                      <Field component={TextField} name="email" type="text" label="Email" disabled="" fullWidth />
                     </div>
 
                     <div>
-                      <Field component={TextField} name="password" type="password" label="Password" disabled="" />
+                      <Field component={TextField} name="password" type="password" label="Password" disabled="" fullWidth />
                     </div>
 
                     <Button
@@ -135,22 +134,19 @@ export default class Register extends Component<Props, State> {
                     >
                       Register in
                     </Button>
-
-
                     {message && (
                       <Typography component="h2" variant="h6">{message}</Typography>
                     )}
-                  </Form>
-                </Formik>
-              </Box>
-            </Container>
-          </ThemeProvider>
-        )}
-        {successful && (
-          <Typography component="h2" variant="h6">{"User registered"}</Typography>
-
-        )}
-      </div>
+                  </div>
+                )}
+                {successful && (
+                  <Typography component="h2" variant="h6">{"User registered"}</Typography>
+                )}
+              </Form>
+            </Formik>
+          </Box>
+        </Container>
+      </ThemeProvider >
     );
   }
 }
