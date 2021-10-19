@@ -2,7 +2,7 @@ import { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import * as Yup from "yup";
 
-import AuthService from "../service/AuthService";
+import AuthService from "../../service/AuthService";
 import { Field, Form, Formik } from "formik";
 import { TextField } from 'formik-material-ui';
 import { Container, ThemeProvider, Typography } from "@material-ui/core";
