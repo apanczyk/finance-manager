@@ -3,7 +3,7 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 
 import { Container, ThemeProvider, Typography } from "@material-ui/core";
-import AuthService from "../service/AuthService";
+import AuthService from "../../service/AuthService";
 import { TextField } from 'formik-material-ui';
 import { createTheme } from '@mui/material/styles';
 import { Avatar, Box, Button } from "@mui/material";

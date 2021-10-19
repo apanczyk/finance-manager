@@ -9,17 +9,19 @@ import {
 } from 'react-router-dom'
 import AddOperation from './routes/AddOperation';
 import DeleteOperation from './routes/DeleteOperation';
-import AdminBoard from './components/AdminBoard';
-import UserBoard from './components/UserBoard';
-import Profile from './components/Profile';
-import Register from './components/Register';
-import Login from './components/Login';
-import Home from './components/Home';
+import AdminBoard from './components/auth/AdminBoard';
+import UserBoard from './components/auth/UserBoard';
+import Profile from './components/auth/Profile';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Home from './components/auth/Home';
 import EventBus from './util/EventBus';
 import IUser from './model/types/UserType';
 import AuthService from './service/AuthService';
 import { Component } from 'react';
 import AuthVerifier from './util/AuthVerifier.js';
+import Box from "@mui/material/Box";
+import { Container } from "@material-ui/core";
 
 type Props = {};
 
@@ -68,27 +70,42 @@ class App extends Component<Props, State> {
   render() {
     return (
       <Router>
+        <NavBar currentUser={this.state.currentUser} showAdminBoard={this.state.showAdminBoard} logOut={this.logOut} />
+
         <div>
-          <NavBar currentUser={this.state.currentUser} showAdminBoard={this.state.showAdminBoard} logOut={this.logOut} />
+          <Switch>
+            <Route exact path={"/"} component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/profile" component={Profile} />
+            <Route path="/user" component={UserBoard} />
+            <Route path="/admin" component={AdminBoard} />
 
-          <div className="container mt-3">
-            <Switch>
-              <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
-              <Route path="/user" component={UserBoard} />
-              <Route path="/admin" component={AdminBoard} />
-
-              <Route exact path="/add" component={AddOperation} />
-              <Route exact path="/delete/:operationId" component={DeleteOperation} />
-            </Switch>
-          </div>
-
-          <EnhancedTable />
-          <OperationList />
-          <AuthVerifier logOut={() => this.logOut()} />
+            <Route exact path="/add" component={AddOperation} />
+            <Route exact path="/delete/:operationId" component={DeleteOperation} />
+          </Switch>
         </div>
+
+        {
+          this.state.currentUser && (
+            <div>
+              <Container component="main" maxWidth="lg">
+                <Box
+                  sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <EnhancedTable />
+                  <OperationList />
+                </Box>
+              </Container>
+            </div>
+          )
+        }
+        <AuthVerifier logOut={() => this.logOut()} />
       </Router>
     );
   }
