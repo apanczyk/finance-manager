@@ -11,12 +11,13 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Operation from './model/Operation';
 
-interface Operation {
-    name: string;
-    amount: number;
-    place: string;
-}
+// interface Operation {
+//     name: string;
+//     amount: number;
+//     place: string;
+// }
 
 export type TOperationList = Operation[]
 
@@ -38,6 +39,17 @@ function createData(
     return { name, calories, fat, carbs, protein };
 }
 
+
+function createData2(
+    id: number,
+    name: string,
+    amount: number,
+    place: string,
+    date: Date,
+): Operation {
+    return { id, name, amount, place, date }
+}
+
 const rows = [
     createData('Cupcake', 305, 3.7, 67, 4.3),
     createData('Donut', 452, 25.0, 51, 4.9),
@@ -54,14 +66,14 @@ const rows = [
     createData('Oreo', 437, 18.0, 63, 4.0),
 ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
+function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
+    if (secondValue[orderBy] < firstValue[orderBy]) {
         return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
+    } else if (secondValue[orderBy] > firstValue[orderBy]) {
         return 1;
+    } else {
+        return 0;
     }
-    return 0;
 }
 
 type Order = 'asc' | 'desc';
@@ -71,8 +83,8 @@ function getComparator<Key extends keyof any>(
     orderBy: Key,
 ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
     return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+        ? (a, b) => ascComp(a, b, orderBy)
+        : (a, b) => -ascComp(a, b, orderBy);
 }
 
 function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
