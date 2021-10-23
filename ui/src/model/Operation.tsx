@@ -1,5 +1,5 @@
 export default interface Operation {
-    id?: any | null | number,
+    id?: any | null,
     name: string,
     amount?: number | null,
     place: string,

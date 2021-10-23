@@ -13,11 +13,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Operation from './model/Operation';
 
-// interface Operation {
-//     name: string;
-//     amount: number;
-//     place: string;
-// }
 
 export type TOperationList = Operation[]
 
