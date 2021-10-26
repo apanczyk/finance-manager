@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 import { Container, ThemeProvider, Typography } from "@material-ui/core";
 import AuthService from "../../service/AuthService";
-import { TextField } from 'formik-material-ui';
+import { TextField } from 'formik-mui';
 import { createTheme } from '@mui/material/styles';
 import { Avatar, Box, Button } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -119,11 +119,11 @@ export default class Register extends Component<Props, State> {
                 {!successful && (
                   <div>
                     <div>
-                      <Field component={TextField} name="email" type="text" label="Email" disabled="" fullWidth />
+                      <Field component={TextField} name="email" type="text" label="Email" disabled="" variant="standard" fullWidth />
                     </div>
 
                     <div>
-                      <Field component={TextField} name="password" type="password" label="Password" disabled="" fullWidth />
+                      <Field component={TextField} name="password" type="password" label="Password" variant="standard" disabled="" fullWidth />
                     </div>
 
                     <Button
