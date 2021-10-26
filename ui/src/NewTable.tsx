@@ -185,7 +185,11 @@ export default function EnhancedTable() {
     React.useEffect(() => {
         DataService.getAll()
             .then(response => {
-                setOperations(response.data)
+                setOperations(response.data.map((operation: Operation) => {
+                    operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
+                    return operation
+                }))
+
                 console.log(response.data);
             })
             .catch(e => {

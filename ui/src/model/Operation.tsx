@@ -1,7 +1,7 @@
 export default interface Operation {
-    id: any,
-    name: any,
-    amount: any,
-    place: any,
-    date: Date | any
+    id: string,
+    name: string,
+    amount: number,
+    place: string,
+    date: string
 }
