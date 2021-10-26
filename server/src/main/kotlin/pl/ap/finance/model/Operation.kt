@@ -1,5 +1,6 @@
 package pl.ap.finance.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -12,7 +13,7 @@ class Operation(
     val name: String,
     val amount: Double,
     val place: String,
-    val date: LocalDateTime = LocalDateTime.now(),
+    val date: LocalDate = LocalDate.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     var _wallet: Wallet? = null,
 ) {
