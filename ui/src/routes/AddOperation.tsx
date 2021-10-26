@@ -29,10 +29,11 @@ class AddOperation extends Component<Props, State> {
         this.newOperation = this.newOperation.bind(this);
 
         this.state = {
-            id: null,
+            id: "",
             name: "",
-            amount: null,
+            amount: 0,
             place: "",
+            date: "",
             submitted: false
         };
     }
@@ -57,9 +58,11 @@ class AddOperation extends Component<Props, State> {
 
     saveTutorial() {
         const data: Operation = {
+            id: this.state.id,
             name: this.state.name,
             amount: this.state.amount,
-            place: this.state.place
+            place: this.state.place,
+            date: this.state.date
         };
 
         DataService.create(data)
@@ -80,9 +83,9 @@ class AddOperation extends Component<Props, State> {
 
     newOperation() {
         this.setState({
-            id: null,
+            id: "",
             name: "",
-            amount: null,
+            amount: 0,
             place: "",
             submitted: false
         });
