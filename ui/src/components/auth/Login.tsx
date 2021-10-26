@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 import AuthService from "../../service/AuthService";
 import { Field, Form, Formik } from "formik";
-import { TextField } from 'formik-material-ui';
+import { TextField } from 'formik-mui';
 import { Container, ThemeProvider, Typography } from "@material-ui/core";
 import { createTheme } from '@mui/material/styles';
 import { Avatar, Box, Button } from "@mui/material";
@@ -103,11 +103,11 @@ export default class Login extends Component<Props, State> {
             >
               <Form>
                 <div>
-                  <Field component={TextField} name="email" type="text" label="Email" disabled="" fullWidth />
+                  <Field component={TextField} name="email" type="text" label="Email" disabled="" variant="standard" fullWidth />
                 </div>
 
                 <div>
-                  <Field component={TextField} name="password" type="password" label="Password" disabled="" fullWidth />
+                  <Field component={TextField} name="password" type="password" label="Password" disabled="" variant="standard" fullWidth />
                 </div>
 
                 <Button
