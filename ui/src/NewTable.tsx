@@ -252,7 +252,7 @@ export default function EnhancedTable() {
                                     <TableRow
                                         hover
                                         tabIndex={-1}
-                                        key={operation.name}
+                                        key={operation.id}
                                     >
                                         <TableCell padding="checkbox">
 
