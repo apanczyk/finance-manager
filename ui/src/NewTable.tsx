@@ -13,6 +13,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Operation from './model/Operation';
 import DataService from './api/DataService';
+import { IconButton } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import OperationForm from './components/main/OperationForm';
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
     if (secondValue[orderBy] < firstValue[orderBy]) {
@@ -127,27 +130,6 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface EnhancedTableToolbarProps {
-    numSelected: number;
-}
-
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                Operations
-            </Typography>
-        </Toolbar>
-    );
-};
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -181,6 +163,9 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [operations, setOperations] = React.useState(Array<Operation>());
+
+    const [recordForEdit, setRecordForEdit] = React.useState(null)
+    const [openPopup, setOpenPopup] = React.useState(false)
 
     React.useEffect(() => {
         DataService.getAll()
@@ -221,11 +206,53 @@ export default function EnhancedTable() {
         setPage(0);
     };
 
+
+    const addOrEdit = (operation: Operation, resetForm: any) => {
+        if (operation.id == "0")
+            DataService.create(operation)
+        else
+            DataService.update(operation)
+        resetForm()
+        setRecordForEdit(null)
+        setOpenPopup(false)
+        DataService.getAll()
+            .then(response => {
+                setOperations(response.data.map((operation: Operation) => {
+                    operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
+                    return operation
+                }))
+
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+    const openInPopup = (item: any) => {
+        setRecordForEdit(item)
+        setOpenPopup(true)
+    }
+
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, operations.length - page * rowsPerPage);
+    const toolbarClasses = useToolbarStyles();
+
 
     return (
         <div className={classes.root}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <Toolbar
+                className={clsx(classes.root, {
+                    [toolbarClasses.highlight]: selected.length > 0,
+                })}
+            >
+                <Typography className={toolbarClasses.title} variant="h6" id="tableTitle" component="div">
+                    Operations
+                </Typography>
+
+                <IconButton aria-label="delete" size="large" onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}>
+                    <AddCircleIcon />
+                </IconButton>
+            </Toolbar>
             <TableContainer>
                 <Table
                     className={classes.table}
@@ -283,6 +310,13 @@ export default function EnhancedTable() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            <OperationForm
+                openPopup={openPopup}
+            // setOpenPopup={setOpenPopup}
+            // recordForEdit={recordForEdit}
+            // addOrEdit={addOrEdit} 
+            />
+
         </div>
     );
 }

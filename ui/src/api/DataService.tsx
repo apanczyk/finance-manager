@@ -11,6 +11,10 @@ class DataService {
         return api.post(`/api/operations`, data, { headers: authHeader() })
     }
 
+    update(data: Operation) {
+        return api.post(`/api/operations/${data.id}`, data, { headers: authHeader() })
+    }
+
     delete(id: string) {
         return api.delete(`/api/operations/${id}`, { headers: authHeader() })
     }
