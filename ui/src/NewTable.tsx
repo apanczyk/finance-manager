@@ -312,9 +312,9 @@ export default function EnhancedTable() {
             />
             <OperationForm
                 openPopup={openPopup}
-            // setOpenPopup={setOpenPopup}
-            // recordForEdit={recordForEdit}
-            // addOrEdit={addOrEdit} 
+                setOpenPopup={setOpenPopup}
+                recordForEdit={recordForEdit}
+                addOrEdit={addOrEdit} 
             />
 
         </div>

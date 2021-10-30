@@ -1,9 +1,12 @@
-import { Button, Checkbox, Dialog, DialogContent, DialogTitle, Grid, Input, RadioGroup, Select, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Grid, Input, RadioGroup, Select, Typography } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@mui/icons-material/Close';
-// import { Form } from "formik";
-// import { DatePicker } from "formik-mui-lab/dist/DatePicker";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
+import Operation from "../../model/Operation";
+import Button from "@material-ui/core/Button";
+import * as Yup from "yup";
+import { Field, Form, Formik } from "formik";
+import { TextField } from 'formik-mui';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,79 +21,59 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const genderItems = [
-    { id: 'male', title: 'Male' },
-    { id: 'female', title: 'Female' },
-    { id: 'other', title: 'Other' },
-]
-
-const initialFValues = {
-    id: 0,
-    fullName: '',
-    email: '',
-    mobile: '',
-    city: '',
-    gender: 'male',
-    departmentId: '',
-    hireDate: new Date(),
-    isPermanent: false,
+const initialFValues: Operation = {
+    id: "",
+    name: "",
+    amount: 0,
+    place: "",
+    date: ""
 }
 
 interface OperationFormProps {
     openPopup: boolean
-    // setOpenPopup: any
-    // recordForEdit: any
-    // addOrEdit: any
+    setOpenPopup: Dispatch<SetStateAction<boolean>>
+    recordForEdit: any
+    addOrEdit: (operation: Operation, resetForm: any) => void
 }
 
 export default function OperationForm(props: OperationFormProps) {
-
+    const [values, setValues] = React.useState(initialFValues);
     const classes = useStyles();
-    const { openPopup
-        // , setOpenPopup, recordForEdit, addOrEdit 
-    } = props;
+    const { openPopup, setOpenPopup, recordForEdit, addOrEdit } = props;
 
-    // const validate: any = (fieldValues = values) => {
-    //     let temp = { ...errors }
-    //     if ('fullName' in fieldValues)
-    //         temp.fullName = fieldValues.fullName ? "" : "This field is required."
-    //     if ('email' in fieldValues)
-    //         temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
-    //     if ('mobile' in fieldValues)
-    //         temp.mobile = fieldValues.mobile.length > 9 ? "" : "Minimum 10 numbers required."
-    //     if ('departmentId' in fieldValues)
-    //         temp.departmentId = fieldValues.departmentId.length != 0 ? "" : "This field is required."
-    //     setErrors({
-    //         ...temp
-    //     })
-
-    //     if (fieldValues == values)
-    //         return Object.values(temp).every(x => x == "")
-    // }
-
-    // const {
-    //     values,
-    //     setValues,
-    //     errors,
-    //     setErrors,
-    //     handleInputChange,
-    //     resetForm
-    // } = useForm(initialFValues, true, validate);
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
-        // if (validate()) {
-        // addOrEdit(new Operation, resetForm);
-        // }
+    const resetForm = () => {
+        setValues(initialFValues);
     }
 
-    // React.useEffect(() => {
-    //     console.log("")
-    //     // if (recordForEdit != null)
-    //     // setValues({
-    //     //     ...recordForEdit
-    //     // })
-    // }, [recordForEdit])
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string }) => {
+        const { name, amount, place, date } = formValue;
+        const data: Operation = {
+            id: "",
+            name: name,
+            amount: amount,
+            place: place,
+            date: date
+        };
+
+        addOrEdit(data, resetForm);        
+    }
+
+    const validationSchema = () => {
+        return Yup.object().shape({
+            name: Yup.string().required("This field is required!"),
+            amount: Yup.string().required("This field is required!"),
+            place: Yup.string().required("This field is required!"),
+            date: Yup.string().required("This field is required!")
+        });
+    }
+
+    React.useEffect(() => {
+        console.log("")
+        if (recordForEdit != null)
+            setValues({
+                ...recordForEdit
+            })
+    }, [recordForEdit])
 
     return (
         <Dialog
@@ -103,89 +86,39 @@ export default function OperationForm(props: OperationFormProps) {
                     </Typography>
                     <Button
                         color="secondary"
-                    // onClick={() => { setOpenPopup(false) }}
+                        onClick={() => { setOpenPopup(false) }}
                     >
                         <CloseIcon />
                     </Button>
                 </div>
             </DialogTitle>
             <DialogContent dividers>
-                <form>
-                    {/* <Form onSubmit={handleSubmit}> */}
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Input
-                                name="fullName"
-                            // label="Full Name"
-                            // value={values.fullName}
-                            // onChange={handleInputChange}
-                            // error={errors.fullName}
-                            />
-                            <Input
-                                // label="Email"
-                                name="email"
-                            // value={values.email}
-                            // onChange={handleInputChange}
-                            // error={errors.email}
-                            />
-                            <Input
-                                // label="Mobile"
-                                name="mobile"
-                            // value={values.mobile}
-                            // onChange={handleInputChange}
-                            // error={errors.mobile}
-                            />
-                            <Input
-                                // label="City"
-                                name="city"
-                            // value={values.city}
-                            // onChange={handleInputChange}
-                            />
-
+                <Formik
+                    initialValues={initialFValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    <Form>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <Field component={TextField} name="name" type="text" label="name" disabled="" variant="standard" fullWidth />
+                                <Field component={TextField} name="amount" type="number" label="amount" disabled="" variant="standard" fullWidth />
+                                <Field component={TextField} name="place" type="text" label="place" disabled="" variant="standard" fullWidth />
+                                <Field component={TextField} name="date" type="text" label="date" disabled="" variant="standard" fullWidth />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            <RadioGroup
-                                name="gender"
-                            // label="Gender"
-                            // value={values.gender}
-                            // onChange={handleInputChange}
-                            // items={genderItems}
-                            />
-                            <Select
-                                name="departmentId"
-                                label="Department"
-                            // value={values.departmentId}
-                            // onChange={handleInputChange}
-                            // options={employeeService.getDepartmentCollection()}
-                            // error={errors.departmentId}
-                            />
-                            {/* <KeyboardDatePicker 
-                                name="hireDate"
-                                label="Hire Date"
-                                value={values.hireDate}
-                                onChange={handleInputChange}
-                            /> */}
-                            <Checkbox
-                                name="isPermanent"
-                            // label="Permanent Employee"
-                            // value={values.isPermanent}
-                            // onChange={handleInputChange}
-                            />
 
-                            <div>
-                                <Button
-                                    type="submit"
-                                >Submit</Button>
-                                <Button
-                                // onClick={resetForm} 
-                                >
-                                    Reset
-                                </Button>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    {/* </Form> */}
-                </form>
+                        <div>
+                            <Button type="submit">
+                                Submit
+                            </Button>
+                            <Button onClick={resetForm}>
+                                Reset
+                            </Button>
+                        </div>
+
+                    </Form>
+                </Formik>
             </DialogContent>
         </Dialog>
     )
