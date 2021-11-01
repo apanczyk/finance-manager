@@ -119,11 +119,11 @@ export default class Register extends Component<Props, State> {
                 {!successful && (
                   <div>
                     <div>
-                      <Field component={TextField} name="email" type="text" label="Email" disabled="" variant="standard" fullWidth />
+                      <Field component={TextField} name="email" type="text" label="Email" disabled={false} variant="standard" fullWidth />
                     </div>
 
                     <div>
-                      <Field component={TextField} name="password" type="password" label="Password" variant="standard" disabled="" fullWidth />
+                      <Field component={TextField} name="password" type="password" label="Password" variant="standard" disabled={false} fullWidth />
                     </div>
 
                     <Button

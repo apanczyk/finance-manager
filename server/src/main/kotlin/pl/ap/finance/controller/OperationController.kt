@@ -33,6 +33,17 @@ class OperationController(val operationsRepository: OperationRepository) {
         return ResponseEntity(operation, HttpStatus.CREATED)
     }
 
+    @PostMapping("/{id}")
+    fun updateOperation(@PathVariable("id") id: Long, @RequestBody request: OperationDto): ResponseEntity<Operation> {
+        val operationToUpdate = operationsRepository.save(Operation(
+            id = id,
+            name = request.name,
+            amount = request.amount,
+            place = request.place
+        ))
+        return ResponseEntity(operationToUpdate, HttpStatus.OK)
+    }
+
     @DeleteMapping("/{id}")
     fun deleteOperation(@PathVariable("id") id: Long): ResponseEntity<Operation> {
         operationsRepository.deleteById(id)

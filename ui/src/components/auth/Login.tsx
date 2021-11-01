@@ -103,11 +103,11 @@ export default class Login extends Component<Props, State> {
             >
               <Form>
                 <div>
-                  <Field component={TextField} name="email" type="text" label="Email" disabled="" variant="standard" fullWidth />
+                  <Field component={TextField} name="email" type="text" label="Email" disabled={false} variant="standard" fullWidth />
                 </div>
 
                 <div>
-                  <Field component={TextField} name="password" type="password" label="Password" disabled="" variant="standard" fullWidth />
+                  <Field component={TextField} name="password" type="password" label="Password" disabled={false} variant="standard" fullWidth />
                 </div>
 
                 <Button
