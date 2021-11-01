@@ -11,11 +11,21 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Operation from './model/Operation';
-import DataService from './api/DataService';
+import Operation from '../../model/Operation';
+import DataService from '../../api/DataService';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import OperationForm from './components/main/OperationForm';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import OperationForm from './OperationForm';
+
+const emptyOperation: Operation = {
+    id: "",
+    name: "",
+    amount: 0,
+    place: "",
+    date: ""
+}
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
     if (secondValue[orderBy] < firstValue[orderBy]) {
@@ -38,7 +48,7 @@ function getComparator<Key extends keyof any>(
         : (a, b) => -ascComp(a, b, orderBy);
 }
 
-function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
+function sortOperation<T>(array: T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -50,31 +60,28 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 
 interface HeadCell {
     disablePadding: boolean;
-    id: keyof Operation;
+    id: keyof Operation | string;
     label: string;
-    numeric: boolean;
 }
 
 const headCells: HeadCell[] = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
-    { id: 'place', numeric: false, disablePadding: false, label: 'Place' },
-    { id: 'date', numeric: true, disablePadding: false, label: 'Operation date' },
+    { id: 'name', disablePadding: false, label: 'Name' },
+    { id: 'amount', disablePadding: false, label: 'Amount' },
+    { id: 'place', disablePadding: false, label: 'Place' },
+    { id: 'date', disablePadding: false, label: 'Operation date' }
 ];
 
-interface EnhancedTableProps {
+interface OperationTableProps {
     classes: ReturnType<typeof useStyles>;
-    numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Operation) => void;
-    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
+function OperationTableHead(props: OperationTableProps) {
     const { classes, order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property: keyof Operation) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof Operation | any) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -103,6 +110,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell />
             </TableRow>
         </TableHead>
     );
@@ -155,16 +163,15 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-export default function EnhancedTable() {
+export default function OperationTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Operation>('date');
-    const [selected, setSelected] = React.useState<string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [operations, setOperations] = React.useState(Array<Operation>());
 
-    const [recordForEdit, setRecordForEdit] = React.useState(null)
+    const [recordForEdit, setRecordForEdit] = React.useState(emptyOperation)
     const [openPopup, setOpenPopup] = React.useState(false)
 
     React.useEffect(() => {
@@ -174,8 +181,6 @@ export default function EnhancedTable() {
                     operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
                     return operation
                 }))
-
-                console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
@@ -188,15 +193,6 @@ export default function EnhancedTable() {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const newSelecteds = operations.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
-
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -206,23 +202,31 @@ export default function EnhancedTable() {
         setPage(0);
     };
 
+    const deleteOperation = (operation: Operation) => {
+        DataService.delete(operation.id).then(() =>
+            refreshData()
+        ).catch(e => {
+            console.log(e);
+        });
+    }
 
-    const addOrEdit = (operation: Operation, resetForm: any) => {
-        if (operation.id == "0")
+    const editOrAddOperation = (operation: Operation) => {
+        if (operation.id === "0")
             DataService.create(operation)
         else
             DataService.update(operation)
-        resetForm()
-        setRecordForEdit(null)
+        setRecordForEdit(emptyOperation)
         setOpenPopup(false)
+        refreshData()
+    }
+
+    const refreshData = () => {
         DataService.getAll()
             .then(response => {
                 setOperations(response.data.map((operation: Operation) => {
                     operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
                     return operation
                 }))
-
-                console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
@@ -235,21 +239,18 @@ export default function EnhancedTable() {
     }
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, operations.length - page * rowsPerPage);
-    const toolbarClasses = useToolbarStyles();
-
+    const barClass = useToolbarStyles();
 
     return (
         <div className={classes.root}>
             <Toolbar
-                className={clsx(classes.root, {
-                    [toolbarClasses.highlight]: selected.length > 0,
-                })}
+                className={clsx(classes.root)}
             >
-                <Typography className={toolbarClasses.title} variant="h6" id="tableTitle" component="div">
+                <Typography className={barClass.title} variant="h6" id="tableTitle" component="div">
                     Operations
                 </Typography>
 
-                <IconButton aria-label="delete" size="large" onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}>
+                <IconButton color="primary" size="large" onClick={() => openInPopup(emptyOperation)}>
                     <AddCircleIcon />
                 </IconButton>
             </Toolbar>
@@ -260,17 +261,15 @@ export default function EnhancedTable() {
                     size='small'
                     aria-label="enhanced table"
                 >
-                    <EnhancedTableHead
+                    <OperationTableHead
                         classes={classes}
-                        numSelected={selected.length}
                         order={order}
                         orderBy={orderBy}
-                        onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
                         rowCount={operations.length}
                     />
                     <TableBody>
-                        {stableSort(operations, getComparator(order, orderBy))
+                        {sortOperation(operations, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((operation, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -290,6 +289,18 @@ export default function EnhancedTable() {
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
                                         <TableCell align="right">{operation.date}</TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                color="primary"
+                                                onClick={() => openInPopup(operation)}>
+                                                <EditIcon fontSize="small" />
+                                            </IconButton>
+                                            <IconButton
+                                                color="secondary"
+                                                onClick={() => deleteOperation(operation)}>
+                                                <CloseIcon fontSize="small" />
+                                            </IconButton>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
@@ -314,9 +325,8 @@ export default function EnhancedTable() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 recordForEdit={recordForEdit}
-                addOrEdit={addOrEdit} 
+                editOrAddOperation={editOrAddOperation}
             />
-
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, Grid, Input, RadioGroup, Select, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Grid, Typography } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { Dispatch, SetStateAction } from "react";
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const initialFValues: Operation = {
+const emptyOperation: Operation = {
     id: "",
     name: "",
     amount: 0,
@@ -32,30 +32,26 @@ const initialFValues: Operation = {
 interface OperationFormProps {
     openPopup: boolean
     setOpenPopup: Dispatch<SetStateAction<boolean>>
-    recordForEdit: any
-    addOrEdit: (operation: Operation, resetForm: any) => void
+    recordForEdit: Operation
+    editOrAddOperation: (operation: Operation) => void
 }
 
 export default function OperationForm(props: OperationFormProps) {
-    const [values, setValues] = React.useState(initialFValues);
+    const [values, setValues] = React.useState<Operation>(emptyOperation);
     const classes = useStyles();
-    const { openPopup, setOpenPopup, recordForEdit, addOrEdit } = props;
-
-    const resetForm = () => {
-        setValues(initialFValues);
-    }
+    const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
 
     const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string }) => {
         const { name, amount, place, date } = formValue;
         const data: Operation = {
-            id: "",
+            id: values.id,
             name: name,
             amount: amount,
             place: place,
             date: date
         };
 
-        addOrEdit(data, resetForm);        
+        editOrAddOperation(data);
     }
 
     const validationSchema = () => {
@@ -68,11 +64,11 @@ export default function OperationForm(props: OperationFormProps) {
     }
 
     React.useEffect(() => {
-        console.log("")
-        if (recordForEdit != null)
+        if (recordForEdit != null) {
             setValues({
                 ...recordForEdit
             })
+        }
     }, [recordForEdit])
 
     return (
@@ -86,7 +82,7 @@ export default function OperationForm(props: OperationFormProps) {
                     </Typography>
                     <Button
                         color="secondary"
-                        onClick={() => { setOpenPopup(false) }}
+                        onClick={() => { setOpenPopup(false); }}
                     >
                         <CloseIcon />
                     </Button>
@@ -94,17 +90,17 @@ export default function OperationForm(props: OperationFormProps) {
             </DialogTitle>
             <DialogContent dividers>
                 <Formik
-                    initialValues={initialFValues}
+                    initialValues={values}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
                     <Form>
                         <Grid container>
                             <Grid item xs={6}>
-                                <Field component={TextField} name="name" type="text" label="name" disabled="" variant="standard" fullWidth />
-                                <Field component={TextField} name="amount" type="number" label="amount" disabled="" variant="standard" fullWidth />
-                                <Field component={TextField} name="place" type="text" label="place" disabled="" variant="standard" fullWidth />
-                                <Field component={TextField} name="date" type="text" label="date" disabled="" variant="standard" fullWidth />
+                                <Field component={TextField} name="name" type="text" label="name" variant="standard" fullWidth />
+                                <Field component={TextField} name="amount" type="number" label="amount" variant="standard" fullWidth />
+                                <Field component={TextField} name="place" type="text" label="place" variant="standard" fullWidth />
+                                <Field component={TextField} name="date" type="text" label="date" variant="standard" fullWidth />
                             </Grid>
                         </Grid>
 
@@ -112,7 +108,7 @@ export default function OperationForm(props: OperationFormProps) {
                             <Button type="submit">
                                 Submit
                             </Button>
-                            <Button onClick={resetForm}>
+                            <Button type="reset">
                                 Reset
                             </Button>
                         </div>

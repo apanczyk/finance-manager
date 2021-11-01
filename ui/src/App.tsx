@@ -1,13 +1,11 @@
 import "./App.css"
 import NavBar from './fragments/NavBar';
-import EnhancedTable from './NewTable';
-import OperationList from './model/OperationList';
+import OperationTable from './components/main/OperationTable';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from 'react-router-dom'
-import AddOperation from './routes/AddOperation';
 import DeleteOperation from './routes/DeleteOperation';
 import AdminBoard from './components/auth/AdminBoard';
 import UserBoard from './components/auth/UserBoard';
@@ -81,7 +79,6 @@ class App extends Component<Props, State> {
             <Route path="/user" component={UserBoard} />
             <Route path="/admin" component={AdminBoard} />
 
-            <Route exact path="/add" component={AddOperation} />
             <Route exact path="/delete/:operationId" component={DeleteOperation} />
           </Switch>
         </div>
@@ -98,8 +95,7 @@ class App extends Component<Props, State> {
                     alignItems: 'center',
                   }}
                 >
-                  <EnhancedTable />
-                  <OperationList />
+                  <OperationTable />
                 </Box>
               </Container>
             </div>
