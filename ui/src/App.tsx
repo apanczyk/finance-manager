@@ -20,6 +20,7 @@ import { Component } from 'react';
 import AuthVerifier from './util/AuthVerifier.js';
 import Box from "@mui/material/Box";
 import { Container } from "@material-ui/core";
+import ChartFragment from "./fragments/ChartFragment";
 
 type Props = {};
 
@@ -95,6 +96,7 @@ class App extends Component<Props, State> {
                     alignItems: 'center',
                   }}
                 >
+                  <ChartFragment />
                   <OperationTable />
                 </Box>
               </Container>
