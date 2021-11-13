@@ -18,6 +18,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import OperationForm from './OperationForm';
+import Select from './WalletSelect';
 
 const emptyOperation: Operation = {
     id: "",
@@ -249,7 +250,7 @@ export default function OperationTable() {
                 <Typography className={barClass.title} variant="h6" id="tableTitle" component="div">
                     Operations
                 </Typography>
-
+                <Select />
                 <IconButton color="primary" size="large" onClick={() => openInPopup(emptyOperation)}>
                     <AddCircleIcon />
                 </IconButton>
