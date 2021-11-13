@@ -6,7 +6,6 @@ import {
   Switch,
   Route,
 } from 'react-router-dom'
-import DeleteOperation from './routes/DeleteOperation';
 import AdminBoard from './components/auth/AdminBoard';
 import UserBoard from './components/auth/UserBoard';
 import Profile from './components/auth/Profile';
@@ -79,8 +78,6 @@ class App extends Component<Props, State> {
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={UserBoard} />
             <Route path="/admin" component={AdminBoard} />
-
-            <Route exact path="/delete/:operationId" component={DeleteOperation} />
           </Switch>
         </div>
 

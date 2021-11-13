@@ -18,5 +18,9 @@ class DataService {
     delete(id: string) {
         return api.delete(`/api/operations/${id}`, { headers: authHeader() })
     }
+
+    getWallets(id: string) {
+        return api.get(`/api/user/${id}/wallets`, { headers: authHeader() })
+    }
 }
 export default new DataService();

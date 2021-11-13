@@ -62,7 +62,6 @@ export default function NavBar(props: React.PropsWithChildren<Props>) {
                             <Button color="inherit" onClick={logOut}>
                                 LogOut
                             </Button>
-
                         </>
                     ) : (
                         <>

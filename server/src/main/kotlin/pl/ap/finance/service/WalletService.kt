@@ -1,6 +1,7 @@
 package pl.ap.finance.service
 
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.PathVariable
 import pl.ap.finance.exceptions.WalletNotFoundException
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
@@ -22,5 +23,10 @@ class WalletService(private val walletRepository: WalletRepository) {
         wallet.addOperation(operation)
         walletRepository.save(wallet)
         return wallet
+    }
+
+    fun getWallets(@PathVariable("id") userId: Long): List<Wallet> {
+        val wallets = walletRepository.findAll()
+        return wallets
     }
 }
