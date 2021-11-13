@@ -9,28 +9,35 @@ import IWallet from "../../model/types/WalletType";
 type Props = {}
 
 type State = {
-    wallet: IWallet[],
+    wallet: IWallet | null,
     redirect: string | null,
     userReady: boolean,
-    currentUser: IUser & { accessToken: string }
+    currentUser: IUser & { accessToken: string },
+    walletList: IWallet[]
 }
 export default class WalletSelect extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
         this.state = {
+            wallet: null,
             redirect: null,
             userReady: false,
             currentUser: { accessToken: "" },
-            wallet: []
+            walletList: []
         };
     }
 
     componentDidMount() {
         const currentUser = AuthService.getCurrentUser();
 
-        if (!currentUser) this.setState({ redirect: "/" })
-        else this.getWallets(currentUser.id)
+        if (currentUser) {
+            this.getWallets(currentUser.id)
+            this.state.walletList.forEach(element => {
+                if (element.isDefault) this.setState({ wallet: element })
+            }
+            )
+        }
         this.setState({ currentUser: currentUser, userReady: true })
     }
 
@@ -41,8 +48,7 @@ export default class WalletSelect extends Component<Props, State> {
     getWallets = (id: string) => {
         DataService.getWallets(id)
             .then(response => {
-                console.log(response.data)
-                this.setState({ wallet: response.data })
+                this.setState({ walletList: response.data })
             })
             .catch(e => {
                 console.log(e);
@@ -55,14 +61,15 @@ export default class WalletSelect extends Component<Props, State> {
                 <FormControl fullWidth>
                     <InputLabel id="wallet-select-label">Wallet</InputLabel>
                     <Select
+                        defaultValue=""
                         labelId="wallet-select-label"
                         id="wallet-select"
-                        // value={this.state.wallet}
+                        value={this.state.wallet?.name}
                         label="Wallet"
                         onChange={this.handleChange}
                     >
-                        {this.state.wallet.map(element => {
-                            return <MenuItem value={element.id}>{element.name}</MenuItem>
+                        {this.state.walletList.map(element => {
+                            return <MenuItem key={element.id} value={element.id}>{element.name}</MenuItem>
                         })}
                     </Select>
                 </FormControl>

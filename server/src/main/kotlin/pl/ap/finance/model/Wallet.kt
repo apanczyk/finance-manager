@@ -15,6 +15,7 @@ class Wallet(
     val currency: Currency,
     val amount: Double,
     val date: LocalDateTime = LocalDateTime.now(),
+    val isDefault: Boolean,
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_wallet_table",
