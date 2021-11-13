@@ -6,14 +6,16 @@ import java.util.*
 class WalletDto(
     val name: String,
     val currency: Currency,
-    val amount: Double
+    val amount: Double,
+    val isDefault: Boolean
 ) {
     companion object {
         fun toWallet(walletDto: WalletDto): Wallet {
             return Wallet(
                     name = walletDto.name,
                     currency = walletDto.currency,
-                    amount = walletDto.amount
+                    amount = walletDto.amount,
+                    isDefault = walletDto.isDefault
             )
         }
     }

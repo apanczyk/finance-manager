@@ -72,7 +72,8 @@ class UserService(private val passwordEncoder: PasswordEncoder,
         val wallet = Wallet(
                 name = walletDto.name,
                 currency = walletDto.currency,
-                amount = walletDto.amount
+                amount = walletDto.amount,
+                isDefault = walletDto.isDefault
         )
         wallet.addUser(user)
         walletRepository.save(wallet)

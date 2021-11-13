@@ -13,6 +13,7 @@ import pl.ap.finance.util.TestData.Companion.AMOUNT
 import pl.ap.finance.util.TestData.Companion.CURRENCY
 import pl.ap.finance.util.TestData.Companion.EMAIL
 import pl.ap.finance.util.TestData.Companion.FIRST_NAME
+import pl.ap.finance.util.TestData.Companion.IS_DEFAULT
 import pl.ap.finance.util.TestData.Companion.LAST_NAME
 import pl.ap.finance.util.TestData.Companion.NAME
 import pl.ap.finance.util.TestData.Companion.USER
@@ -73,5 +74,6 @@ class UserIT {
         assertThat(response.wallets.any { it.amount == AMOUNT })
         assertThat(response.wallets.any { it.name == NAME })
         assertThat(response.wallets.any { it.currency == CURRENCY })
+        assertThat(response.wallets.any { it.isDefault == IS_DEFAULT })
     }
 }

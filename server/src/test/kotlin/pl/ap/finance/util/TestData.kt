@@ -16,6 +16,7 @@ class TestData {
         val CURRENCY = Currency.getInstance("USD")!!
         const val NAME = "Wallet"
         const val AMOUNT = 200.0
+        const val IS_DEFAULT = false
 
         const val PLACE = "Warsaw"
 
@@ -30,7 +31,8 @@ class TestData {
         val WALLET = WalletDto(
                 name = NAME,
                 currency = CURRENCY,
-                amount = AMOUNT
+                amount = AMOUNT,
+                isDefault = IS_DEFAULT
         )
 
         val OPERATION = OperationDto(
