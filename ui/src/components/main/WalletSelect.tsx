@@ -1,79 +1,68 @@
-import { Component } from "react";
 import AuthService from "../../service/AuthService";
-import IUser from "../../model/types/UserType";
 import Container from "@material-ui/core/Container";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import DataService from "../../api/DataService";
 import IWallet from "../../model/types/WalletType";
+import React from "react";
 
-type Props = {}
-
-type State = {
-    wallet: IWallet | null,
-    redirect: string | null,
-    userReady: boolean,
-    currentUser: IUser & { accessToken: string },
-    walletList: IWallet[]
+interface WalletSelectFormProps {
+    changeWallet: (walletId: string) => void
 }
-export default class WalletSelect extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
 
-        this.state = {
-            wallet: null,
-            redirect: null,
-            userReady: false,
-            currentUser: { accessToken: "" },
-            walletList: []
-        };
-    }
+export default function WalletSelect(props: WalletSelectFormProps) {
 
-    componentDidMount() {
-        const currentUser = AuthService.getCurrentUser();
+    const [walletId, setWalletId] = React.useState<string>("")
+    const [walletList, setWalletList] = React.useState<IWallet[]>([])
+    const { changeWallet } = props
 
-        if (currentUser) {
-            this.getWallets(currentUser.id)
-            this.state.walletList.forEach(element => {
-                if (element.isDefault) this.setState({ wallet: element })
-            }
-            )
-        }
-        this.setState({ currentUser: currentUser, userReady: true })
-    }
-
-    handleChange(event: SelectChangeEvent) {
-        // this.setState({ wallet: event.target.value })
+    const handleChange = (event: SelectChangeEvent) => {
+        setWalletId(event.target.value)
+        changeWallet(event.target.value)
     };
 
-    getWallets = (id: string) => {
+    React.useEffect(() => {
+        const currentUser = AuthService.getCurrentUser();
+        getWallets(currentUser.id)
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const getWallets = (id: string) => {
         DataService.getWallets(id)
             .then(response => {
-                this.setState({ walletList: response.data })
+                console.log("XDDD" + response.data)
+                setWalletList(response.data)
+                response.data.forEach((element: IWallet) => {
+                    if (element.isDefault)
+                        setWalletId(element.id.toString())
+                })
             })
             .catch(e => {
                 console.log(e);
             });
+        console.log(walletList)
     }
 
-    render() {
-        return (
-            <Container component="main" maxWidth="sm">
-                <FormControl fullWidth>
-                    <InputLabel id="wallet-select-label">Wallet</InputLabel>
-                    <Select
-                        defaultValue=""
-                        labelId="wallet-select-label"
-                        id="wallet-select"
-                        value={this.state.wallet?.name}
-                        label="Wallet"
-                        onChange={this.handleChange}
-                    >
-                        {this.state.walletList.map(element => {
-                            return <MenuItem key={element.id} value={element.id}>{element.name}</MenuItem>
-                        })}
-                    </Select>
-                </FormControl>
-            </Container>
-        );
-    }
+
+    return (
+        <Container component="main" maxWidth="sm">
+            <FormControl fullWidth>
+                <InputLabel id="wallet-select-label">Wallet</InputLabel>
+                <Select
+                    defaultValue=""
+                    labelId="wallet-select-label"
+                    id="wallet-select"
+                    value={walletId}
+                    label="Wallet"
+                    onChange={handleChange}
+                >
+                    {walletList.map(element => {
+                        return <MenuItem
+                            key={element.id}
+                            value={element.id}>
+                            {element.name}
+                        </MenuItem>
+                    })}
+                </Select>
+            </FormControl>
+        </Container>
+    );
 }

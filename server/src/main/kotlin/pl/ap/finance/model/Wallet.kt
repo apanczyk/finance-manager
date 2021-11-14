@@ -1,5 +1,6 @@
 package pl.ap.finance.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.time.LocalDateTime
 import java.util.*
@@ -22,8 +23,9 @@ class Wallet(
         joinColumns = [JoinColumn(name = "wallet_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")]
     )
-    @JsonIgnoreProperties("wallets")
+    @JsonIgnore
     val users: MutableSet<User> = mutableSetOf(),
+    @JsonIgnore
     @OneToMany(mappedBy = "_wallet", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     val operations: MutableSet<Operation> = mutableSetOf()
 ) {

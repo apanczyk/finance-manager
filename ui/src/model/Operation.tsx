@@ -3,5 +3,6 @@ export default interface Operation {
     name: string,
     amount: number,
     place: string,
-    date: string
+    date: string,
+    walletId: number
 }

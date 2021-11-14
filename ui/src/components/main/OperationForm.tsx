@@ -26,7 +26,8 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: ""
+    date: "",
+    walletId: 0
 }
 
 interface OperationFormProps {
@@ -41,14 +42,15 @@ export default function OperationForm(props: OperationFormProps) {
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
 
-    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string }) => {
-        const { name, amount, place, date } = formValue;
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, walletId: number }) => {
+        const { name, amount, place, date, walletId } = formValue;
         const data: Operation = {
             id: values.id,
             name: name,
             amount: amount,
             place: place,
-            date: date
+            date: date,
+            walletId: walletId
         };
 
         editOrAddOperation(data);

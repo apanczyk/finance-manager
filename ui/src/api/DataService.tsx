@@ -22,5 +22,9 @@ class DataService {
     getWallets(id: string) {
         return api.get(`/api/user/${id}/wallets`, { headers: authHeader() })
     }
+
+    getOperations(id: string) {
+        return api.get(`/api/wallets/${id}/operations`, { headers: authHeader() })
+    }
 }
 export default new DataService();
