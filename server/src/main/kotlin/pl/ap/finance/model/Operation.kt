@@ -1,7 +1,7 @@
 package pl.ap.finance.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -15,6 +15,7 @@ class Operation(
     val place: String,
     val date: LocalDate = LocalDate.now(),
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     var _wallet: Wallet? = null,
 ) {
     var wallet: Wallet?

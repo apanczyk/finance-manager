@@ -18,14 +18,15 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import OperationForm from './OperationForm';
-import Select from './WalletSelect';
+import WalletSelect from './WalletSelect';
 
 const emptyOperation: Operation = {
     id: "",
     name: "",
     amount: 0,
     place: "",
-    date: ""
+    date: "",
+    walletId: 0
 }
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
@@ -175,18 +176,19 @@ export default function OperationTable() {
     const [recordForEdit, setRecordForEdit] = React.useState(emptyOperation)
     const [openPopup, setOpenPopup] = React.useState(false)
 
-    React.useEffect(() => {
-        DataService.getAll()
-            .then(response => {
-                setOperations(response.data.map((operation: Operation) => {
-                    operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-                    return operation
-                }))
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }, []);
+    // React.useEffect(() => {
+    //     DataService.getAll()
+    //         .then(response => {
+    //             setOperations(response.data.map((operation: Operation) => {
+    //                 operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
+    //                 return operation
+    //             }))
+    //             console.log(response.data)
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    // }, []);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Operation) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -205,7 +207,7 @@ export default function OperationTable() {
 
     const deleteOperation = (operation: Operation) => {
         DataService.delete(operation.id).then(() =>
-            refreshData()
+            refreshData(null)
         ).catch(e => {
             console.log(e);
         });
@@ -218,20 +220,37 @@ export default function OperationTable() {
             DataService.update(operation)
         setRecordForEdit(emptyOperation)
         setOpenPopup(false)
-        refreshData()
+        refreshData(null)
     }
 
-    const refreshData = () => {
-        DataService.getAll()
-            .then(response => {
+    const changeWallet = (walletId: string) => {
+        refreshData(walletId)
+    }
+
+    const refreshData = (id: string | null) => {
+        if (id !== "" && id != null) {
+            console.log("xd" + id)
+            DataService.getOperations(id).then(response => {
                 setOperations(response.data.map((operation: Operation) => {
                     operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
                     return operation
                 }))
             })
-            .catch(e => {
-                console.log(e);
-            });
+                .catch(e => {
+                    console.log(e);
+                });
+        } else {
+            DataService.getAll()
+                .then(response => {
+                    setOperations(response.data.map((operation: Operation) => {
+                        operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
+                        return operation
+                    }))
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }
     }
 
     const openInPopup = (item: any) => {
@@ -250,7 +269,7 @@ export default function OperationTable() {
                 <Typography className={barClass.title} variant="h6" id="tableTitle" component="div">
                     Operations
                 </Typography>
-                <Select />
+                <WalletSelect changeWallet={changeWallet} />
                 <IconButton color="primary" size="large" onClick={() => openInPopup(emptyOperation)}>
                     <AddCircleIcon />
                 </IconButton>

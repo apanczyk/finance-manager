@@ -3,7 +3,8 @@ interface IWallet {
     name: string,
     currency: string,
     amount: number,
-    isDefault: boolean
+    isDefault: boolean,
+    _wallet_id: number | null
 }
 
 export default IWallet

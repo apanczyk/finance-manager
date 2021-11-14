@@ -1,5 +1,6 @@
 package pl.ap.finance.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -16,8 +17,9 @@ class User(
         var password: String,
         val registrationDate: LocalDateTime = LocalDateTime.now(),
         @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "users")
-        @JsonIgnoreProperties("users")
+        @JsonIgnore
         val wallets: MutableSet<Wallet> = mutableSetOf(),
+        @JsonIgnore
         val role: Role?
 ) {
     fun addWallet(wallet: Wallet) {
