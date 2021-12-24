@@ -35,18 +35,18 @@ export default class Register extends Component<Props, State> {
   validationSchema() {
     return Yup.object().shape({
       email: Yup.string()
-        .email("This is not a valid email.")
-        .required("This field is required!"),
+        .email("Email not valid")
+        .required("Field required"),
       password: Yup.string()
         .test(
           "len",
-          "The password must be between 6 and 40 characters.",
+          "Password should be between 4 and 20 characters",
           (val: any) =>
             val &&
-            val.toString().length >= 6 &&
-            val.toString().length <= 40
+            val.toString().length >= 4 &&
+            val.toString().length <= 20
         )
-        .required("This field is required!"),
+        .required("Field required"),
     });
   }
 
