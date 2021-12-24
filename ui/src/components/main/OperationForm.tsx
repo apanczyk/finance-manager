@@ -58,10 +58,10 @@ export default function OperationForm(props: OperationFormProps) {
 
     const validationSchema = () => {
         return Yup.object().shape({
-            name: Yup.string().required("This field is required!"),
-            amount: Yup.string().required("This field is required!"),
-            place: Yup.string().required("This field is required!"),
-            date: Yup.string().required("This field is required!")
+            name: Yup.string().required("Field required"),
+            amount: Yup.string().required("Field required"),
+            place: Yup.string().required("Field required"),
+            date: Yup.string().required("Field required")
         });
     }
 
