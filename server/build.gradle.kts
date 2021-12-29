@@ -31,6 +31,7 @@ dependencies {
     implementation("javax.mail:mail:1.4.7")
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.4")
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.1")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.4")
