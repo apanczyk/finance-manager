@@ -4,13 +4,14 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import pl.ap.finance.IntegrationTest
 import pl.ap.finance.model.dto.WalletDto
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.service.WalletService
 import pl.ap.finance.util.TestData
 
-@IntegrationTest
+@SpringBootTest
 class WalletIT {
 
     @Autowired

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import pl.ap.finance.IntegrationTest
 import pl.ap.finance.exceptions.EmailExistsException
 import pl.ap.finance.repository.UserRepository
@@ -19,7 +20,7 @@ import pl.ap.finance.util.TestData.Companion.NAME
 import pl.ap.finance.util.TestData.Companion.USER
 import pl.ap.finance.util.TestData.Companion.WALLET
 
-@IntegrationTest
+@SpringBootTest
 class UserIT {
 
     @Autowired
