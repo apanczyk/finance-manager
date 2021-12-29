@@ -32,7 +32,7 @@ export default class Register extends Component<Props, State> {
     };
   }
 
-  validationSchema() {
+  validateRegistration() {
     return Yup.object().shape({
       email: Yup.string()
         .email("Email not valid")
@@ -41,10 +41,10 @@ export default class Register extends Component<Props, State> {
         .test(
           "len",
           "Password should be between 4 and 20 characters",
-          (val: any) =>
-            val &&
-            val.toString().length >= 4 &&
-            val.toString().length <= 20
+          (passwordInput: any) =>
+            passwordInput &&
+            passwordInput.toString().length >= 4 &&
+            passwordInput.toString().length <= 20
         )
         .required("Field required"),
     });
@@ -112,7 +112,7 @@ export default class Register extends Component<Props, State> {
             </Typography>
             <Formik
               initialValues={initialValues}
-              validationSchema={this.validationSchema}
+              validationSchema={this.validateRegistration}
               onSubmit={this.handleRegister}
             >
               <Form>
