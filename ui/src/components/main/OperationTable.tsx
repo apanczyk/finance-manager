@@ -229,7 +229,6 @@ export default function OperationTable() {
 
     const refreshData = (id: string | null) => {
         if (id !== "" && id != null) {
-            console.log("xd" + id)
             DataService.getOperations(id).then(response => {
                 setOperations(response.data.map((operation: Operation) => {
                     operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
