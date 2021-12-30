@@ -11,3 +11,5 @@ class UserNotFoundException(message: String? = null, cause: Exception? = null) :
 class WalletNotFoundException(message: String? = null, cause: Exception? = null) : UsersException(message, cause)
 
 class UserRoleNotFoundException(message: String? = null, cause: Exception? = null) : UsersException(message, cause)
+
+class CategoryTypeNotFoundException(message: String? = null, cause: Exception? = null) : UsersException(message, cause)

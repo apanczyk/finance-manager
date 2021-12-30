@@ -1,12 +1,13 @@
-import { Dialog, DialogContent, DialogTitle, Grid, Typography } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { Dispatch, SetStateAction } from "react";
 import Operation from "../../model/Operation";
-import Button from "@material-ui/core/Button";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { TextField } from 'formik-mui';
+import TextFieldMui from '@mui/material/TextField';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,10 +38,43 @@ interface OperationFormProps {
     editOrAddOperation: (operation: Operation) => void
 }
 
+const categoryTypes = [
+    {
+        key: 'INCOME',
+        value: 'Income',
+    },
+    {
+        key: 'OUTCOME',
+        value: 'Outcome',
+    },
+];
+
+const categories = [
+    {
+        key: 'FOOD',
+        value: 'Food',
+    },
+    {
+        key: 'BILL',
+        value: 'Bill',
+    },
+];
+
 export default function OperationForm(props: OperationFormProps) {
     const [values, setValues] = React.useState<Operation>(emptyOperation);
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
+    const [categoryType, setCategoryType] = React.useState('Income');
+    const [category, setCategory] = React.useState('Food');
+
+    const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCategoryType(event.target.value);
+
+    };
+
+    const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCategory(event.target.value);
+    };
 
     const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, walletId: number }) => {
         const { name, amount, place, date, walletId } = formValue;
@@ -97,24 +131,63 @@ export default function OperationForm(props: OperationFormProps) {
                     onSubmit={handleSubmit}
                 >
                     <Form>
-                        <Grid container>
+                        <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Field component={TextField} name="name" type="text" label="name" variant="standard" fullWidth />
                                 <Field component={TextField} name="amount" type="number" label="amount" variant="standard" fullWidth />
                                 <Field component={TextField} name="place" type="text" label="place" variant="standard" fullWidth />
                                 <Field component={TextField} name="date" type="text" label="date" variant="standard" fullWidth />
                             </Grid>
+                            <Grid item xs={6}>
+                                <TextFieldMui
+                                    id="categoryType"
+                                    select
+                                    label="Category Type"
+                                    value={categoryType}
+                                    onChange={handleChangeCategoryType}
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                    variant="standard"
+                                    fullWidth
+                                >
+                                    {categoryTypes.map((specCategoryType) => (
+                                        <option key={specCategoryType.key} value={specCategoryType.key}>
+                                            {specCategoryType.value}
+                                        </option>
+                                    ))}
+                                </TextFieldMui>
+
+                                <TextFieldMui
+                                    id="category"
+                                    select
+                                    label="Category"
+                                    value={category}
+                                    onChange={handleChangeCategory}
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                    variant="standard"
+                                    fullWidth
+                                >
+                                    {categories.map((specCategory) => (
+                                        <option key={specCategory.key} value={specCategory.key}>
+                                            {specCategory.value}
+                                        </option>
+                                    ))}
+                                </TextFieldMui>
+                            </Grid>
                         </Grid>
-
                         <div>
-                            <Button type="submit">
-                                Submit
-                            </Button>
-                            <Button type="reset">
-                                Reset
-                            </Button>
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                                <Button variant="outlined" color='secondary' type="submit">
+                                    Submit
+                                </Button>
+                                <Button variant="outlined" color='secondary' type="reset">
+                                    Reset
+                                </Button>
+                            </Stack>
                         </div>
-
                     </Form>
                 </Formik>
             </DialogContent>
