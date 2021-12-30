@@ -4,5 +4,6 @@ export default interface Operation {
     amount: number,
     place: string,
     date: string,
+    category: string,
     walletId: number
 }
