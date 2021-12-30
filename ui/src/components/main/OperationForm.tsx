@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { TextField } from 'formik-mui';
 import TextFieldMui from '@mui/material/TextField';
+import Category from "../../model/Category";
+import DataService from "../../api/DataService";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +30,7 @@ const emptyOperation: Operation = {
     amount: 0,
     place: "",
     date: "",
+    category: "",
     walletId: 0
 }
 
@@ -49,34 +52,30 @@ const categoryTypes = [
     },
 ];
 
-const categories = [
-    {
-        key: 'FOOD',
-        value: 'Food',
-    },
-    {
-        key: 'BILL',
-        value: 'Bill',
-    },
-];
-
 export default function OperationForm(props: OperationFormProps) {
     const [values, setValues] = React.useState<Operation>(emptyOperation);
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
     const [categoryType, setCategoryType] = React.useState('Income');
     const [category, setCategory] = React.useState('Food');
+    const [categories, setCategories] = React.useState(Array<Category>());
 
     const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategoryType(event.target.value);
-
+        DataService.getCategories(event.target.value)
+            .then(response => {
+                setCategories(response.data)
+            })
+            .catch(e => {
+                console.log(e);
+            });
     };
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategory(event.target.value);
     };
 
-    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, walletId: number }) => {
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: string, walletId: number }) => {
         const { name, amount, place, date, walletId } = formValue;
         const data: Operation = {
             id: values.id,
@@ -84,6 +83,7 @@ export default function OperationForm(props: OperationFormProps) {
             amount: amount,
             place: place,
             date: date,
+            category: category,
             walletId: walletId
         };
 
@@ -171,8 +171,8 @@ export default function OperationForm(props: OperationFormProps) {
                                     fullWidth
                                 >
                                     {categories.map((specCategory) => (
-                                        <option key={specCategory.key} value={specCategory.key}>
-                                            {specCategory.value}
+                                        <option key={specCategory.id} value={specCategory.id}>
+                                            {specCategory.name}
                                         </option>
                                     ))}
                                 </TextFieldMui>

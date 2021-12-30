@@ -13,6 +13,8 @@ class Operation(
     val name: String,
     val amount: Double,
     val place: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    val category: Category,
     val date: LocalDate = LocalDate.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

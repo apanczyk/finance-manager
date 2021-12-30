@@ -26,6 +26,7 @@ const emptyOperation: Operation = {
     amount: 0,
     place: "",
     date: "",
+    category: "",
     walletId: 0
 }
 
@@ -176,20 +177,6 @@ export default function OperationTable() {
     const [recordForEdit, setRecordForEdit] = React.useState(emptyOperation)
     const [openPopup, setOpenPopup] = React.useState(false)
 
-    // React.useEffect(() => {
-    //     DataService.getAll()
-    //         .then(response => {
-    //             setOperations(response.data.map((operation: Operation) => {
-    //                 operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-    //                 return operation
-    //             }))
-    //             console.log(response.data)
-    //         })
-    //         .catch(e => {
-    //             console.log(e);
-    //         });
-    // }, []);
-
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Operation) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -225,6 +212,7 @@ export default function OperationTable() {
 
     const changeWallet = (walletId: string) => {
         refreshData(walletId)
+        setPage(0)
     }
 
     const refreshData = (id: string | null) => {

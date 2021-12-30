@@ -5,11 +5,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.dto.OperationDto
+import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.OperationRepository
 
 @RestController
 @RequestMapping("/api/operations")
-class OperationController(val operationsRepository: OperationRepository) {
+class OperationController(val operationsRepository: OperationRepository, val categoryRepository: CategoryRepository) {
 
     @GetMapping
     fun getAllOperations(): ResponseEntity<List<Operation>> {
@@ -25,22 +26,30 @@ class OperationController(val operationsRepository: OperationRepository) {
 
     @PostMapping
     fun createOperation(@RequestBody request: OperationDto): ResponseEntity<Operation> {
-        val operation = operationsRepository.save(Operation(
-            name = request.name,
-            amount = request.amount,
-            place = request.place
-        ))
+        val category = categoryRepository.findById(request.category)
+        val operation = operationsRepository.save(
+            Operation(
+                name = request.name,
+                amount = request.amount,
+                place = request.place,
+                category = category.orElseThrow()
+            )
+        )
         return ResponseEntity(operation, HttpStatus.CREATED)
     }
 
     @PostMapping("/{id}")
     fun updateOperation(@PathVariable("id") id: Long, @RequestBody request: OperationDto): ResponseEntity<Operation> {
-        val operationToUpdate = operationsRepository.save(Operation(
-            id = id,
-            name = request.name,
-            amount = request.amount,
-            place = request.place
-        ))
+        val category = categoryRepository.findById(request.category)
+        val operationToUpdate = operationsRepository.save(
+            Operation(
+                id = id,
+                name = request.name,
+                amount = request.amount,
+                place = request.place,
+                category = category.orElseThrow()
+            )
+        )
         return ResponseEntity(operationToUpdate, HttpStatus.OK)
     }
 
