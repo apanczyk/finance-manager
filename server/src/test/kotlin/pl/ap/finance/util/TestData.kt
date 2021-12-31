@@ -1,5 +1,6 @@
 package pl.ap.finance.util
 
+import pl.ap.finance.model.Category
 import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
@@ -19,6 +20,7 @@ class TestData {
         const val IS_DEFAULT = false
 
         const val PLACE = "Warsaw"
+        const val CATEGORY =  1L
 
 
         val USER = UserDto(
@@ -38,7 +40,8 @@ class TestData {
         val OPERATION = OperationDto(
                 name = NAME,
                 amount = AMOUNT,
-                place = PLACE
+                place = PLACE,
+                category = CATEGORY
         )
     }
 }
