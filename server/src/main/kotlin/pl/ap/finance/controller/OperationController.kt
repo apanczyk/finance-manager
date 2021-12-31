@@ -7,10 +7,14 @@ import pl.ap.finance.model.Operation
 import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.OperationRepository
+import pl.ap.finance.repository.WalletRepository
 
 @RestController
 @RequestMapping("/api/operations")
-class OperationController(val operationsRepository: OperationRepository, val categoryRepository: CategoryRepository) {
+class OperationController(val operationsRepository: OperationRepository,
+                          val categoryRepository: CategoryRepository,
+                          val walletRepository: WalletRepository
+                          ) {
 
     @GetMapping
     fun getAllOperations(): ResponseEntity<List<Operation>> {
@@ -27,12 +31,14 @@ class OperationController(val operationsRepository: OperationRepository, val cat
     @PostMapping
     fun createOperation(@RequestBody request: OperationDto): ResponseEntity<Operation> {
         val category = categoryRepository.findById(request.category)
+        val wallet = walletRepository.findById(request.walletId)
         val operation = operationsRepository.save(
             Operation(
                 name = request.name,
                 amount = request.amount,
                 place = request.place,
-                category = category.orElseThrow()
+                category = category.orElseThrow(),
+                _wallet = wallet.orElseThrow()
             )
         )
         return ResponseEntity(operation, HttpStatus.CREATED)
@@ -41,13 +47,15 @@ class OperationController(val operationsRepository: OperationRepository, val cat
     @PostMapping("/{id}")
     fun updateOperation(@PathVariable("id") id: Long, @RequestBody request: OperationDto): ResponseEntity<Operation> {
         val category = categoryRepository.findById(request.category)
+        val wallet = walletRepository.findById(request.walletId)
         val operationToUpdate = operationsRepository.save(
             Operation(
                 id = id,
                 name = request.name,
                 amount = request.amount,
                 place = request.place,
-                category = category.orElseThrow()
+                category = category.orElseThrow(),
+                _wallet = wallet.orElseThrow()
             )
         )
         return ResponseEntity(operationToUpdate, HttpStatus.OK)

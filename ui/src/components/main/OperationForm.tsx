@@ -56,8 +56,8 @@ export default function OperationForm(props: OperationFormProps) {
     const [values, setValues] = React.useState<Operation>(emptyOperation);
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
-    const [categoryType, setCategoryType] = React.useState('Income');
-    const [category, setCategory] = React.useState('Food');
+    const [categoryType, setCategoryType] = React.useState('');
+    const [category, setCategory] = React.useState('');
     const [categories, setCategories] = React.useState(Array<Category>());
 
     const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
