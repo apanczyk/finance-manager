@@ -26,7 +26,7 @@ class Wallet(
     @JsonIgnore
     val users: MutableSet<User> = mutableSetOf(),
     @JsonIgnore
-    @OneToMany(mappedBy = "_wallet", cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "_wallet", fetch = FetchType.EAGER, orphanRemoval = true)
     val operations: MutableSet<Operation> = mutableSetOf()
 ) {
     fun addUser(user: User) {

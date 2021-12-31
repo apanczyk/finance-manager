@@ -173,6 +173,7 @@ export default function OperationTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [operations, setOperations] = React.useState(Array<Operation>());
+    const [wallet, setWallet] = React.useState<string>()
 
     const [recordForEdit, setRecordForEdit] = React.useState(emptyOperation)
     const [openPopup, setOpenPopup] = React.useState(false)
@@ -194,30 +195,36 @@ export default function OperationTable() {
 
     const deleteOperation = (operation: Operation) => {
         DataService.delete(operation.id).then(() =>
-            refreshData(null)
+            refreshData()
         ).catch(e => {
             console.log(e);
         });
     }
 
     const editOrAddOperation = (operation: Operation) => {
+        operation.walletId = Number(wallet)
         if (operation.id === "0")
             DataService.create(operation)
         else
             DataService.update(operation)
         setRecordForEdit(emptyOperation)
         setOpenPopup(false)
-        refreshData(null)
+        refreshData()
     }
 
     const changeWallet = (walletId: string) => {
-        refreshData(walletId)
+        setWallet(walletId)
         setPage(0)
     }
 
-    const refreshData = (id: string | null) => {
-        if (id !== "" && id != null) {
-            DataService.getOperations(id).then(response => {
+
+    React.useEffect(() => {
+        refreshData()
+    }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const refreshData = () => {
+        if (wallet !== "" && wallet != null) {
+            DataService.getOperations(wallet).then(response => {
                 setOperations(response.data.map((operation: Operation) => {
                     operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
                     return operation
