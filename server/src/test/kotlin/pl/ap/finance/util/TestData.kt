@@ -1,6 +1,7 @@
 package pl.ap.finance.util
 
 import pl.ap.finance.model.Category
+import pl.ap.finance.model.CategoryType
 import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
@@ -20,28 +21,37 @@ class TestData {
         const val IS_DEFAULT = false
 
         const val PLACE = "Warsaw"
-        const val CATEGORY =  1L
+        const val CATEGORY_ID = 1L
+        const val CATEGORY_NAME = "Bills"
+        const val WALLET_ID = 1L
 
 
         val USER = UserDto(
-                firstName = FIRST_NAME,
-                lastName = LAST_NAME,
-                email = EMAIL,
-                password = PASSWORD
+            firstName = FIRST_NAME,
+            lastName = LAST_NAME,
+            email = EMAIL,
+            password = PASSWORD
         )
 
         val WALLET = WalletDto(
-                name = NAME,
-                currency = CURRENCY,
-                amount = AMOUNT,
-                isDefault = IS_DEFAULT
+            name = NAME,
+            currency = CURRENCY,
+            amount = AMOUNT,
+            isDefault = IS_DEFAULT
         )
 
         val OPERATION = OperationDto(
-                name = NAME,
-                amount = AMOUNT,
-                place = PLACE,
-                category = CATEGORY
+            name = NAME,
+            amount = AMOUNT,
+            place = PLACE,
+            category = CATEGORY_ID,
+            walletId = WALLET_ID
+        )
+
+        val CATEGORY = Category(
+            id = WALLET_ID,
+            name = CATEGORY_NAME,
+            type = CategoryType.OUTCOME
         )
     }
 }
