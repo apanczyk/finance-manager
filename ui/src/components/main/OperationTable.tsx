@@ -27,7 +27,11 @@ const emptyOperation: Operation = {
     amount: 0,
     place: "",
     date: "",
-    category: {} as Category,
+    category: {
+        id: 0,
+        name: '',
+        type: ''
+    } as Category,
     walletId: 0
 }
 
