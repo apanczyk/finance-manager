@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTitle, Grid, MenuItem, Stack, Typography } from "@mui/material";
+import { Dialog, DialogTitle, Typography, Button, DialogContent, Grid, MenuItem, Stack } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { Dispatch, SetStateAction } from "react";
@@ -9,7 +9,9 @@ import { TextField } from 'formik-mui';
 import TextFieldMui from '@mui/material/TextField';
 import Category from "../../model/Category";
 import DataService from "../../api/DataService";
-
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,16 +67,26 @@ export default function OperationForm(props: OperationFormProps) {
     const [allCategories, setAllCategories] = React.useState(Array<Category>());
 
     const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
-        values.category = emptyOperation.category
-        setCategoryType(event.target.value);
+        let copyValues = { ...values }
+        copyValues.category = emptyOperation.category
+        setValues(copyValues)
+
         let filteredCategories = allCategories.filter(cat => cat.type !== categoryType)
         setCategories(filteredCategories)
+        setCategoryType(event.target.value);
     };
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
         let categoryId = Number(Object.keys(categories).find((k: any) => categories[k].name === event.target.value))
-        values.category = categories[categoryId]
-        console.log(values.category)
+        let copyValues = { ...values }
+        copyValues.category = categories[categoryId]
+        setValues(copyValues)
+    };
+
+    const handleChangeDate = (newValue: Date | null) => {
+        let copyValues = { ...values }
+        copyValues.date = newValue!.toString()
+        setValues(copyValues)
     };
 
     const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: Category, walletId: number }) => {
@@ -158,14 +170,13 @@ export default function OperationForm(props: OperationFormProps) {
                                 <Field component={TextField} name="name" type="text" label="name" variant="standard" fullWidth />
                                 <Field component={TextField} name="amount" type="number" label="amount" variant="standard" fullWidth />
                                 <Field component={TextField} name="place" type="text" label="place" variant="standard" fullWidth />
-                                <Field component={TextField} name="date" type="text" label="date" variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextFieldMui
                                     id="categoryType"
                                     select
                                     label="Category Type"
-                                    value={values.category.type}
+                                    value={categoryType}
                                     onChange={handleChangeCategoryType}
                                     variant="standard"
                                     fullWidth
@@ -178,7 +189,7 @@ export default function OperationForm(props: OperationFormProps) {
                                 </TextFieldMui>
 
                                 <TextFieldMui
-                                    id="category"
+                                    id="categorySpec"
                                     select
                                     required
                                     label="Category"
@@ -196,6 +207,16 @@ export default function OperationForm(props: OperationFormProps) {
                                     }
 
                                 </TextFieldMui>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopDatePicker
+                                        label="Date"
+                                        inputFormat="yyyy/MM/dd"
+                                        value={values.date}
+                                        onChange={handleChangeDate}
+                                        mask="____/__/__"
+                                        renderInput={(params) => <TextFieldMui {...params} />}
+                                    />
+                                </LocalizationProvider>
                             </Grid>
                         </Grid>
                         <div>
