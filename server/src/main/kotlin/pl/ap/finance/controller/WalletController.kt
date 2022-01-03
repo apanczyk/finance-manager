@@ -22,8 +22,8 @@ class WalletController(private val walletService: WalletService, private val wal
 
     @GetMapping("/{id}/grouped")
     fun getGroupedOperations(@PathVariable("id") id: Long): ResponseEntity<List<GroupedOperation>> {
-        val wallet = walletRepository.findById(id).get()
-        val groupedOperations = walletService.groupOperations(wallet)
+        val wallet = walletRepository.findById(id)
+        val groupedOperations = walletService.groupOperations(wallet.get())
         return ResponseEntity.ok(groupedOperations)
     }
 }

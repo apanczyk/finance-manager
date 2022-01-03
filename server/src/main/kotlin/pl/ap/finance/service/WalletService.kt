@@ -10,6 +10,7 @@ import pl.ap.finance.model.response.GroupedOperation
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.WalletRepository
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -37,10 +38,32 @@ class WalletService(private val walletRepository: WalletRepository, private val 
     }
 
     fun groupOperations(wallet: Wallet): List<GroupedOperation> {
+        val months = 12L
         val operations = wallet.operations
 
-        val groupedOperation: List<GroupedOperation> = emptyList()
-        operations.sortedBy { it.date }.filter { it.date > LocalDate.now().minusYears(1) }
+        val groupedOperation = mutableListOf<GroupedOperation>()
+        val monthsFromLastYear = createMonthList(months)
+        val previousYear = LocalDate.now().minusMonths(months)
+
+        for(month in 1..months) {
+            val currentDate = previousYear.plusMonths(month)
+            val xd = operations.filter {
+                it.date.isAfter(LocalDate.of(currentDate.year, currentDate.monthValue, 0))
+                        && it.date.isBefore(LocalDate.of(currentDate.year, currentDate.monthValue+1, 0))
+            }.sumOf { it.amount }
+            groupedOperation.add(GroupedOperation(monthsFromLastYear[month.minus(1).toInt()], xd.toInt()))
+        }
+
+        println(groupedOperation)
+        return groupedOperation
+    }
+
+    fun createMonthList(months: Long): MutableList<String> {
+        val groupedOperation = mutableListOf<String>()
+        val previousYear = LocalDate.now().minusMonths(months)
+        for(month in 1..months) {
+            groupedOperation.add(previousYear.plusMonths(month).month.name)
+        }
         return groupedOperation
     }
 }
