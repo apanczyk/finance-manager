@@ -21,10 +21,14 @@ class TestData {
         const val IS_DEFAULT = false
 
         const val PLACE = "Warsaw"
-        const val CATEGORY_ID = 1L
         const val CATEGORY_NAME = "Bills"
         const val WALLET_ID = 1L
 
+        val CATEGORY = Category(
+            id = WALLET_ID,
+            name = CATEGORY_NAME,
+            type = CategoryType.OUTCOME
+        )
 
         val USER = UserDto(
             firstName = FIRST_NAME,
@@ -44,14 +48,8 @@ class TestData {
             name = NAME,
             amount = AMOUNT,
             place = PLACE,
-            category = CATEGORY_ID,
+            category = CATEGORY,
             walletId = WALLET_ID
-        )
-
-        val CATEGORY = Category(
-            id = WALLET_ID,
-            name = CATEGORY_NAME,
-            type = CategoryType.OUTCOME
         )
     }
 }
