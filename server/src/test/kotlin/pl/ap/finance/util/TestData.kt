@@ -2,6 +2,7 @@ package pl.ap.finance.util
 
 import pl.ap.finance.model.Category
 import pl.ap.finance.model.CategoryType
+import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
@@ -51,5 +52,15 @@ class TestData {
             category = CATEGORY,
             walletId = WALLET_ID
         )
+
+//        val WALLET_BODY = Wallet(
+//            name = "Wallet 1",
+//            currency = Currency.getInstance("PLN"),
+//            amount = 100.0,
+//            isDefault = false,
+//            operations = OPERATION,
+//            users =
+//
+//        )
     }
 }

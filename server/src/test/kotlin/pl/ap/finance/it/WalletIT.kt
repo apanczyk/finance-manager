@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import pl.ap.finance.model.dto.WalletDto
+import pl.ap.finance.model.response.GroupedOperation
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.service.WalletService
@@ -40,8 +41,16 @@ class WalletIT {
         val response = walletService.addOperation(wallet.id, TestData.OPERATION)
 
         //then
-        Assertions.assertThat(response.operations.any { it.amount == TestData.AMOUNT })
-        Assertions.assertThat(response.operations.any { it.name == TestData.NAME })
-        Assertions.assertThat(response.operations.any { it.place == TestData.PLACE })
+        Assertions.assertThat(response.operations).anyMatch { it.amount == TestData.AMOUNT }
+        Assertions.assertThat(response.operations).anyMatch { it.name == TestData.NAME }
+        Assertions.assertThat(response.operations).anyMatch { it.place == TestData.PLACE }
+    }
+
+    @Test
+    fun `should return list with months`() {
+        val months = 12L
+        val list = walletService.createMonthList(months)
+
+        Assertions.assertThat(list.size).isEqualTo(months)
     }
 }

@@ -212,6 +212,7 @@ export default function OperationTable() {
             DataService.create(operation)
         else
             DataService.update(operation)
+
         setRecordForEdit(emptyOperation)
         setOpenPopup(false)
         refreshData()
@@ -238,6 +239,9 @@ export default function OperationTable() {
                 .catch(e => {
                     console.log(e);
                 });
+
+            DataService.getGroupedOperations(wallet)
+
         } else {
             DataService.getAll()
                 .then(response => {
