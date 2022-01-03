@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTitle, Grid, Stack, Typography } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Grid, MenuItem, Stack, Typography } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { Dispatch, SetStateAction } from "react";
@@ -32,8 +32,8 @@ const emptyOperation: Operation = {
     date: "",
     category: {
         id: 0,
-        name: "",
-        type: ""
+        name: '',
+        type: ''
     } as Category,
     walletId: 0
 }
@@ -60,20 +60,21 @@ export default function OperationForm(props: OperationFormProps) {
     const [values, setValues] = React.useState<Operation>(emptyOperation);
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
-    const [categoryType, setCategoryType] = React.useState('');
+    const [categoryType, setCategoryType] = React.useState('INCOME');
     const [categories, setCategories] = React.useState(Array<Category>());
     const [allCategories, setAllCategories] = React.useState(Array<Category>());
 
     const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
+        values.category = emptyOperation.category
         setCategoryType(event.target.value);
-
-        let filteredCategories = allCategories.filter(asd => asd.type !== categoryType)
+        let filteredCategories = allCategories.filter(cat => cat.type !== categoryType)
         setCategories(filteredCategories)
     };
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
         let categoryId = Number(Object.keys(categories).find((k: any) => categories[k].name === event.target.value))
         values.category = categories[categoryId]
+        console.log(values.category)
     };
 
     const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: Category, walletId: number }) => {
@@ -106,8 +107,17 @@ export default function OperationForm(props: OperationFormProps) {
             setValues({
                 ...recordForEdit
             })
+            DataService.getCategoriesAll()
+                .then(response => {
+                    setAllCategories(response.data)
+                    setCategories(response.data)
+                })
+                .catch(e => {
+                    console.log(e);
+                });
         }
     }, [recordForEdit])
+
 
     React.useEffect(() => {
         DataService.getCategoriesAll()
@@ -117,7 +127,7 @@ export default function OperationForm(props: OperationFormProps) {
             .catch(e => {
                 console.log(e);
             });
-    }, [openPopup, recordForEdit])
+    }, [openPopup])
 
     return (
         <Dialog
@@ -155,41 +165,35 @@ export default function OperationForm(props: OperationFormProps) {
                                     id="categoryType"
                                     select
                                     label="Category Type"
-                                    value={categoryType}
+                                    value={values.category.type}
                                     onChange={handleChangeCategoryType}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
                                     variant="standard"
                                     fullWidth
                                 >
                                     {categoryTypes.map((specCategoryType) => (
-                                        <option key={specCategoryType.key} value={specCategoryType.key}>
+                                        <MenuItem key={specCategoryType.key} value={specCategoryType.key}>
                                             {specCategoryType.value}
-                                        </option>
+                                        </MenuItem>
                                     ))}
                                 </TextFieldMui>
 
                                 <TextFieldMui
+                                    id="category"
                                     select
                                     required
-                                    id="category"
-                                    name="category"
                                     label="Category"
                                     value={values.category.name}
                                     onChange={handleChangeCategory}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
                                     variant="standard"
                                     fullWidth
                                 >
                                     {
                                         categories.map((specCategory) => (
-                                            <option key={specCategory.name} value={specCategory.name}>
+                                            <MenuItem key={specCategory.name} value={specCategory.name}>
                                                 {specCategory.name}
-                                            </option>
-                                        ))}
+                                            </MenuItem>
+                                        ))
+                                    }
 
                                 </TextFieldMui>
                             </Grid>
