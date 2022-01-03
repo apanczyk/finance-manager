@@ -30,15 +30,15 @@ class OperationController(val operationsRepository: OperationRepository,
 
     @PostMapping
     fun createOperation(@RequestBody request: OperationDto): ResponseEntity<Operation> {
-        val category = categoryRepository.findById(request.category)
+        val category = categoryRepository.findById(request.category.id)
         val wallet = walletRepository.findById(request.walletId)
         val operation = operationsRepository.save(
             Operation(
                 name = request.name,
                 amount = request.amount,
                 place = request.place,
-                category = category.orElseThrow(),
-                _wallet = wallet.orElseThrow()
+                category = category.get(),
+                _wallet = wallet.get()
             )
         )
         return ResponseEntity(operation, HttpStatus.CREATED)
@@ -46,7 +46,7 @@ class OperationController(val operationsRepository: OperationRepository,
 
     @PostMapping("/{id}")
     fun updateOperation(@PathVariable("id") id: Long, @RequestBody request: OperationDto): ResponseEntity<Operation> {
-        val category = categoryRepository.findById(request.category)
+        val category = categoryRepository.findById(request.category.id)
         val wallet = walletRepository.findById(request.walletId)
         val operationToUpdate = operationsRepository.save(
             Operation(
@@ -54,8 +54,8 @@ class OperationController(val operationsRepository: OperationRepository,
                 name = request.name,
                 amount = request.amount,
                 place = request.place,
-                category = category.orElseThrow(),
-                _wallet = wallet.orElseThrow()
+                category = category.get(),
+                _wallet = wallet.get()
             )
         )
         return ResponseEntity(operationToUpdate, HttpStatus.OK)

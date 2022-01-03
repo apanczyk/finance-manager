@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import OperationForm from './OperationForm';
 import WalletSelect from './WalletSelect';
+import Category from '../../model/Category';
 
 const emptyOperation: Operation = {
     id: "",
@@ -26,7 +27,7 @@ const emptyOperation: Operation = {
     amount: 0,
     place: "",
     date: "",
-    category: "",
+    category: {} as Category,
     walletId: 0
 }
 
@@ -45,7 +46,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
+): (a: { [key in Key]: number | string | Category }, b: { [key in Key]: number | string | Category }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);

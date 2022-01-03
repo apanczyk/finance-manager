@@ -16,7 +16,7 @@ import java.util.*
 class WalletService(private val walletRepository: WalletRepository, private val categoryRepository: CategoryRepository) {
 
     fun addOperation(walletId: Long, operationDto: OperationDto): Wallet {
-        val category = categoryRepository.findById(operationDto.category)
+        val category = categoryRepository.findById(operationDto.category.id)
         val wallet = walletRepository.findById(walletId).orElseThrow {
             throw WalletNotFoundException("Wallet with id $walletId doesn't exist")
         }

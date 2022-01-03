@@ -30,7 +30,11 @@ const emptyOperation: Operation = {
     amount: 0,
     place: "",
     date: "",
-    category: "",
+    category: {
+        id: 0,
+        name: "",
+        type: ""
+    } as Category,
     walletId: 0
 }
 
@@ -57,26 +61,23 @@ export default function OperationForm(props: OperationFormProps) {
     const classes = useStyles();
     const { openPopup, setOpenPopup, recordForEdit, editOrAddOperation } = props;
     const [categoryType, setCategoryType] = React.useState('');
-    const [category, setCategory] = React.useState('');
     const [categories, setCategories] = React.useState(Array<Category>());
+    const [allCategories, setAllCategories] = React.useState(Array<Category>());
 
     const handleChangeCategoryType = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCategoryType(event.target.value);
-        DataService.getCategories(event.target.value)
-            .then(response => {
-                setCategories(response.data)
-            })
-            .catch(e => {
-                console.log(e);
-            });
+
+        let filteredCategories = allCategories.filter(asd => asd.type !== categoryType)
+        setCategories(filteredCategories)
     };
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCategory(event.target.value);
+        let categoryId = Number(Object.keys(categories).find((k: any) => categories[k].name === event.target.value))
+        values.category = categories[categoryId]
     };
 
-    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: string, walletId: number }) => {
-        const { name, amount, place, date, walletId } = formValue;
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: Category, walletId: number }) => {
+        const { name, amount, place, date, walletId, category } = formValue;
         const data: Operation = {
             id: values.id,
             name: name,
@@ -91,6 +92,7 @@ export default function OperationForm(props: OperationFormProps) {
     }
 
     const validationSchema = () => {
+
         return Yup.object().shape({
             name: Yup.string().required("Field required"),
             amount: Yup.string().required("Field required"),
@@ -106,6 +108,16 @@ export default function OperationForm(props: OperationFormProps) {
             })
         }
     }, [recordForEdit])
+
+    React.useEffect(() => {
+        DataService.getCategoriesAll()
+            .then(response => {
+                setAllCategories(response.data)
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }, [openPopup, recordForEdit])
 
     return (
         <Dialog
@@ -159,10 +171,12 @@ export default function OperationForm(props: OperationFormProps) {
                                 </TextFieldMui>
 
                                 <TextFieldMui
-                                    id="category"
                                     select
+                                    required
+                                    id="category"
+                                    name="category"
                                     label="Category"
-                                    value={category}
+                                    value={values.category.name}
                                     onChange={handleChangeCategory}
                                     SelectProps={{
                                         native: true,
@@ -170,11 +184,13 @@ export default function OperationForm(props: OperationFormProps) {
                                     variant="standard"
                                     fullWidth
                                 >
-                                    {categories.map((specCategory) => (
-                                        <option key={specCategory.id} value={specCategory.id}>
-                                            {specCategory.name}
-                                        </option>
-                                    ))}
+                                    {
+                                        categories.map((specCategory) => (
+                                            <option key={specCategory.name} value={specCategory.name}>
+                                                {specCategory.name}
+                                            </option>
+                                        ))}
+
                                 </TextFieldMui>
                             </Grid>
                         </Grid>
