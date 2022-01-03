@@ -28,7 +28,6 @@ export default function WalletSelect(props: WalletSelectFormProps) {
     const getWallets = (id: string) => {
         DataService.getWallets(id)
             .then(response => {
-                console.log("XDDD" + response.data)
                 setWalletList(response.data)
                 response.data.forEach((element: IWallet) => {
                     if (element.isDefault)
@@ -38,7 +37,6 @@ export default function WalletSelect(props: WalletSelectFormProps) {
             .catch(e => {
                 console.log(e);
             });
-        console.log(walletList)
     }
 
 

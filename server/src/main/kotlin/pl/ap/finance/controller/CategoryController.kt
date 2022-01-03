@@ -18,4 +18,10 @@ class CategoryController(val categoryRepository: CategoryRepository) {
         val categories = categoryRepository.findAllByType(type)
         return ResponseEntity.ok(categories)
     }
+
+    @GetMapping()
+    fun getAllCategories(): ResponseEntity<List<Category>> {
+        val categories = categoryRepository.findAll()
+        return ResponseEntity.ok(categories)
+    }
 }

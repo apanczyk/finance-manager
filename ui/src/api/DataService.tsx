@@ -30,5 +30,9 @@ class DataService {
     getCategories(type: string) {
         return api.get(`/api/categories/${type}`, { headers: authHeader() })
     }
+
+    getCategoriesAll() {
+        return api.get(`/api/categories`, { headers: authHeader() })
+    }
 }
 export default new DataService();
