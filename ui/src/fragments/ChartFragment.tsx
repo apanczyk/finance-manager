@@ -44,7 +44,7 @@ export default function ChartFragment(props: ChartProps) {
                         <XAxis dataKey="month" tick={{ fill: "#000" }} />
                         <YAxis tick={{ fill: "#000" }} />
                         <Tooltip contentStyle={{ backgroundColor: "#8884d8", color: "#fff" }} itemStyle={{ color: "#fff" }} cursor={false} />
-                        <Line type="monotone" dataKey="Cost" stroke="#8884d8" strokeWidth="5" dot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
+                        <Line type="monotone" dataKey="cost" stroke="#8884d8" strokeWidth="5" dot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </Box>

@@ -8,6 +8,7 @@ import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.OperationRepository
 import pl.ap.finance.repository.WalletRepository
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/operations")
@@ -38,7 +39,8 @@ class OperationController(val operationsRepository: OperationRepository,
                 amount = request.amount,
                 place = request.place,
                 category = category.get(),
-                _wallet = wallet.get()
+                _wallet = wallet.get(),
+                date = request.date ?: LocalDate.now()
             )
         )
         return ResponseEntity(operation, HttpStatus.CREATED)
@@ -48,6 +50,7 @@ class OperationController(val operationsRepository: OperationRepository,
     fun updateOperation(@PathVariable("id") id: Long, @RequestBody request: OperationDto): ResponseEntity<Operation> {
         val category = categoryRepository.findById(request.category.id)
         val wallet = walletRepository.findById(request.walletId)
+        val previousOperation = operationsRepository.findOneById(id)
         val operationToUpdate = operationsRepository.save(
             Operation(
                 id = id,
@@ -55,7 +58,8 @@ class OperationController(val operationsRepository: OperationRepository,
                 amount = request.amount,
                 place = request.place,
                 category = category.get(),
-                _wallet = wallet.get()
+                _wallet = wallet.get(),
+                date = request.date ?: previousOperation.date
             )
         )
         return ResponseEntity(operationToUpdate, HttpStatus.OK)
