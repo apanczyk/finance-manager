@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import OperationForm from './OperationForm';
 import WalletSelect from './WalletSelect';
 import Category from '../../model/Category';
+import ChartFragment from '../../fragments/ChartFragment';
 
 const emptyOperation: Operation = {
     id: "",
@@ -124,28 +125,6 @@ function OperationTableHead(props: OperationTableProps) {
     );
 }
 
-const useToolbarStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(1),
-        },
-        highlight:
-            theme.palette.type === 'light'
-                ? {
-                    color: theme.palette.secondary.main,
-                    backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-                }
-                : {
-                    color: theme.palette.text.primary,
-                    backgroundColor: theme.palette.secondary.dark,
-                },
-        title: {
-            flex: '1 1 100%',
-        },
-    }),
-);
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -168,6 +147,9 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             top: 20,
             width: 1,
+        },
+        title: {
+            flex: '1 1 100%',
         },
     }),
 );
@@ -262,14 +244,15 @@ export default function OperationTable() {
     }
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, operations.length - page * rowsPerPage);
-    const barClass = useToolbarStyles();
 
     return (
         <div className={classes.root}>
-            <Toolbar
-                className={clsx(classes.root)}
-            >
-                <Typography className={barClass.title} variant="h6" id="tableTitle" component="div">
+            {wallet && (<ChartFragment
+                wallet={wallet!}
+            />
+            )}
+            <Toolbar className={clsx(classes.root)}>
+                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
                     Operations
                 </Typography>
                 <WalletSelect changeWallet={changeWallet} />
