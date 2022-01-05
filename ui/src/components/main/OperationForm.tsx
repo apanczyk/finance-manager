@@ -53,8 +53,8 @@ const categoryTypes = [
         value: 'Income',
     },
     {
-        key: 'OUTCOME',
-        value: 'Outcome',
+        key: 'COST',
+        value: 'Cost',
     },
 ];
 
