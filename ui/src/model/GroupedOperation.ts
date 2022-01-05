@@ -1,4 +1,4 @@
 export default interface GroupedOperation {
-    month: string,
-    outcome: number
+    Month: string,
+    Cost: number
 }

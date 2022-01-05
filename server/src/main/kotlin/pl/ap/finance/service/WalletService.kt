@@ -52,7 +52,7 @@ class WalletService(private val walletRepository: WalletRepository, private val 
                     LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue, 1)
                 ) && it.date.isBefore(
                     LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue % 12 + 1, 1)
-                ) && it.category.type == CategoryType.OUTCOME
+                ) && it.category.type == CategoryType.COST
             }.sumOf { it.amount }.let {
                 groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month-1).toInt()]), it.toInt()))
             }

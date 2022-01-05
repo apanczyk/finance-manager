@@ -28,7 +28,7 @@ class TestData {
         val CATEGORY = Category(
             id = WALLET_ID,
             name = CATEGORY_NAME,
-            type = CategoryType.OUTCOME
+            type = CategoryType.COST
         )
 
         val USER = UserDto(
