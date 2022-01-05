@@ -31,7 +31,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: Date(),
+    date: new Date(),
     category: {
         id: 0,
         name: '',
@@ -85,19 +85,19 @@ export default function OperationForm(props: OperationFormProps) {
 
     const handleChangeDate = (newValue: Date | null) => {
         let copyValues = { ...values }
-        copyValues.date = newValue!.toLocaleDateString()
+        copyValues.date = newValue!
         setValues(copyValues)
     };
 
-    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: string, category: Category, walletId: number }) => {
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: Date, category: Category, walletId: number }) => {
         const { name, amount, place, date, walletId, category } = formValue;
         const data: Operation = {
             id: values.id,
             name: name,
             amount: amount,
             place: place,
-            date: date,
-            category: category,
+            date: values.date,
+            category: values.category,
             walletId: walletId
         };
 
@@ -162,7 +162,7 @@ export default function OperationForm(props: OperationFormProps) {
                 <Formik
                     initialValues={values}
                     validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
+                    onSubmit={valuesInForm => handleSubmit(valuesInForm)}
                 >
                     <Form>
                         <Grid container spacing={2}>
