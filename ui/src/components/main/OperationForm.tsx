@@ -31,7 +31,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: "",
+    date: Date(),
     category: {
         id: 0,
         name: '',
@@ -85,7 +85,7 @@ export default function OperationForm(props: OperationFormProps) {
 
     const handleChangeDate = (newValue: Date | null) => {
         let copyValues = { ...values }
-        copyValues.date = newValue!.toString()
+        copyValues.date = newValue!.toLocaleDateString()
         setValues(copyValues)
     };
 
@@ -105,12 +105,12 @@ export default function OperationForm(props: OperationFormProps) {
     }
 
     const validationSchema = () => {
-
+        console.log(values)
         return Yup.object().shape({
             name: Yup.string().required("Field required"),
             amount: Yup.string().required("Field required"),
             place: Yup.string().required("Field required"),
-            date: Yup.string().required("Field required")
+            // date: Yup.string().required("Field required")
         });
     }
 
@@ -214,21 +214,19 @@ export default function OperationForm(props: OperationFormProps) {
                                         value={values.date}
                                         onChange={handleChangeDate}
                                         mask="____/__/__"
-                                        renderInput={(params) => <TextFieldMui {...params} />}
+                                        renderInput={(params) => <TextFieldMui {...params} fullWidth />}
                                     />
                                 </LocalizationProvider>
                             </Grid>
                         </Grid>
-                        <div>
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                                <Button variant="outlined" color='secondary' type="submit">
-                                    Submit
-                                </Button>
-                                <Button variant="outlined" color='secondary' type="reset">
-                                    Reset
-                                </Button>
-                            </Stack>
-                        </div>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                            <Button variant='outlined' color='secondary' type='submit' fullWidth>
+                                Submit
+                            </Button>
+                            <Button variant='outlined' color='secondary' type='reset' fullWidth>
+                                Reset
+                            </Button>
+                        </Stack>
                     </Form>
                 </Formik>
             </DialogContent>

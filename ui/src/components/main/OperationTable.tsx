@@ -221,9 +221,6 @@ export default function OperationTable() {
                 .catch(e => {
                     console.log(e);
                 });
-
-            DataService.getGroupedOperations(wallet)
-
         } else {
             DataService.getAll()
                 .then(response => {
