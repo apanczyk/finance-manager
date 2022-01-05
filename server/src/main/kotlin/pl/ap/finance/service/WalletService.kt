@@ -3,6 +3,7 @@ package pl.ap.finance.service
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PathVariable
 import pl.ap.finance.exceptions.WalletNotFoundException
+import pl.ap.finance.model.CategoryType
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.OperationDto
@@ -38,23 +39,25 @@ class WalletService(private val walletRepository: WalletRepository, private val 
     }
 
     fun groupOperations(wallet: Wallet): List<GroupedOperation> {
-        val months = 12L
         val operations = wallet.operations
 
         val groupedOperation = mutableListOf<GroupedOperation>()
-        val monthsFromLastYear = createMonthList(months)
-        val previousYear = LocalDate.now().minusMonths(months)
+        val monthsFromLastYear = createMonthList(MONTHS_IN_YEAR)
+        val previousYear = LocalDate.now().minusMonths(MONTHS_IN_YEAR)
 
-        for(month in 1..months) {
-            val currentDate = previousYear.plusMonths(month)
-            val xd = operations.filter {
-                it.date.isAfter(LocalDate.of(currentDate.year, currentDate.monthValue, 0))
-                        && it.date.isBefore(LocalDate.of(currentDate.year, currentDate.monthValue+1, 0))
-            }.sumOf { it.amount }
-            groupedOperation.add(GroupedOperation(monthsFromLastYear[month.minus(1).toInt()], xd.toInt()))
+        for(month in 1..MONTHS_IN_YEAR) {
+            val currentRotationDate = previousYear.plusMonths(month)
+            operations.filter {
+                it.date.isAfter(
+                    LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue, 1)
+                ) && it.date.isBefore(
+                    LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue % 12 + 1, 1)
+                ) && it.category.type == CategoryType.OUTCOME
+            }.sumOf { it.amount }.let {
+                groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month-1).toInt()]), it.toInt()))
+            }
         }
 
-        println(groupedOperation)
         return groupedOperation
     }
 
@@ -65,5 +68,13 @@ class WalletService(private val walletRepository: WalletRepository, private val 
             groupedOperation.add(previousYear.plusMonths(month).month.name)
         }
         return groupedOperation
+    }
+
+    companion object {
+        const val MONTHS_IN_YEAR = 12L
+
+        fun capitalize(word: String): String {
+            return word.substring(0,1).uppercase() + word.substring(1).lowercase()
+        }
     }
 }
