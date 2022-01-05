@@ -5,7 +5,7 @@ export default interface Operation {
     name: string,
     amount: number,
     place: string,
-    date: string,
+    date: Date,
     category: Category,
     walletId: number
 }

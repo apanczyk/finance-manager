@@ -27,7 +27,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: "",
+    date: new Date(),
     category: {
         id: 0,
         name: '',
@@ -51,7 +51,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string | Category }, b: { [key in Key]: number | string | Category }) => number {
+): (a: { [key in Key]: number | string | Category | Date }, b: { [key in Key]: number | string | Category | Date }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);
@@ -213,23 +213,15 @@ export default function OperationTable() {
     const refreshData = () => {
         if (wallet !== "" && wallet != null) {
             DataService.getOperations(wallet).then(response => {
-                setOperations(response.data.map((operation: Operation) => {
-                    operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-                    return operation
-                }))
-            })
-                .catch(e => {
-                    console.log(e);
-                });
+                setOperations(response.data)
+            }).catch(e => {
+                console.log(e);
+            });
         } else {
             DataService.getAll()
                 .then(response => {
-                    setOperations(response.data.map((operation: Operation) => {
-                        operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-                        return operation
-                    }))
-                })
-                .catch(e => {
+                    setOperations(response.data)
+                }).catch(e => {
                     console.log(e);
                 });
         }
