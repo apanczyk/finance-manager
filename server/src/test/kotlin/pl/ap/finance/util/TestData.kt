@@ -6,6 +6,7 @@ import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.OperationDto
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
+import java.time.LocalDate
 import java.util.*
 
 class TestData {
@@ -50,17 +51,8 @@ class TestData {
             amount = AMOUNT,
             place = PLACE,
             category = CATEGORY,
-            walletId = WALLET_ID
+            walletId = WALLET_ID,
+            date = LocalDate.now()
         )
-
-//        val WALLET_BODY = Wallet(
-//            name = "Wallet 1",
-//            currency = Currency.getInstance("PLN"),
-//            amount = 100.0,
-//            isDefault = false,
-//            operations = OPERATION,
-//            users =
-//
-//        )
     }
 }

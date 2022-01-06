@@ -11,7 +11,7 @@ interface WalletSelectFormProps {
 
 export default function WalletSelect(props: WalletSelectFormProps) {
 
-    const [walletId, setWalletId] = React.useState<string>("")
+    const [walletId, setWalletId] = React.useState<string>('')
     const [walletList, setWalletList] = React.useState<IWallet[]>([])
     const { changeWallet } = props
 
@@ -32,12 +32,14 @@ export default function WalletSelect(props: WalletSelectFormProps) {
                 response.data.forEach((element: IWallet) => {
                     if (element.isDefault)
                         setWalletId(element.id.toString())
+                        changeWallet(element.id.toString())
                 })
             })
             .catch(e => {
                 console.log(e);
             });
     }
+
 
 
     return (

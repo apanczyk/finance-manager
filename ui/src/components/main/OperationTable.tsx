@@ -21,13 +21,14 @@ import OperationForm from './OperationForm';
 import WalletSelect from './WalletSelect';
 import Category from '../../model/Category';
 import ChartFragment from '../../fragments/ChartFragment';
+import { format } from "date-fns";
 
 const emptyOperation: Operation = {
     id: "",
     name: "",
     amount: 0,
     place: "",
-    date: "",
+    date: format(new Date(), "yyyy/MM/dd"),
     category: {
         id: 0,
         name: '',
@@ -37,6 +38,18 @@ const emptyOperation: Operation = {
 }
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
+    if(orderBy === 'date') {
+        if (new Date(secondValue[orderBy] as unknown as string) < 
+            new Date(firstValue[orderBy] as unknown as string)) {
+            return -1;
+        } else if (new Date(secondValue[orderBy] as unknown as string) > 
+            new Date(firstValue[orderBy] as unknown as string)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     if (secondValue[orderBy] < firstValue[orderBy]) {
         return -1;
     } else if (secondValue[orderBy] > firstValue[orderBy]) {
@@ -51,7 +64,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string | Category }, b: { [key in Key]: number | string | Category }) => number {
+): (a: { [key in Key]: number | string | Category | Date}, b: { [key in Key]: number | string | Category | Date }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);
@@ -102,7 +115,7 @@ function OperationTableHead(props: OperationTableProps) {
                     <TableCell
                         key={headCell.id}
                         align='right'
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        padding='normal'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -208,28 +221,21 @@ export default function OperationTable() {
 
     React.useEffect(() => {
         refreshData()
+        setPage(0)
     }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const refreshData = () => {
         if (wallet !== "" && wallet != null) {
             DataService.getOperations(wallet).then(response => {
-                setOperations(response.data.map((operation: Operation) => {
-                    operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-                    return operation
-                }))
-            })
-                .catch(e => {
-                    console.log(e);
-                });
+                setOperations(response.data)
+            }).catch(e => {
+                console.log(e);
+            });
         } else {
             DataService.getAll()
                 .then(response => {
-                    setOperations(response.data.map((operation: Operation) => {
-                        operation.date = `${operation.date[0]}/${operation.date[1]}/${operation.date[2]}`
-                        return operation
-                    }))
-                })
-                .catch(e => {
+                    setOperations(response.data)
+                }).catch(e => {
                     console.log(e);
                 });
         }
@@ -246,6 +252,7 @@ export default function OperationTable() {
         <div className={classes.root}>
             {wallet && (<ChartFragment
                 wallet={wallet!}
+                operations={operations}
             />
             )}
             <Toolbar className={clsx(classes.root)}>
@@ -276,7 +283,6 @@ export default function OperationTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((operation, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
                                     <TableRow
                                         hover
@@ -291,7 +297,7 @@ export default function OperationTable() {
                                         </TableCell>
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
-                                        <TableCell align="right">{operation.date}</TableCell>
+                                        <TableCell align="right">{format(new Date(operation.date), "yyyy/MM/dd")}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"
@@ -330,6 +336,6 @@ export default function OperationTable() {
                 recordForEdit={recordForEdit}
                 editOrAddOperation={editOrAddOperation}
             />
-        </div>
+        </div >
     );
 }
