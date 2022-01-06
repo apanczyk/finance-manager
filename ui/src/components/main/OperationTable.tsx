@@ -21,13 +21,14 @@ import OperationForm from './OperationForm';
 import WalletSelect from './WalletSelect';
 import Category from '../../model/Category';
 import ChartFragment from '../../fragments/ChartFragment';
+import { format } from "date-fns";
 
 const emptyOperation: Operation = {
     id: "",
     name: "",
     amount: 0,
     place: "",
-    date: new Date().toString(),
+    date: format(new Date(), "yyyy/MM/dd"),
     category: {
         id: 0,
         name: '',
@@ -208,6 +209,7 @@ export default function OperationTable() {
 
     React.useEffect(() => {
         refreshData()
+        setPage(0)
     }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const refreshData = () => {
@@ -283,7 +285,7 @@ export default function OperationTable() {
                                         </TableCell>
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
-                                        <TableCell align="right">{new Date(operation.date).toUTCString()}</TableCell>
+                                        <TableCell align="right">{format(new Date(operation.date), "yyyy/MM/dd")}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"

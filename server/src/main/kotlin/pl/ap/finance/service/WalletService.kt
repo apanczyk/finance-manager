@@ -31,10 +31,7 @@ class WalletService(private val walletRepository: WalletRepository, private val 
         return wallet
     }
 
-    fun getWallets(@PathVariable("id") userId: Long): List<Wallet> {
-        val wallets = walletRepository.findAll()
-        return wallets
-    }
+    fun getWallets(@PathVariable("id") userId: Long): List<Wallet> = walletRepository.findAll()
 
     fun groupOperations(wallet: Wallet): List<GroupedOperation> {
         val operations = wallet.operations
@@ -43,16 +40,19 @@ class WalletService(private val walletRepository: WalletRepository, private val 
         val monthsFromLastYear = createMonthList(MONTHS_IN_YEAR)
         val previousYear = LocalDate.now().minusMonths(MONTHS_IN_YEAR)
 
-        for(month in 1..MONTHS_IN_YEAR) {
+        for (month in 1..MONTHS_IN_YEAR) {
             val currentRotationDate = previousYear.plusMonths(month)
+            val currentMonth = LocalDate.of( currentRotationDate.year, currentRotationDate.monthValue, 1)
+            val nextMonth = currentMonth.plusMonths(1)
+
             operations.filter {
                 it.date.isAfter(
-                    LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue, 1)
+                    currentMonth
                 ) && it.date.isBefore(
-                    LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue % 12 + 1, 1)
+                    nextMonth
                 ) && it.category.type == CategoryType.COST
             }.sumOf { it.amount }.let {
-                groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month-1).toInt()]), it.toInt()))
+                groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month - 1).toInt()]), it.toInt()))
             }
         }
 
@@ -62,7 +62,7 @@ class WalletService(private val walletRepository: WalletRepository, private val 
     fun createMonthList(months: Long): MutableList<String> {
         val groupedOperation = mutableListOf<String>()
         val previousYear = LocalDate.now().minusMonths(months)
-        for(month in 1..months) {
+        for (month in 1..months) {
             groupedOperation.add(previousYear.plusMonths(month).month.name)
         }
         return groupedOperation
@@ -71,8 +71,6 @@ class WalletService(private val walletRepository: WalletRepository, private val 
     companion object {
         const val MONTHS_IN_YEAR = 12L
 
-        fun capitalize(word: String): String {
-            return word.substring(0,1).uppercase() + word.substring(1).lowercase()
-        }
+        fun capitalize(word: String): String = word.substring(0, 1).uppercase() + word.substring(1).lowercase()
     }
 }

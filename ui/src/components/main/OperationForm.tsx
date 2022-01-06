@@ -12,6 +12,7 @@ import DataService from "../../api/DataService";
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { format, formatISO, isValid } from "date-fns";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +32,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: new Date().toString(),
+    date: format(new Date(), "yyyy/MM/dd"),
     category: {
         id: 0,
         name: '',
@@ -84,9 +85,11 @@ export default function OperationForm(props: OperationFormProps) {
     };
 
     const handleChangeDate = (newValue: string | null) => {
-        let copyValues = { ...values }
-        copyValues.date = newValue!
-        setValues(copyValues)
+        if(isValid(newValue)){
+            let copyValues = { ...values }
+            copyValues.date = newValue!
+            setValues(copyValues)    
+        }
     };
 
     const handleSubmit = (formValue: { name: string; amount: number, place: string, walletId: number }) => {
@@ -96,7 +99,7 @@ export default function OperationForm(props: OperationFormProps) {
             name: name,
             amount: amount,
             place: place,
-            date: values.date,
+            date: formatISO(new Date(values.date),  { representation: 'date' }),
             category: values.category,
             walletId: walletId
         };
@@ -105,12 +108,10 @@ export default function OperationForm(props: OperationFormProps) {
     }
 
     const validationSchema = () => {
-        console.log(values)
         return Yup.object().shape({
             name: Yup.string().required("Field required"),
             amount: Yup.string().required("Field required"),
-            place: Yup.string().required("Field required"),
-            // date: Yup.string().required("Field required")
+            place: Yup.string().required("Field required")
         });
     }
 
