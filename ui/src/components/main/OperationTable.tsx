@@ -38,6 +38,19 @@ const emptyOperation: Operation = {
 }
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
+    if(orderBy === 'date') {
+        let dateFirstValue = new Date(firstValue[orderBy] as unknown as string)
+        let dateSecondValue = new Date(secondValue[orderBy] as unknown as string)
+
+        if (dateSecondValue < dateFirstValue) {
+            return -1;
+        } else if (dateSecondValue > dateFirstValue) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     if (secondValue[orderBy] < firstValue[orderBy]) {
         return -1;
     } else if (secondValue[orderBy] > firstValue[orderBy]) {
@@ -52,7 +65,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string | Category }, b: { [key in Key]: number | string | Category }) => number {
+): (a: { [key in Key]: number | string | Category | Date}, b: { [key in Key]: number | string | Category | Date }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);
