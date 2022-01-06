@@ -19,6 +19,7 @@ import { Component } from 'react';
 import AuthVerifier from './util/AuthVerifier.js';
 import Box from "@mui/material/Box";
 import { Container } from "@material-ui/core";
+import PrivateRoute from "./components/auth/PrivateRoute";
 
 type Props = {};
 
@@ -71,12 +72,12 @@ class App extends Component<Props, State> {
 
         <div>
           <Switch>
-            <Route exact path={"/"} component={Home} />
+            <PrivateRoute exact path={"/"} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={UserBoard} />
-            <Route path="/admin" component={AdminBoard} />
+            <PrivateRoute exact path="/profile" component={Profile} />
+            <PrivateRoute path="/user" component={UserBoard} />
+            <PrivateRoute path="/admin" component={AdminBoard} />
           </Switch>
         </div>
 
