@@ -39,12 +39,11 @@ const emptyOperation: Operation = {
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
     if(orderBy === 'date') {
-        let dateFirstValue = new Date(firstValue[orderBy] as unknown as string)
-        let dateSecondValue = new Date(secondValue[orderBy] as unknown as string)
-
-        if (dateSecondValue < dateFirstValue) {
+        if (new Date(secondValue[orderBy] as unknown as string) < 
+            new Date(firstValue[orderBy] as unknown as string)) {
             return -1;
-        } else if (dateSecondValue > dateFirstValue) {
+        } else if (new Date(secondValue[orderBy] as unknown as string) > 
+            new Date(firstValue[orderBy] as unknown as string)) {
             return 1;
         } else {
             return 0;
