@@ -27,7 +27,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: new Date(),
+    date: new Date().toString(),
     category: {
         id: 0,
         name: '',
@@ -51,7 +51,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string | Category | Date }, b: { [key in Key]: number | string | Category | Date }) => number {
+): (a: { [key in Key]: number | string | Category }, b: { [key in Key]: number | string | Category }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);
@@ -102,7 +102,7 @@ function OperationTableHead(props: OperationTableProps) {
                     <TableCell
                         key={headCell.id}
                         align='right'
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        padding='normal'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -238,6 +238,7 @@ export default function OperationTable() {
         <div className={classes.root}>
             {wallet && (<ChartFragment
                 wallet={wallet!}
+                operations={operations}
             />
             )}
             <Toolbar className={clsx(classes.root)}>
@@ -268,7 +269,6 @@ export default function OperationTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((operation, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
                                     <TableRow
                                         hover
@@ -283,7 +283,7 @@ export default function OperationTable() {
                                         </TableCell>
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
-                                        <TableCell align="right">{operation.date}</TableCell>
+                                        <TableCell align="right">{new Date(operation.date).toUTCString()}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"
@@ -322,6 +322,6 @@ export default function OperationTable() {
                 recordForEdit={recordForEdit}
                 editOrAddOperation={editOrAddOperation}
             />
-        </div>
+        </div >
     );
 }

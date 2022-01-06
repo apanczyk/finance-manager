@@ -31,7 +31,7 @@ const emptyOperation: Operation = {
     name: "",
     amount: 0,
     place: "",
-    date: new Date(),
+    date: new Date().toString(),
     category: {
         id: 0,
         name: '',
@@ -83,14 +83,14 @@ export default function OperationForm(props: OperationFormProps) {
         setValues(copyValues)
     };
 
-    const handleChangeDate = (newValue: Date | null) => {
+    const handleChangeDate = (newValue: string | null) => {
         let copyValues = { ...values }
         copyValues.date = newValue!
         setValues(copyValues)
     };
 
-    const handleSubmit = (formValue: { name: string; amount: number, place: string, date: Date, category: Category, walletId: number }) => {
-        const { name, amount, place, date, walletId, category } = formValue;
+    const handleSubmit = (formValue: { name: string; amount: number, place: string, walletId: number }) => {
+        const { name, amount, place, walletId } = formValue;
         const data: Operation = {
             id: values.id,
             name: name,
