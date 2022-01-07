@@ -12,7 +12,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Operation from '../../model/Operation';
-import DataService from '../../api/DataService';
+import DataService from '../../service/api/DataService';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
@@ -38,11 +38,11 @@ const emptyOperation: Operation = {
 }
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
-    if(orderBy === 'date') {
-        if (new Date(secondValue[orderBy] as unknown as string) < 
+    if (orderBy === 'date') {
+        if (new Date(secondValue[orderBy] as unknown as string) <
             new Date(firstValue[orderBy] as unknown as string)) {
             return -1;
-        } else if (new Date(secondValue[orderBy] as unknown as string) > 
+        } else if (new Date(secondValue[orderBy] as unknown as string) >
             new Date(firstValue[orderBy] as unknown as string)) {
             return 1;
         } else {
@@ -64,7 +64,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
-): (a: { [key in Key]: number | string | Category | Date}, b: { [key in Key]: number | string | Category | Date }) => number {
+): (a: { [key in Key]: number | string | Category | Date }, b: { [key in Key]: number | string | Category | Date }) => number {
     return order === 'desc'
         ? (a, b) => ascComp(a, b, orderBy)
         : (a, b) => -ascComp(a, b, orderBy);
