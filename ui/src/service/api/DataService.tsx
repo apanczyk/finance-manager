@@ -1,5 +1,5 @@
-import Operation from "../model/Operation";
-import authHeader from "../service/AuthHeader";
+import Operation from "../../model/Operation";
+import authHeader from "../AuthHeader";
 import api from "./api";
 
 class DataService {

@@ -1,10 +1,8 @@
-import "./App.css"
 import NavBar from './fragments/NavBar';
 import OperationTable from './components/main/OperationTable';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
 } from 'react-router-dom'
 import AdminBoard from './components/auth/AdminBoard';
 import UserBoard from './components/auth/UserBoard';
@@ -16,9 +14,10 @@ import EventBus from './util/EventBus';
 import IUser from './model/types/UserType';
 import AuthService from './service/AuthService';
 import { Component } from 'react';
-import AuthVerifier from './util/AuthVerifier.js';
 import Box from "@mui/material/Box";
 import { Container } from "@material-ui/core";
+import RedirectRoute from "./components/auth/RedirectRoute";
+import AuthVerifier from './util/AuthVerifier';
 
 type Props = {};
 
@@ -65,18 +64,19 @@ class App extends Component<Props, State> {
   }
 
   render() {
+    let user = this.state.currentUser
     return (
       <Router>
         <NavBar currentUser={this.state.currentUser} showAdminBoard={this.state.showAdminBoard} logOut={this.logOut} />
 
         <div>
           <Switch>
-            <Route exact path={"/"} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
-            <Route path="/user" component={UserBoard} />
-            <Route path="/admin" component={AdminBoard} />
+            <RedirectRoute user={user} antiAuth={true} exact path="/login" redirectPath="/" component={Login} />
+            <RedirectRoute user={user} antiAuth={true} exact path="/register" redirectPath="/" component={Register} />
+            <RedirectRoute user={user} antiAuth={false} exact path="/" redirectPath="/login" component={Home} />
+            <RedirectRoute user={user} antiAuth={false} exact path="/profile" redirectPath="/login" component={Profile} />
+            <RedirectRoute user={user} antiAuth={false} exact path="/user" redirectPath="/login" component={UserBoard} />
+            <RedirectRoute user={user} antiAuth={false} exact path="/admin" redirectPath="/login" component={AdminBoard} />
           </Switch>
         </div>
 

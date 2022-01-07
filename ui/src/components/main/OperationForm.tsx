@@ -8,7 +8,7 @@ import { Field, Form, Formik } from "formik";
 import { TextField } from 'formik-mui';
 import TextFieldMui from '@mui/material/TextField';
 import Category from "../../model/Category";
-import DataService from "../../api/DataService";
+import DataService from "../../service/api/DataService";
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -85,10 +85,10 @@ export default function OperationForm(props: OperationFormProps) {
     };
 
     const handleChangeDate = (newValue: string | null) => {
-        if(isValid(newValue)){
+        if (isValid(newValue)) {
             let copyValues = { ...values }
             copyValues.date = newValue!
-            setValues(copyValues)    
+            setValues(copyValues)
         }
     };
 
@@ -99,7 +99,7 @@ export default function OperationForm(props: OperationFormProps) {
             name: name,
             amount: amount,
             place: place,
-            date: formatISO(new Date(values.date),  { representation: 'date' }),
+            date: formatISO(new Date(values.date), { representation: 'date' }),
             category: values.category,
             walletId: walletId
         };
@@ -166,7 +166,7 @@ export default function OperationForm(props: OperationFormProps) {
                     onSubmit={valuesInForm => handleSubmit(valuesInForm)}
                 >
                     <Form>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} >
                             <Grid item xs={6}>
                                 <Field component={TextField} name="name" type="text" label="name" variant="standard" fullWidth />
                                 <Field component={TextField} name="amount" type="number" label="amount" variant="standard" fullWidth />
