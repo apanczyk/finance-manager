@@ -1,26 +1,28 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import DataService from '../api/DataService';
+import DataService from '../service/api/DataService';
 import GroupedOperation from '../model/GroupedOperation';
+import Operation from '../model/Operation';
 
 interface ChartProps {
-    wallet: string
+    wallet: string,
+    operations: Array<Operation>
 }
 
 export default function ChartFragment(props: ChartProps) {
-    const [operations, setOperations] = React.useState<Array<GroupedOperation>>();
-    const { wallet } = props
+    const [groupedOperations, setGroupedOperations] = React.useState<Array<GroupedOperation>>();
+    const { wallet, operations } = props
 
     React.useEffect(() => {
         DataService.getGroupedOperations(wallet)
             .then(response => {
-                setOperations(response.data)
+                setGroupedOperations(response.data)
             })
             .catch(e => {
                 console.log(e);
             });
-    }, [wallet]);
+    }, [operations, wallet]);
 
     return (
         <>
@@ -32,7 +34,7 @@ export default function ChartFragment(props: ChartProps) {
                     <LineChart
                         width={150}
                         height={150}
-                        data={operations}
+                        data={groupedOperations}
                         margin={{
                             top: 15,
                             right: 30,

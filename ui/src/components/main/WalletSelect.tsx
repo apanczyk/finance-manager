@@ -1,7 +1,7 @@
 import AuthService from "../../service/AuthService";
 import Container from "@material-ui/core/Container";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import DataService from "../../api/DataService";
+import DataService from "../../service/api/DataService";
 import IWallet from "../../model/types/WalletType";
 import React from "react";
 
@@ -11,7 +11,7 @@ interface WalletSelectFormProps {
 
 export default function WalletSelect(props: WalletSelectFormProps) {
 
-    const [walletId, setWalletId] = React.useState<string>("")
+    const [walletId, setWalletId] = React.useState<string>('')
     const [walletList, setWalletList] = React.useState<IWallet[]>([])
     const { changeWallet } = props
 
@@ -32,6 +32,8 @@ export default function WalletSelect(props: WalletSelectFormProps) {
                 response.data.forEach((element: IWallet) => {
                     if (element.isDefault)
                         setWalletId(element.id.toString())
+                    changeWallet(element.id.toString())
+
                 })
             })
             .catch(e => {
@@ -39,14 +41,13 @@ export default function WalletSelect(props: WalletSelectFormProps) {
             });
     }
 
-
     return (
         <Container component="main" maxWidth="sm">
             <FormControl fullWidth>
-                <InputLabel id="wallet-select-label">Wallet</InputLabel>
+                <InputLabel id="walletSelect">Wallet</InputLabel>
                 <Select
                     defaultValue=""
-                    labelId="wallet-select-label"
+                    labelId="walletSelect"
                     id="wallet-select"
                     value={walletId}
                     label="Wallet"
