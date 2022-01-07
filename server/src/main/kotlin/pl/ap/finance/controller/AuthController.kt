@@ -23,7 +23,7 @@ class AuthController(private val userService: UserService) {
     }
 
     @PostMapping("/auth/login")
-    fun registerUser(@RequestBody authRequest: AuthRequest): ResponseEntity<JwtResponse> {
+    fun loginUser(@RequestBody authRequest: AuthRequest): ResponseEntity<JwtResponse> {
         val response = userService.logUser(authRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
