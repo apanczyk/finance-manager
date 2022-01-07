@@ -22,7 +22,7 @@ export default function ChartFragment(props: ChartProps) {
             .catch(e => {
                 console.log(e);
             });
-    }, [operations, wallet]);
+    }, [operations]);
 
     return (
         <>
