@@ -14,10 +14,10 @@ import EventBus from './util/EventBus';
 import IUser from './model/types/UserType';
 import AuthService from './service/AuthService';
 import { Component } from 'react';
-import AuthVerifier from './util/AuthVerifier.js';
 import Box from "@mui/material/Box";
 import { Container } from "@material-ui/core";
 import RedirectRoute from "./components/auth/RedirectRoute";
+import AuthVerifier from './util/AuthVerifier';
 
 type Props = {};
 
