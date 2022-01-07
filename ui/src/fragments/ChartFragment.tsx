@@ -22,7 +22,7 @@ export default function ChartFragment(props: ChartProps) {
             .catch(e => {
                 console.log(e);
             });
-    }, [operations]);
+    }, [operations]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
