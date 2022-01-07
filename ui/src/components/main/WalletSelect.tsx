@@ -33,6 +33,7 @@ export default function WalletSelect(props: WalletSelectFormProps) {
                     if (element.isDefault)
                         setWalletId(element.id.toString())
                     changeWallet(element.id.toString())
+
                 })
             })
             .catch(e => {
