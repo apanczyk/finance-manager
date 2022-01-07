@@ -12,7 +12,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Operation from '../../model/Operation';
-import DataService from '../../api/DataService';
+import DataService from '../../service/api/DataService';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,13 +21,14 @@ import OperationForm from './OperationForm';
 import WalletSelect from './WalletSelect';
 import Category from '../../model/Category';
 import ChartFragment from '../../fragments/ChartFragment';
+import { format } from "date-fns";
 
 const emptyOperation: Operation = {
     id: "",
     name: "",
     amount: 0,
     place: "",
-    date: new Date(),
+    date: format(new Date(), "yyyy/MM/dd"),
     category: {
         id: 0,
         name: '',
@@ -37,6 +38,18 @@ const emptyOperation: Operation = {
 }
 
 function ascComp<T>(firstValue: T, secondValue: T, orderBy: keyof T) {
+    if (orderBy === 'date') {
+        if (new Date(secondValue[orderBy] as unknown as string) <
+            new Date(firstValue[orderBy] as unknown as string)) {
+            return -1;
+        } else if (new Date(secondValue[orderBy] as unknown as string) >
+            new Date(firstValue[orderBy] as unknown as string)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     if (secondValue[orderBy] < firstValue[orderBy]) {
         return -1;
     } else if (secondValue[orderBy] > firstValue[orderBy]) {
@@ -102,7 +115,7 @@ function OperationTableHead(props: OperationTableProps) {
                     <TableCell
                         key={headCell.id}
                         align='right'
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        padding='normal'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -208,6 +221,7 @@ export default function OperationTable() {
 
     React.useEffect(() => {
         refreshData()
+        setPage(0)
     }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const refreshData = () => {
@@ -238,6 +252,7 @@ export default function OperationTable() {
         <div className={classes.root}>
             {wallet && (<ChartFragment
                 wallet={wallet!}
+                operations={operations}
             />
             )}
             <Toolbar className={clsx(classes.root)}>
@@ -268,7 +283,6 @@ export default function OperationTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((operation, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
                                     <TableRow
                                         hover
@@ -283,7 +297,7 @@ export default function OperationTable() {
                                         </TableCell>
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
-                                        <TableCell align="right">{operation.date}</TableCell>
+                                        <TableCell align="right">{format(new Date(operation.date), "yyyy/MM/dd")}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"
@@ -322,6 +336,6 @@ export default function OperationTable() {
                 recordForEdit={recordForEdit}
                 editOrAddOperation={editOrAddOperation}
             />
-        </div>
+        </div >
     );
 }
