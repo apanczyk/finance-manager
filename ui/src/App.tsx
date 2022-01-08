@@ -92,7 +92,7 @@ class App extends Component<Props, State> {
                     alignItems: 'center',
                   }}
                 >
-                  <OperationTable />
+                  <OperationTable currentUser={this.state.currentUser} />
                 </Box>
               </Container>
             </div>

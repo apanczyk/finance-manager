@@ -16,7 +16,7 @@ class User(
         val email: String,
         var password: String,
         val registrationDate: LocalDateTime = LocalDateTime.now(),
-        @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "users")
+        @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
         @JsonIgnore
         val wallets: MutableSet<Wallet> = mutableSetOf(),
         @JsonIgnore

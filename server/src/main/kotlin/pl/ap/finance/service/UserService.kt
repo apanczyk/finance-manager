@@ -20,6 +20,7 @@ import pl.ap.finance.repository.UserRepository
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.security.jwt.JwtUtils
 import pl.ap.finance.security.service.UserDetailsImpl
+import java.util.*
 import java.util.stream.Collectors
 
 
@@ -35,13 +36,20 @@ class UserService(private val passwordEncoder: PasswordEncoder,
             throw EmailExistsException("Account with given email address exists:" + newUser.email)
         }
         val encodedPassword = passwordEncoder.encode(newUser.password)
-        val user = User(
-                firstName = newUser.firstName,
-                lastName = newUser.lastName,
-                email = newUser.email,
-                password = encodedPassword,
-                role = Role.roleOf(newUser.role)
-        )
+        val user = userRepository.save(User(
+            firstName = newUser.firstName,
+            lastName = newUser.lastName,
+            email = newUser.email,
+            password = encodedPassword,
+            role = Role.roleOf(newUser.role),
+        ))
+
+        addWallet(user.id, WalletDto(
+            name = "Main Wallet",
+            currency = Currency.getInstance("PLN"),
+            amount = 0.0,
+            isDefault = true,
+        ))
         return userRepository.save(user)
     }
 
