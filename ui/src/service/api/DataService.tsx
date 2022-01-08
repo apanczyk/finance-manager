@@ -1,4 +1,5 @@
 import Operation from "../../model/Operation";
+import IWallet from "../../model/types/WalletType";
 import authHeader from "../AuthHeader";
 import api from "./api";
 
@@ -37,6 +38,15 @@ class DataService {
 
     getGroupedOperations(id: string) {
         return api.get(`/api/wallets/${id}/grouped`, { headers: authHeader() })
+    }
+
+    getNewWalletForUser(id: string) {
+        return api.get(`/api/wallets/${id}`, { headers: authHeader() })
+    }
+
+    updateWallets(id: string, walletList: IWallet[]) {
+        return api.post(`/api/wallets/${id}/update`, walletList, { headers: authHeader() })
+
     }
 }
 export default new DataService();

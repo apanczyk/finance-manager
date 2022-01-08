@@ -3,7 +3,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { Dispatch, SetStateAction } from "react";
 import IWallet from "../../model/types/WalletType";
 import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
+import DataService from "../../service/api/DataService";
+import AuthService from "../../service/AuthService";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +48,16 @@ export default function WalletForm(props: OperationFormProps) {
 
     const addNewWallet = () => {
         let wallets = [...values]
-        wallets.push({}: IWallet)
+        const currentUser = AuthService.getCurrentUser();
+
+        DataService.getNewWalletForUser(currentUser.id)
+            .then(response => {
+                wallets.push(response.data)
+                setValues(wallets)
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     const deleteWallets = (wallet: IWallet) => {
@@ -81,7 +92,7 @@ export default function WalletForm(props: OperationFormProps) {
                     <Button
                         color="secondary"
                         onClick={() => {
-                            resetWallets()
+                            editWalletList(recordForEdit)
                             setOpenPopup(false);
                         }}
                     >

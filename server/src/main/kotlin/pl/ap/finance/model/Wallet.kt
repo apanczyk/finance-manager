@@ -1,7 +1,7 @@
 package pl.ap.finance.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import pl.ap.finance.model.dto.WalletDto
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -54,6 +54,21 @@ class Wallet(
         if(operations.contains(operation)) {
             operations.remove(operation);
             operation.wallet = null
+        }
+    }
+
+    companion object {
+        fun walletOf(wallet: Wallet, walletDto: WalletDto): Wallet {
+            return Wallet(
+                id = wallet.id,
+                name = walletDto.name,
+                currency = walletDto.currency,
+                amount = walletDto.amount,
+                isDefault = walletDto.isDefault,
+                date = wallet.date,
+                users = wallet.users,
+                operations = wallet.operations
+            )
         }
     }
 }

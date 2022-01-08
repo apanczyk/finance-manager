@@ -4,6 +4,7 @@ import pl.ap.finance.model.Wallet
 import java.util.*
 
 class WalletDto(
+    val id: Long = 0,
     val name: String,
     val currency: Currency,
     val amount: Double,
