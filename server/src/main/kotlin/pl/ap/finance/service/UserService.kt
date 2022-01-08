@@ -85,6 +85,18 @@ class UserService(private val passwordEncoder: PasswordEncoder,
         )
         wallet.addUser(user)
         walletRepository.save(wallet)
+
+        return user
+    }
+
+    fun removeUser(userId: Long): User {
+        val user = userRepository.findById(userId).orElseThrow {
+            throw UserNotFoundException("User with id $userId doesn't exist")
+        }
+
+        walletRepository.deleteAllById(user.wallets.map { it.id })
+        userRepository.deleteById(user.id)
+
         return user
     }
 }

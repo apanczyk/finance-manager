@@ -10,6 +10,7 @@ import pl.ap.finance.repository.UserRepository
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.service.WalletService
 import java.util.*
+import kotlin.NoSuchElementException
 
 @RestController
 @RequestMapping("/api/wallets")
@@ -21,8 +22,10 @@ class WalletController(
 
     @GetMapping("/{id}/operations")
     fun getOperationsForWallet(@PathVariable("id") id: Long): ResponseEntity<MutableSet<Operation>>? {
-        val wallet = walletRepository.findById(id)
-        return ResponseEntity.ok(wallet.get().operations)
+        val wallet = walletRepository.findById(id).orElseThrow {
+            throw NoSuchElementException("No operations for this wallet")
+        }
+        return ResponseEntity.ok(wallet.operations)
     }
 
     @GetMapping("/{id}/grouped")

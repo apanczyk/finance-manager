@@ -1,14 +1,13 @@
 package pl.ap.finance.it
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import pl.ap.finance.IntegrationTest
 import pl.ap.finance.exceptions.EmailExistsException
 import pl.ap.finance.repository.UserRepository
+import pl.ap.finance.repository.UserTestService
 import pl.ap.finance.service.UserService
 import pl.ap.finance.util.TestData.Companion.AMOUNT
 import pl.ap.finance.util.TestData.Companion.CURRENCY
@@ -29,9 +28,12 @@ class UserIT {
     @Autowired
     private lateinit var userService: UserService
 
+    @Autowired
+    private lateinit var userTestService: UserTestService
+
     @BeforeEach
-    fun remove() {
-        userRepository.deleteAll()
+    fun removeBefore() {
+        userTestService.removeAllUsers()
     }
 
     @Test
@@ -69,12 +71,12 @@ class UserIT {
         val response = userService.registerUser(request)
 
         //when
-        userService.addWallet(response.id, WALLET)
+        val userAfterInsert = userService.addWallet(response.id, WALLET)
 
         //then
-        assertThat(response.wallets.any { it.amount == AMOUNT })
-        assertThat(response.wallets.any { it.name == NAME })
-        assertThat(response.wallets.any { it.currency == CURRENCY })
-        assertThat(response.wallets.any { it.isDefault == IS_DEFAULT })
+        assertThat(userAfterInsert.wallets).anyMatch { it.amount == AMOUNT }
+        assertThat(userAfterInsert.wallets).anyMatch { it.name == NAME }
+        assertThat(userAfterInsert.wallets).anyMatch { it.currency == CURRENCY }
+        assertThat(userAfterInsert.wallets).anyMatch { it.isDefault == IS_DEFAULT }
     }
 }

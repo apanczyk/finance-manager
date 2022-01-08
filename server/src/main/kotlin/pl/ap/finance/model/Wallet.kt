@@ -18,11 +18,7 @@ class Wallet(
     val date: LocalDateTime = LocalDateTime.now(),
     val isDefault: Boolean,
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_wallet_table",
-        joinColumns = [JoinColumn(name = "wallet_id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id")]
-    )
+    @JoinTable(name = "user_wallet_table")
     @JsonIgnore
     val users: MutableSet<User> = mutableSetOf(),
     @JsonIgnore

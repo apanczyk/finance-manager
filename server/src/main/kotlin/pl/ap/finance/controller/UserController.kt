@@ -2,12 +2,7 @@ package pl.ap.finance.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import pl.ap.finance.model.User
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.WalletDto
@@ -29,5 +24,12 @@ class UserController(private val userService: UserService, private val userRepos
     fun getWallets(@PathVariable("id") userId: Long): ResponseEntity<Set<Wallet>> {
         val user = userRepository.getById(userId)
         return ResponseEntity(user.wallets, HttpStatus.OK)
+    }
+
+    @DeleteMapping("/user/{id}")
+    fun removeUser(@PathVariable("id") userId: Long): ResponseEntity<User> {
+        val user = userService.removeUser(userId)
+
+        return ResponseEntity(user, HttpStatus.OK)
     }
 }
