@@ -22,6 +22,8 @@ import WalletSelect from './WalletSelect';
 import Category from '../../model/Category';
 import ChartFragment from '../../fragments/ChartFragment';
 import { format } from "date-fns";
+import IWallet from '../../model/types/WalletType';
+import WalletForm from './WalletForm';
 
 const emptyOperation: Operation = {
     id: "",
@@ -174,9 +176,13 @@ export default function OperationTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [operations, setOperations] = React.useState(Array<Operation>());
     const [wallet, setWallet] = React.useState<string>()
+    const [walletList, setWalletList] = React.useState<IWallet[]>([])
 
-    const [recordForEdit, setRecordForEdit] = React.useState(emptyOperation)
-    const [openPopup, setOpenPopup] = React.useState(false)
+    const [operationForEdit, setOperationForEdit] = React.useState(emptyOperation)
+    const [openOperationPopup, setOpenOperationsPopup] = React.useState(false)
+
+    const [walletsForEdit, setWalletsForEdit] = React.useState<IWallet[]>([])
+    const [openWalletListPopup, setOpenWalletListPopup] = React.useState(false)
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Operation) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -208,14 +214,26 @@ export default function OperationTable() {
         else
             DataService.update(operation)
 
-        setRecordForEdit(emptyOperation)
-        setOpenPopup(false)
+        setOperationForEdit(emptyOperation)
+        setOpenOperationsPopup(false)
+        refreshData()
+    }
+
+    const editWallets = (walletList: IWallet[]) => {
+        // DataService.updateWallet(walletList)
+
+        // setOperationForEdit(emptyOperation)
+        setOpenWalletListPopup(false)
         refreshData()
     }
 
     const changeWallet = (walletId: string) => {
         setWallet(walletId)
         setPage(0)
+    }
+
+    const changeWalletList = (walletList: IWallet[]) => {
+        setWalletList(walletList)
     }
 
 
@@ -241,9 +259,14 @@ export default function OperationTable() {
         }
     }
 
-    const openInPopup = (item: any) => {
-        setRecordForEdit(item)
-        setOpenPopup(true)
+    const openOperationWindowsInPopup = (item: any) => {
+        setOperationForEdit(item)
+        setOpenOperationsPopup(true)
+    }
+
+    const openWalletWindowsInPopup = () => {
+        setWalletsForEdit(walletList)
+        setOpenWalletListPopup(true)
     }
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, operations.length - page * rowsPerPage);
@@ -259,8 +282,11 @@ export default function OperationTable() {
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
                     Operations
                 </Typography>
-                <WalletSelect changeWallet={changeWallet} />
-                <IconButton color="primary" size="large" onClick={() => openInPopup(emptyOperation)}>
+                <WalletSelect changeWallet={changeWallet} changeWalletList={changeWalletList} />
+                <IconButton color="secondary" size="large" onClick={() => openWalletWindowsInPopup()}>
+                    <EditIcon />
+                </IconButton>
+                <IconButton color="primary" size="large" onClick={() => openOperationWindowsInPopup(emptyOperation)}>
                     <AddCircleIcon />
                 </IconButton>
             </Toolbar>
@@ -301,7 +327,7 @@ export default function OperationTable() {
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"
-                                                onClick={() => openInPopup(operation)}>
+                                                onClick={() => openOperationWindowsInPopup(operation)}>
                                                 <EditIcon fontSize="small" />
                                             </IconButton>
                                             <IconButton
@@ -331,10 +357,16 @@ export default function OperationTable() {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
             <OperationForm
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                recordForEdit={recordForEdit}
+                openPopup={openOperationPopup}
+                setOpenPopup={setOpenOperationsPopup}
+                recordForEdit={operationForEdit}
                 editOrAddOperation={editOrAddOperation}
+            />
+            <WalletForm
+                openPopup={openWalletListPopup}
+                setOpenPopup={setOpenWalletListPopup}
+                recordForEdit={walletsForEdit}
+                editWalletList={editWallets}
             />
         </div >
     );

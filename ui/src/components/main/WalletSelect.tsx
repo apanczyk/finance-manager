@@ -7,13 +7,14 @@ import React from "react";
 
 interface WalletSelectFormProps {
     changeWallet: (walletId: string) => void
+    changeWalletList: (walletList: IWallet[]) => void
 }
 
 export default function WalletSelect(props: WalletSelectFormProps) {
 
     const [walletId, setWalletId] = React.useState<string>('')
     const [walletList, setWalletList] = React.useState<IWallet[]>([])
-    const { changeWallet } = props
+    const { changeWallet, changeWalletList } = props
 
     const handleChange = (event: SelectChangeEvent) => {
         setWalletId(event.target.value)
@@ -33,8 +34,8 @@ export default function WalletSelect(props: WalletSelectFormProps) {
                     if (element.isDefault)
                         setWalletId(element.id.toString())
                     changeWallet(element.id.toString())
-
                 })
+                changeWalletList(response.data)
             })
             .catch(e => {
                 console.log(e);
