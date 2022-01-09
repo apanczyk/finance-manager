@@ -1,6 +1,6 @@
 import UserService from "../../service/UserService";
 import EventBus from "../../util/EventBus";
-import { TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, Typography, Dialog, Box, DialogTitle, Button, DialogContent, Stack } from "@mui/material";
+import { TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, Typography, Dialog, Box, DialogTitle, Button, DialogContent } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import DataService from "../../service/api/DataService";
 import IUser from "../../model/types/UserType";
@@ -111,10 +111,15 @@ export default function AdminBoard() {
           setUser(undefined)
           setModal(false)
         })
-        .catch(e => {
-          console.log(e);
-          setMessage(e)
+        .catch(error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
 
+          setMessage(resMessage)
         });
     }
   }
@@ -196,10 +201,6 @@ export default function AdminBoard() {
                   <Typography component="h2" variant="h6">{message}</Typography>
                 )}
               </Box>
-
-              <Stack alignItems="center" spacing={5}>
-
-              </Stack>
             </Form>
           </Formik>
         </DialogContent >

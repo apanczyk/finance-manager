@@ -30,6 +30,7 @@ interface OperationFormProps {
 
 export default function WalletForm(props: OperationFormProps) {
     const classes = useStyles();
+    const [message, setMessage] = React.useState<string>()
     const [values, setValues] = React.useState<IWallet[]>([]);
     const { openPopup, setOpenPopup, recordForEdit, editWalletList, currentUser } = props;
 
@@ -45,6 +46,7 @@ export default function WalletForm(props: OperationFormProps) {
 
     const handleSubmit = (walletList: IWallet[]) => {
         editWalletList(walletList);
+        setMessage(undefined)
     }
 
     const addNewWallet = () => {
@@ -55,8 +57,15 @@ export default function WalletForm(props: OperationFormProps) {
                 wallets.push(response.data)
                 setValues(wallets)
             })
-            .catch(e => {
-                console.log(e);
+            .catch(error => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setMessage(resMessage)
             });
     }
 
@@ -93,6 +102,7 @@ export default function WalletForm(props: OperationFormProps) {
                         color="secondary"
                         onClick={() => {
                             editWalletList(recordForEdit)
+                            setMessage(undefined)
                             setOpenPopup(false);
                         }}
                     >
@@ -137,6 +147,9 @@ export default function WalletForm(props: OperationFormProps) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {message && (
+                    <Typography component="h2" variant="h6">{message}</Typography>
+                )}
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Button variant='outlined' color='secondary' onClick={() => handleSubmit(values)} fullWidth>
                         Submit

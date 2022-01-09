@@ -1,7 +1,9 @@
 package pl.ap.finance.controller
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.ap.finance.exceptions.MaxWalletSize
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.WalletDto
@@ -14,6 +16,7 @@ import java.util.*
 @RestController
 @RequestMapping("/api/wallets")
 class WalletController(
+    @Value("\${finance.maxWallets}") private val maxWallets: Int,
     private val walletService: WalletService,
     private val walletRepository: WalletRepository,
     private val userRepository: UserRepository
@@ -40,6 +43,8 @@ class WalletController(
     @GetMapping("/{id}")
     fun getNewWalletForUser(@PathVariable("id") id: Long) : ResponseEntity<Wallet> {
         val user = userRepository.findById(id).orElse(null)
+        if(user.wallets.size >= maxWallets)
+            throw MaxWalletSize("The number of wallets has been exceeded")
         val newWallet = Wallet(
             name = "Wallet ${user.wallets.size + 1}",
             currency = Currency.getInstance("PLN"),

@@ -13,3 +13,5 @@ class WalletNotFoundException(message: String? = null, cause: Exception? = null)
 class UserRoleNotFoundException(message: String? = null, cause: Exception? = null) : UsersException(message, cause)
 
 class CategoryTypeNotFoundException(message: String? = null, cause: Exception? = null) : UsersException(message, cause)
+
+class MaxWalletSize(message: String? = null, cause: Exception? = null) : UsersException(message, cause)
