@@ -24,23 +24,28 @@ export default function WalletSelect(props: WalletSelectFormProps) {
     };
 
     React.useEffect(() => {
-        getWallets(currentUser?.id)
+        getWallets(currentUser?.id, undefined)
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     React.useEffect(() => {
-        getWallets(currentUser?.id)
+        if (!outerChange)
+            getWallets(currentUser?.id, walletId)
     }, [outerChange]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const getWallets = (id: string) => {
+    const getWallets = (id: string, currentId: string | undefined) => {
         DataService.getWallets(id)
             .then(response => {
                 setWalletList(response.data)
-                response.data.forEach((element: IWallet) => {
-                    if (element.isDefault)
-                        setWalletId(element.id.toString())
-                    changeWallet(element.id.toString())
-                })
-                changeWalletList(response.data)
+                if (currentId && walletList.some(x => x.id.toString() === currentId)) {
+                    changeWallet(currentId)
+                } else {
+                    response.data.forEach((element: IWallet) => {
+                        if (element.isDefault)
+                            setWalletId(element.id.toString())
+                        changeWallet(element.id.toString())
+                    })
+                    changeWalletList(response.data)
+                }
             })
             .catch(e => {
                 console.log(e);

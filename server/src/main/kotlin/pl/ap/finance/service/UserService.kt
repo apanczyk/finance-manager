@@ -12,6 +12,7 @@ import pl.ap.finance.exceptions.UserNotFoundException
 import pl.ap.finance.model.Role
 import pl.ap.finance.model.User
 import pl.ap.finance.model.Wallet
+import pl.ap.finance.model.dto.ChangePasswordDto
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.model.dto.WalletDto
 import pl.ap.finance.model.requests.AuthRequest
@@ -98,5 +99,14 @@ class UserService(private val passwordEncoder: PasswordEncoder,
         userRepository.deleteById(user.id)
 
         return user
+    }
+
+    fun changePassword(changePasswordDto: ChangePasswordDto): List<User> {
+        val user = userRepository.findById(changePasswordDto.id.toLong()).get()
+        val encodedPassword = passwordEncoder.encode(changePasswordDto.password)
+
+        user.password = encodedPassword
+        userRepository.save(user)
+        return userRepository.findAll()
     }
 }

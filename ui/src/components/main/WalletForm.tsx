@@ -4,8 +4,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import IWallet from "../../model/types/WalletType";
 import CloseIcon from '@mui/icons-material/Close';
 import DataService from "../../service/api/DataService";
-import AuthService from "../../service/AuthService";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import IUser from "../../model/types/UserType";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,12 +25,13 @@ interface OperationFormProps {
     setOpenPopup: Dispatch<SetStateAction<boolean>>
     recordForEdit: IWallet[]
     editWalletList: (operation: IWallet[]) => void
+    currentUser: IUser | undefined
 }
 
 export default function WalletForm(props: OperationFormProps) {
     const classes = useStyles();
     const [values, setValues] = React.useState<IWallet[]>([]);
-    const { openPopup, setOpenPopup, recordForEdit, editWalletList } = props;
+    const { openPopup, setOpenPopup, recordForEdit, editWalletList, currentUser } = props;
 
     React.useEffect(() => {
         if (recordForEdit != null) {
@@ -48,9 +49,8 @@ export default function WalletForm(props: OperationFormProps) {
 
     const addNewWallet = () => {
         let wallets = [...values]
-        const currentUser = AuthService.getCurrentUser();
 
-        DataService.getNewWalletForUser(currentUser.id)
+        DataService.getNewWalletForUser(currentUser?.id)
             .then(response => {
                 wallets.push(response.data)
                 setValues(wallets)

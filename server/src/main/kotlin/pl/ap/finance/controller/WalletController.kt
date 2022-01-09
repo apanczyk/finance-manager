@@ -2,6 +2,7 @@ package pl.ap.finance.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.ap.finance.exceptions.NoOperationsFoundException
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.WalletDto
@@ -10,7 +11,6 @@ import pl.ap.finance.repository.UserRepository
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.service.WalletService
 import java.util.*
-import kotlin.NoSuchElementException
 
 @RestController
 @RequestMapping("/api/wallets")
@@ -22,9 +22,12 @@ class WalletController(
 
     @GetMapping("/{id}/operations")
     fun getOperationsForWallet(@PathVariable("id") id: Long): ResponseEntity<MutableSet<Operation>>? {
-        val wallet = walletRepository.findById(id).orElseThrow {
-            throw NoSuchElementException("No operations for this wallet")
-        }
+        val wallet = try {
+                walletRepository.findById(id).get()
+            } catch (e: Exception) {
+                return ResponseEntity.ok(mutableSetOf())
+            }
+
         return ResponseEntity.ok(wallet.operations)
     }
 
@@ -37,7 +40,7 @@ class WalletController(
 
     @GetMapping("/{id}")
     fun getNewWalletForUser(@PathVariable("id") id: Long) : ResponseEntity<Wallet> {
-        val user = userRepository.findById(id).get()
+        val user = userRepository.findById(id).orElse(null)
         val newWallet = Wallet(
             name = "Wallet ${user.wallets.size + 1}",
             currency = Currency.getInstance("PLN"),
@@ -70,7 +73,7 @@ class WalletController(
                 idToDelete.add(wallet)
         }
 
-        val deletedWallets = walletRepository.deleteAllById(idToDelete.map { it.id })
+        walletRepository.deleteAllById(idToDelete.map { it.id })
         val createdWallets = walletRepository.saveAll(updateWallets)
         return ResponseEntity.ok(createdWallets)
     }

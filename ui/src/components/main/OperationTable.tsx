@@ -247,7 +247,6 @@ export default function OperationTable(props: OperationTableProperties) {
         setWalletList(walletList)
     }
 
-
     React.useEffect(() => {
         refreshData()
         setPage(0)
@@ -374,6 +373,7 @@ export default function OperationTable(props: OperationTableProperties) {
                 editOrAddOperation={editOrAddOperation}
             />
             <WalletForm
+                currentUser={currentUser}
                 openPopup={openWalletListPopup}
                 setOpenPopup={setOpenWalletListPopup}
                 recordForEdit={walletsForEdit}

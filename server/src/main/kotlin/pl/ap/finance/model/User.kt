@@ -19,8 +19,7 @@ class User(
         @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
         @JsonIgnore
         val wallets: MutableSet<Wallet> = mutableSetOf(),
-        @JsonIgnore
-        val role: Role?
+        val role: Role
 ) {
     fun addWallet(wallet: Wallet) {
         if (!wallets.contains(wallet)) {

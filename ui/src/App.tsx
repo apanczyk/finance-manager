@@ -1,5 +1,4 @@
 import NavBar from './fragments/NavBar';
-import OperationTable from './components/main/OperationTable';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,8 +13,6 @@ import EventBus from './util/EventBus';
 import IUser from './model/types/UserType';
 import AuthService from './service/AuthService';
 import { Component } from 'react';
-import Box from "@mui/material/Box";
-import { Container } from "@material-ui/core";
 import RedirectRoute from "./components/auth/RedirectRoute";
 import AuthVerifier from './util/AuthVerifier';
 
@@ -79,25 +76,6 @@ class App extends Component<Props, State> {
             <RedirectRoute user={user} antiAuth={false} exact path="/admin" redirectPath="/login" component={AdminBoard} />
           </Switch>
         </div>
-
-        {
-          this.state.currentUser && (
-            <div>
-              <Container component="main" maxWidth="lg">
-                <Box
-                  sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <OperationTable currentUser={this.state.currentUser} />
-                </Box>
-              </Container>
-            </div>
-          )
-        }
         <AuthVerifier logOut={() => this.logOut()} />
       </Router>
     );

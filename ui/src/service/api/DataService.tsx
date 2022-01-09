@@ -1,3 +1,4 @@
+import ChangePasswordDto from "../../model/ChangePasswordDto";
 import Operation from "../../model/Operation";
 import IWallet from "../../model/types/WalletType";
 import authHeader from "../AuthHeader";
@@ -46,7 +47,18 @@ class DataService {
 
     updateWallets(id: string, walletList: IWallet[]) {
         return api.post(`/api/wallets/${id}/update`, walletList, { headers: authHeader() })
+    }
 
+    getAllUsers() {
+        return api.get(`/api/user/all`, { headers: authHeader() })
+    }
+
+    changePassword(changePasswordDto: ChangePasswordDto) {
+        return api.post(`/api/user/changePassword`, changePasswordDto, { headers: authHeader() })
+    }
+
+    deleteUser(id: string) {
+        return api.delete(`/api/user/${id}`, { headers: authHeader() })
     }
 }
 export default new DataService();
