@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Sector, Legend, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Legend, Cell } from 'recharts';
 import DataService from '../service/api/DataService';
 import GroupedOperation from '../model/GroupedOperation';
 import Operation from '../model/Operation';
