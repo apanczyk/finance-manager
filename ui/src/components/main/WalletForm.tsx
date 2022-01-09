@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, Typography, Button, DialogContent, Stack, TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, TextField } from "@mui/material";
+import { Dialog, DialogTitle, Typography, Button, DialogContent, Stack, TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, TextField, MenuItem } from "@mui/material";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { Dispatch, SetStateAction } from "react";
 import IWallet from "../../model/types/WalletType";
@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DataService from "../../service/api/DataService";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import IUser from "../../model/types/UserType";
+import TextFieldMui from '@mui/material/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,6 +20,21 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
+
+const currencies = [
+    {
+        key: 'EUR',
+        value: 'Euro',
+    },
+    {
+        key: 'USD',
+        value: 'Dolar',
+    },
+    {
+        key: 'PLN',
+        value: 'Złoty',
+    },
+];
 
 interface OperationFormProps {
     openPopup: boolean
@@ -89,6 +105,14 @@ export default function WalletForm(props: OperationFormProps) {
         setValues(wallets)
     }
 
+    const handleCurrencyChange = (event: React.ChangeEvent<HTMLInputElement>, walletId: number) => {
+        const myClonedArray: IWallet[] = [];
+        recordForEdit.forEach(wallet => myClonedArray.push(Object.assign({}, wallet)));
+        let value = event.target.value
+        myClonedArray.find(item => item.id === walletId)!.currency = value
+        setValues(myClonedArray)
+    };
+
     return (
         <Dialog
             open={openPopup}
@@ -116,6 +140,7 @@ export default function WalletForm(props: OperationFormProps) {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left">Name</TableCell>
+                                <TableCell align="left">Currency</TableCell>
                                 <TableCell align="right" >
                                     Actions
                                     <IconButton color="primary" size="large" onClick={() => addNewWallet()}>
@@ -134,6 +159,24 @@ export default function WalletForm(props: OperationFormProps) {
                                     <TableCell align="left">
                                         <TextField id={wallet.id.toString()} value={wallet.name} variant="standard" onChange={handleChangeName} required />
                                     </TableCell>
+                                    <TableCell align="left">
+
+                                        <TextFieldMui
+                                            id={wallet.id.toString()}
+                                            select
+                                            value={wallet.currency}
+                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCurrencyChange(event, wallet.id)}
+                                            variant="outlined"
+                                            size="small"
+                                        >
+                                            {currencies.map((currency) => (
+                                                <MenuItem key={currency.key} value={currency.key}>
+                                                    {currency.value}
+                                                </MenuItem>
+                                            ))}
+                                        </TextFieldMui>
+                                    </TableCell>
+
                                     <TableCell align="right">
                                         <IconButton
                                             disabled={wallet.isDefault}

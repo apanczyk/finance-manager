@@ -37,6 +37,7 @@ class UserController(private val userService: UserService, private val userRepos
     }
 
     @PostMapping("/changePassword")
+    @PreAuthorize("hasRole('ADMIN')")
     fun changePassword(@RequestBody changePasswordDto: ChangePasswordDto): ResponseEntity<List<User>> {
         val user = userService.changePassword(changePasswordDto)
         return ResponseEntity(user, HttpStatus.OK)
