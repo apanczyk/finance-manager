@@ -8,6 +8,7 @@ spring:
         database-platform: org.hibernate.dialect.H2Dialect
 
 finance:
+    maxWallets: 5
     app:
         jwtSecret: 635166546A576E5A7234753778217A25432A462D4A614E645267556B58703273357638792F423F4428472B4B6250655368566D597133743677397A2443264629
         jwtExpirationMs: 60000
