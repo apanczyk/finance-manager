@@ -2,7 +2,6 @@ package pl.ap.finance.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.ap.finance.exceptions.NoOperationsFoundException
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.WalletDto
