@@ -40,9 +40,10 @@ export default function WalletSelect(props: WalletSelectFormProps) {
                     changeWallet(currentId)
                 } else {
                     response.data.forEach((element: IWallet) => {
-                        if (element.isDefault)
+                        if (element.isDefault) {
                             setWalletId(element.id.toString())
-                        changeWallet(element.id.toString())
+                            changeWallet(element.id.toString())
+                        }
                     })
                     changeWalletList(response.data)
                 }
