@@ -8,6 +8,7 @@ import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.WalletDto
 import pl.ap.finance.model.response.GroupedOperation
+import pl.ap.finance.model.response.MonthDiagram
 import pl.ap.finance.repository.UserRepository
 import pl.ap.finance.repository.WalletRepository
 import pl.ap.finance.service.WalletService
@@ -31,6 +32,14 @@ class WalletController(
             }
 
         return ResponseEntity.ok(wallet.operations)
+    }
+
+    @GetMapping("/{id}/month/{month}")
+    fun getMonthDiagram(@PathVariable("id") id: Long,
+                             @PathVariable("month") month: String): ResponseEntity<List<MonthDiagram>> {
+        val wallet = walletRepository.findById(id)
+        val groupedOperations = walletService.monthDiagram(wallet.get(), month)
+        return ResponseEntity.ok(groupedOperations)
     }
 
     @GetMapping("/{id}/grouped")

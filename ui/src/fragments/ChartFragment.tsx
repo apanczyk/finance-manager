@@ -5,59 +5,35 @@ import DataService from '../service/api/DataService';
 import GroupedOperation from '../model/GroupedOperation';
 import Operation from '../model/Operation';
 import CloseIcon from '@mui/icons-material/Close';
+import MonthDiagram from '../model/MonthDiagram';
 
 interface ChartProps {
     wallet: string,
     operations: Array<Operation>
 }
 
+
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
-
-const pieData = [
-    {
-        "name": "Chrome",
-        "value": 68.85
-    },
-    {
-        "name": "Firefox",
-        "value": 7.91
-    },
-    {
-        "name": "Edge",
-        "value": 6.85
-    },
-    {
-        "name": "Internet Explorer",
-        "value": 6.14
-    },
-    {
-        "name": "Others",
-        "value": 10.25
-    }
-];
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active) {
-        return (
-            <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
-                <label>{`${payload[0].name} : ${payload[0].value}%`}</label>
-            </div>
-        );
-    }
-
-    return null;
-};
 
 export default function ChartFragment(props: ChartProps) {
     const [groupedOperations, setGroupedOperations] = React.useState<Array<GroupedOperation>>();
+    const [monthDiagram, setMonthDiagram] = React.useState<Array<MonthDiagram>>();
     const { wallet, operations } = props
     const [modal, setModal] = React.useState<boolean>(false)
     const [month, setMonth] = React.useState<string>()
 
     const monthClick = (event: any) => {
         if (event.activeLabel) {
-            setMonth(event.activeLabel)
-            setModal(true)
+            DataService.getMonthDiagram(wallet, event.activeLabel)
+                .then(response => {
+                    setMonthDiagram(response.data)
+                    setMonth(event.activeLabel)
+                    setModal(true)
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
         }
         else setModal(false)
     };
@@ -100,43 +76,48 @@ export default function ChartFragment(props: ChartProps) {
                 </ResponsiveContainer>
             </Box>
 
-
-
-            <Dialog
-                open={modal}
-                maxWidth="md"
-                fullWidth >
-                <DialogTitle>
-                    <div style={{ display: 'flex' }}>
-                        <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-                            Chart for {month}
-                        </Typography>
-                        <Button
-                            color="secondary"
-                            onClick={() => {
-                                setMonth(undefined)
-                                setModal(false)
-                            }}
-                        ><CloseIcon />
-                        </Button>
-                    </div>
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                        <ResponsiveContainer width="100%" height={250}>
-                            <PieChart width={730} height={300}>
-                                <Pie data={pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
-                                    {
-                                        pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
-                                    }
-                                </Pie>
-                                <Tooltip content={<CustomTooltip />} />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </Box>
-                </DialogContent >
-            </Dialog >
+            {monthDiagram && (
+                <Dialog
+                    open={modal}
+                    fullWidth
+                >
+                    <DialogTitle>
+                        <div style={{ display: 'flex' }}>
+                            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+                                Chart for {month}
+                            </Typography>
+                            <Button
+                                color="secondary"
+                                onClick={() => {
+                                    setMonth(undefined)
+                                    setModal(false)
+                                }}
+                            ><CloseIcon />
+                            </Button>
+                        </div>
+                    </DialogTitle>
+                    <DialogContent>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                            {monthDiagram.length != 0 &&
+                                <ResponsiveContainer width="100%" height={350}>
+                                    <PieChart width={450} height={300}>
+                                        <Pie data={monthDiagram} color="#000000" dataKey="cost" nameKey="category" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+                                            {
+                                                monthDiagram!.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+                                            }
+                                        </Pie>
+                                        <Tooltip contentStyle={{ backgroundColor: "#8884d8", color: "#fff" }} itemStyle={{ color: "#fff" }} cursor={false} />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            }
+                            {monthDiagram.length == 0 &&
+                                <Typography component="h2" variant="h6">{"No data found for this month"}</Typography>
+                            }
+                        </Box>
+                    </DialogContent >
+                </Dialog >
+            )}
         </>
     );
 }

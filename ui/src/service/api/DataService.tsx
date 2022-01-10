@@ -60,5 +60,9 @@ class DataService {
     deleteUser(id: string) {
         return api.delete(`/api/user/${id}`, { headers: authHeader() })
     }
+
+    getMonthDiagram(id: string, month: string) {
+        return api.get(`/api/wallets/${id}/month/${month}`, { headers: authHeader() })
+    }
 }
 export default new DataService();
