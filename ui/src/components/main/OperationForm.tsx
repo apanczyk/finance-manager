@@ -13,6 +13,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { format, formatISO, isValid } from "date-fns";
+import { categoryTypes } from "../../util/Utils";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,17 +48,6 @@ interface OperationFormProps {
     recordForEdit: Operation
     editOrAddOperation: (operation: Operation) => void
 }
-
-const categoryTypes = [
-    {
-        key: 'INCOME',
-        value: 'Income',
-    },
-    {
-        key: 'COST',
-        value: 'Cost',
-    },
-];
 
 export default function OperationForm(props: OperationFormProps) {
     const [values, setValues] = React.useState<Operation>(emptyOperation);

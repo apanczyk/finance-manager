@@ -6,14 +6,12 @@ import GroupedOperation from '../model/GroupedOperation';
 import Operation from '../model/Operation';
 import CloseIcon from '@mui/icons-material/Close';
 import MonthDiagram from '../model/MonthDiagram';
+import { COLORS } from '../util/Utils';
 
 interface ChartProps {
     wallet: string,
     operations: Array<Operation>
 }
-
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
 export default function ChartFragment(props: ChartProps) {
     const [groupedOperations, setGroupedOperations] = React.useState<Array<GroupedOperation>>();
@@ -98,7 +96,7 @@ export default function ChartFragment(props: ChartProps) {
                     </DialogTitle>
                     <DialogContent>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                            {monthDiagram.length != 0 &&
+                            {monthDiagram.length !== 0 &&
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart width={450} height={300}>
                                         <Pie data={monthDiagram} color="#000000" dataKey="cost" nameKey="category" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
@@ -111,7 +109,7 @@ export default function ChartFragment(props: ChartProps) {
                                     </PieChart>
                                 </ResponsiveContainer>
                             }
-                            {monthDiagram.length == 0 &&
+                            {monthDiagram.length === 0 &&
                                 <Typography component="h2" variant="h6">{"No data found for this month"}</Typography>
                             }
                         </Box>

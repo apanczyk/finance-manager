@@ -7,6 +7,7 @@ import DataService from "../../service/api/DataService";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import IUser from "../../model/types/UserType";
 import TextFieldMui from '@mui/material/TextField';
+import { currencies } from "../../util/Utils";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,21 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-
-const currencies = [
-    {
-        key: 'EUR',
-        value: 'Euro',
-    },
-    {
-        key: 'USD',
-        value: 'Dolar',
-    },
-    {
-        key: 'PLN',
-        value: 'Złoty',
-    },
-];
 
 interface OperationFormProps {
     openPopup: boolean
