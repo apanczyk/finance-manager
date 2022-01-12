@@ -1,4 +1,4 @@
-import ChangePasswordDto from "../../model/ChangePasswordDto";
+import { ChangePasswordDto } from "../../model/ChangePassword";
 import Operation from "../../model/Operation";
 import IWallet from "../../model/types/WalletType";
 import authHeader from "../AuthHeader";

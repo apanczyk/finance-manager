@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-const parseJwt = (token: string) => {
+export const parseJwt = (token: string) => {
     try {
         return JSON.parse(atob(token.split('.')[1]));
     } catch (e) {

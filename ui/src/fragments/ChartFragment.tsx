@@ -6,7 +6,7 @@ import GroupedOperation from '../model/GroupedOperation';
 import Operation from '../model/Operation';
 import CloseIcon from '@mui/icons-material/Close';
 import MonthDiagram from '../model/MonthDiagram';
-import { COLORS } from '../util/Utils';
+import { COLORS, months } from '../util/Utils';
 
 interface ChartProps {
     wallet: string,
@@ -21,7 +21,7 @@ export default function ChartFragment(props: ChartProps) {
     const [month, setMonth] = React.useState<string>()
 
     const monthClick = (event: any) => {
-        if (event.activeLabel) {
+        if (event && months.includes(event.activeLabel)) {
             DataService.getMonthDiagram(wallet, event.activeLabel)
                 .then(response => {
                     setMonthDiagram(response.data)
@@ -31,7 +31,6 @@ export default function ChartFragment(props: ChartProps) {
                 .catch(e => {
                     console.log(e);
                 });
-
         }
         else setModal(false)
     };

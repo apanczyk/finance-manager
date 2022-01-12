@@ -1,6 +1,6 @@
 import UserService from "../../service/UserService";
 import EventBus from "../../util/EventBus";
-import { TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, Typography, Dialog, Box, DialogTitle, Button, DialogContent } from "@mui/material";
+import { TableCell, Paper, TableContainer, Table, TableHead, TableRow, TableBody, IconButton, Typography, Dialog, Box, DialogTitle, Button, DialogContent, Container } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import DataService from "../../service/api/DataService";
 import IUser from "../../model/types/UserType";
@@ -8,15 +8,9 @@ import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import ChangePassword from "../../model/ChangePassword";
+import { ChangePasswordDto } from "../../model/ChangePassword";
 import { TextField } from "formik-mui";
-import ChangePasswordDto from "../../model/ChangePasswordDto";
-
-
-const emptyChangePassword: ChangePassword = {
-  passwordFirst: "",
-  passwordSecond: ""
-}
+import { emptyChangePassword } from "../../util/Utils";
 
 export default function AdminBoard() {
   const [content, setContent] = React.useState<string>()
@@ -94,7 +88,7 @@ export default function AdminBoard() {
     });
   }
 
-  const handleRegister = (formValue: { passwordFirst: string; passwordSecond: string }) => {
+  const handlePasswordChange = (formValue: { passwordFirst: string; passwordSecond: string }) => {
     const { passwordFirst, passwordSecond } = formValue;
 
     if (passwordFirst !== passwordSecond) {
@@ -129,40 +123,49 @@ export default function AdminBoard() {
       <header className="jumbotron">
         <h3>{content}</h3>
       </header>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Email</TableCell>
-              <TableCell align="right" >
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {values.map((user) => (
-              <TableRow key={user?.id}>
-                <TableCell align="left">
-                  {user.email}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton color="secondary" size="large" onClick={() => modifyPassword(user)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    disabled={user.role === 'ADMIN'}
-                    color="secondary"
-                    onClick={() => deleteUser(user)}>
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
+      <Container component="main" maxWidth="lg">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Email</TableCell>
+                  <TableCell align="right" >
+                    Actions
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {values.map((user) => (
+                  <TableRow key={user?.id}>
+                    <TableCell align="left">
+                      {user.email}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton color="secondary" size="large" onClick={() => modifyPassword(user)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        disabled={user.role === 'ADMIN'}
+                        color="secondary"
+                        onClick={() => deleteUser(user)}>
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Container>
       <Dialog
         open={modal}
         maxWidth="md" >
@@ -186,7 +189,7 @@ export default function AdminBoard() {
           <Formik
             initialValues={emptyChangePassword}
             validationSchema={validationSchema}
-            onSubmit={passwordValues => handleRegister(passwordValues)}
+            onSubmit={passwordValues => handlePasswordChange(passwordValues)}
           >
             <Form>
               <Box sx={{ flexDirection: 'column', alignItems: 'center', m: 2 }}>
