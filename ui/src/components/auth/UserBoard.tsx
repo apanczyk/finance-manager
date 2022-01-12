@@ -1,12 +1,16 @@
 import { Component } from "react";
+import IUser from "../../model/types/UserType";
+import AuthService from "../../service/AuthService";
 
 import UserService from "../../service/UserService";
 import EventBus from "../../util/EventBus";
+import UserBoardView from "../main/UserBoardView";
 
 type Props = {};
 
 type State = {
   content: string;
+  currentUser: IUser | undefined;
 }
 
 export default class UserBoard extends Component<Props, State> {
@@ -14,11 +18,19 @@ export default class UserBoard extends Component<Props, State> {
     super(props);
 
     this.state = {
-      content: ""
+      content: "",
+      currentUser: undefined
     };
   }
 
   componentDidMount() {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user
+      });
+    }
+
     UserService.getUserBoard().then(
       response => {
         this.setState({
@@ -42,12 +54,16 @@ export default class UserBoard extends Component<Props, State> {
     );
   }
 
+
   render() {
     return (
       <div className="container">
         <header className="jumbotron">
           <h3>{this.state.content}</h3>
         </header>
+        {this.state.currentUser && (
+          <UserBoardView currentUser={this.state.currentUser} />
+        )}
       </div>
     );
   }
