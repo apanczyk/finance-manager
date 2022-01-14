@@ -19,6 +19,7 @@ export default function ChartFragment(props: ChartProps) {
     const { wallet, operations } = props
     const [modal, setModal] = React.useState<boolean>(false)
     const [month, setMonth] = React.useState<string>()
+    const [diagramType, setDiagramType] = React.useState<string>("last year")
 
     const monthClick = (event: any) => {
         if (event && months.includes(event.activeLabel)) {
@@ -35,22 +36,29 @@ export default function ChartFragment(props: ChartProps) {
         else setModal(false)
     };
 
+    const changeDiagramType = () => {
+        if(diagramType === "last year")
+            setDiagramType("month")
+        else setDiagramType("last year")
+    }
+
     React.useEffect(() => {
-        DataService.getGroupedOperations(wallet)
+        DataService.getGroupedOperations(wallet, diagramType)
             .then(response => {
                 setGroupedOperations(response.data)
             })
             .catch(e => {
                 console.log(e);
             });
-    }, [operations]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [operations, diagramType]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
                 <Typography variant="h5" component="h1">
-                    Money spendings during last year
+                    Money spendings during {diagramType}
                 </Typography >
+                <Button color="primary" onClick={() => changeDiagramType()}>Change diagram</Button>
                 <ResponsiveContainer aspect={3}>
                     <LineChart
                         onClick={monthClick}
@@ -65,7 +73,7 @@ export default function ChartFragment(props: ChartProps) {
                         }}
                     >
                         <CartesianGrid horizontal={true} stroke="#243240" />
-                        <XAxis dataKey="month" tick={{ fill: "#000" }} />
+                        <XAxis interval={diagramType === "last year" ? 0 : 2} dataKey="month" tick={{ fill: "#000" }} />
                         <YAxis tick={{ fill: "#000" }} />
                         <Tooltip contentStyle={{ backgroundColor: "#8884d8", color: "#fff" }} itemStyle={{ color: "#fff" }} cursor={false} />
                         <Line type="monotone" dataKey="cost" stroke="#8884d8" strokeWidth="5" dot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />

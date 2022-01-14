@@ -37,8 +37,8 @@ class DataService {
         return api.get(`/api/categories`, { headers: authHeader() })
     }
 
-    getGroupedOperations(id: string) {
-        return api.get(`/api/wallets/${id}/grouped`, { headers: authHeader() })
+    getGroupedOperations(id: string, diagramType: string) {
+        return api.get(`/api/wallets/${id}/grouped/${diagramType}`, { headers: authHeader() })
     }
 
     getNewWalletForUser(id: string) {

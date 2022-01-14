@@ -1,4 +1,4 @@
-import { Toolbar } from "@mui/material";
+import { Container, Toolbar } from "@mui/material";
 import React from "react";
 import ChartFragment from "../../fragments/ChartFragment";
 import Operation from "../../model/Operation";
@@ -27,6 +27,7 @@ export default function UserBoardView(props: UserBoardViewProps) {
 
     return (
         <div >
+            <Container component="main" maxWidth="lg">
             {wallet && (<ChartFragment
                 wallet={wallet!}
                 operations={operations}
@@ -35,6 +36,7 @@ export default function UserBoardView(props: UserBoardViewProps) {
             <Toolbar>
                 <WalletSelect currentUser={currentUser} outerChange={false} changeWallet={changeWallet} changeWalletList={changeWalletList} />
             </Toolbar>
+            </Container>
         </div >
     );
 }

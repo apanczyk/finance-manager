@@ -10,7 +10,12 @@ import pl.ap.finance.model.response.GroupedOperation
 import pl.ap.finance.model.response.MonthDiagram
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.WalletRepository
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Locale
+
 
 @Service
 class WalletService(private val walletRepository: WalletRepository, private val categoryRepository: CategoryRepository) {
@@ -63,7 +68,33 @@ class WalletService(private val walletRepository: WalletRepository, private val 
         return monthDiagram
     }
 
-    fun groupOperations(wallet: Wallet): List<GroupedOperation> {
+    fun groupOperations(wallet: Wallet, diagramType: String) : List<GroupedOperation> {
+        return when (diagramType) {
+            "last year" -> groupOperationsByYear(wallet)
+            "month" -> groupOperationsByMonth(wallet)
+            else -> emptyList()
+        }
+    }
+
+    fun groupOperationsByMonth(wallet: Wallet): List<GroupedOperation> {
+        val operations = wallet.operations
+
+        val groupedOperation = mutableListOf<GroupedOperation>()
+        val days = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        for (day in 1..days) {
+            operations.filter {
+                it.date.dayOfMonth == day && it.category.type == CategoryType.COST
+            }.sumOf { it.amount }.let {
+                groupedOperation.add(
+                    GroupedOperation("${LocalDate.now().withDayOfMonth(day).dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)} - $day", it.toInt())
+                )
+            }
+        }
+        return groupedOperation
+    }
+
+    fun groupOperationsByYear(wallet: Wallet): List<GroupedOperation> {
         val operations = wallet.operations
 
         val groupedOperation = mutableListOf<GroupedOperation>()
@@ -86,6 +117,15 @@ class WalletService(private val walletRepository: WalletRepository, private val 
             }
         }
 
+        return groupedOperation
+    }
+
+    fun createDayList(): MutableList<String> {
+        val groupedOperation = mutableListOf<String>()
+        val days = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH)
+        for (day in 1..days) {
+            groupedOperation.add(day.toString())
+        }
         return groupedOperation
     }
 
