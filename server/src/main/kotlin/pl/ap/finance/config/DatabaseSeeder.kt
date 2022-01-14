@@ -5,6 +5,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import pl.ap.finance.model.Category
 import pl.ap.finance.model.CategoryType
+import pl.ap.finance.model.Role
 import pl.ap.finance.model.dto.UserDto
 import pl.ap.finance.repository.CategoryRepository
 import pl.ap.finance.repository.UserRepository
@@ -24,7 +25,7 @@ class DatabaseSeeder(val userRepository: UserRepository,
     private fun seedUsersTable() {
         if(userRepository.findAll().isEmpty()) {
             val users = listOf(
-                UserDto(email = "arek.paniec@gmail.com", password = "123456", firstName = "Arkadiusz", lastName = "Pańczyk"),
+                UserDto(email = "arek.paniec@gmail.com", password = "123456", firstName = "Arkadiusz", lastName = "Pańczyk", role = Role.ADMIN.toString()),
                 UserDto(email = "test@test.com", password = "123456", firstName = "Test", lastName = "Test"),
                 UserDto(email = "empty@empty.com", password = "123456", firstName = "Empty", lastName = "Empty")
             )
