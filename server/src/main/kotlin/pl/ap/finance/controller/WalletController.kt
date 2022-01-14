@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*
 import pl.ap.finance.exceptions.MaxWalletSize
 import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
+import pl.ap.finance.model.dto.ReturnOperationDto
 import pl.ap.finance.model.dto.WalletDto
 import pl.ap.finance.model.response.GroupedOperation
 import pl.ap.finance.model.response.MonthDiagram
@@ -24,14 +25,16 @@ class WalletController(
     ) {
 
     @GetMapping("/{id}/operations")
-    fun getOperationsForWallet(@PathVariable("id") id: Long): ResponseEntity<MutableSet<Operation>>? {
+    fun getOperationsForWallet(@PathVariable("id") id: Long): ResponseEntity<MutableSet<ReturnOperationDto>>? {
         val wallet = try {
                 walletRepository.findById(id).get()
             } catch (e: Exception) {
                 return ResponseEntity.ok(mutableSetOf())
             }
 
-        return ResponseEntity.ok(wallet.operations)
+        return ResponseEntity.ok(wallet.operations.map {
+            ReturnOperationDto.toReturnOperationDto(it)
+        }.toMutableSet())
     }
 
     @GetMapping("/{id}/month/{month}")

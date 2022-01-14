@@ -83,13 +83,22 @@ class WalletService(private val walletRepository: WalletRepository, private val 
         val days = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH)
 
         for (day in 1..days) {
-            operations.filter {
+            val cost = operations.filter {
                 it.date.dayOfMonth == day && it.category.type == CategoryType.COST
-            }.sumOf { it.amount }.let {
-                groupedOperation.add(
-                    GroupedOperation("${LocalDate.now().withDayOfMonth(day).dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)} - $day", it.toInt())
+            }.sumOf { it.amount }
+            val income = operations.filter {
+                it.date.dayOfMonth == day && it.category.type == CategoryType.INCOME
+            }.sumOf { it.amount }
+            groupedOperation.add(
+                GroupedOperation(
+                    "${
+                        LocalDate.now().withDayOfMonth(day).dayOfWeek.getDisplayName(
+                            TextStyle.SHORT,
+                            Locale.US
+                        )
+                    } - $day", cost.toInt(), income.toInt()
                 )
-            }
+            )
         }
         return groupedOperation
     }
@@ -103,18 +112,24 @@ class WalletService(private val walletRepository: WalletRepository, private val 
 
         for (month in 1..MONTHS_IN_YEAR) {
             val currentRotationDate = previousYear.plusMonths(month)
-            val currentMonth = LocalDate.of( currentRotationDate.year, currentRotationDate.monthValue, 1)
+            val currentMonth = LocalDate.of(currentRotationDate.year, currentRotationDate.monthValue, 1)
             val nextMonth = currentMonth.plusMonths(1)
 
-            operations.filter {
+            val filter = operations.filter {
                 it.date.isAfter(
                     currentMonth
                 ) && it.date.isBefore(
                     nextMonth
-                ) && it.category.type == CategoryType.COST
-            }.sumOf { it.amount }.let {
-                groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month - 1).toInt()]), it.toInt()))
+                )
             }
+            val cost = filter.filter {
+                it.category.type == CategoryType.COST
+            }.sumOf { it.amount }
+            val income = filter.filter {
+                it.category.type == CategoryType.INCOME
+            }.sumOf { it.amount }
+
+            groupedOperation.add(GroupedOperation(capitalize(monthsFromLastYear[(month - 1).toInt()]), cost.toInt(), income.toInt()))
         }
 
         return groupedOperation

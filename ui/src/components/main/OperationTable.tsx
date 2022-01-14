@@ -37,6 +37,8 @@ const emptyOperation: Operation = {
         name: '',
         type: ''
     } as Category,
+    categoryName: "",
+    categoryType: "",
     walletId: 0
 }
 
@@ -93,7 +95,9 @@ const headCells: HeadCell[] = [
     { id: 'name', disablePadding: false, label: 'Name' },
     { id: 'amount', disablePadding: false, label: 'Amount' },
     { id: 'place', disablePadding: false, label: 'Place' },
-    { id: 'date', disablePadding: false, label: 'Operation date' }
+    { id: 'date', disablePadding: false, label: 'Operation date' },
+    { id: 'categoryName', disablePadding: false, label: 'Category' },
+    { id: 'categoryType', disablePadding: false, label: 'Category Type' },
 ];
 
 interface OperationTableProps {
@@ -334,6 +338,8 @@ export default function OperationTable(props: OperationTableProperties) {
                                         <TableCell align="right">{operation.amount}</TableCell>
                                         <TableCell align="right">{operation.place}</TableCell>
                                         <TableCell align="right">{format(new Date(operation.date), "yyyy/MM/dd")}</TableCell>
+                                        <TableCell align="right">{operation.categoryName}</TableCell>
+                                        <TableCell align="right">{operation.categoryType}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 color="primary"

@@ -37,7 +37,7 @@ export default function ChartFragment(props: ChartProps) {
     };
 
     const changeDiagramType = () => {
-        if(diagramType === "last year")
+        if (diagramType === "last year")
             setDiagramType("month")
         else setDiagramType("last year")
     }
@@ -76,7 +76,8 @@ export default function ChartFragment(props: ChartProps) {
                         <XAxis interval={diagramType === "last year" ? 0 : 2} dataKey="month" tick={{ fill: "#000" }} />
                         <YAxis tick={{ fill: "#000" }} />
                         <Tooltip contentStyle={{ backgroundColor: "#8884d8", color: "#fff" }} itemStyle={{ color: "#fff" }} cursor={false} />
-                        <Line type="monotone" dataKey="cost" stroke="#8884d8" strokeWidth="5" dot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
+                        <Line type="monotone" dataKey="cost" stroke="#ff8080" strokeWidth="4" dot={{ fill: "#bf3f3f", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
+                        <Line type="monotone" dataKey="income" stroke="#80ff86" strokeWidth="4" dot={{ fill: "#3fbf41", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </Box>

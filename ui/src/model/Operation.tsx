@@ -7,5 +7,7 @@ export default interface Operation {
     place: string,
     date: string,
     category: Category,
+    categoryName: string,
+    categoryType: string,
     walletId: number
 }

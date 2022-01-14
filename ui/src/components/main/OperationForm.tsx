@@ -39,6 +39,8 @@ const emptyOperation: Operation = {
         name: '',
         type: ''
     } as Category,
+    categoryName: "",
+    categoryType: "",
     walletId: 0
 }
 
@@ -91,6 +93,8 @@ export default function OperationForm(props: OperationFormProps) {
             place: place,
             date: formatISO(new Date(values.date), { representation: 'date' }),
             category: values.category,
+            categoryName: values.category.name,
+            categoryType: values.category.type,
             walletId: walletId
         };
 
