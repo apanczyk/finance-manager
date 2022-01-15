@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Legend, Cell } from 'recharts';
 import DataService from '../service/api/DataService';
@@ -58,7 +58,9 @@ export default function ChartFragment(props: ChartProps) {
                 <Typography variant="h5" component="h1">
                     Money spendings during {diagramType}
                 </Typography >
-                <Button color="primary" onClick={() => changeDiagramType()}>Change diagram</Button>
+                <Grid container direction="row" justifyContent="space-evenly" alignItems="flex-end" spacing={0}>
+                    <Button color="primary" variant="contained" onClick={() => changeDiagramType()}>Change diagram</Button>
+                </Grid>
                 <ResponsiveContainer aspect={3}>
                     <LineChart
                         onClick={monthClick}
@@ -76,8 +78,8 @@ export default function ChartFragment(props: ChartProps) {
                         <XAxis interval={diagramType === "last year" ? 0 : 2} dataKey="month" tick={{ fill: "#000" }} />
                         <YAxis tick={{ fill: "#000" }} />
                         <Tooltip contentStyle={{ backgroundColor: "#8884d8", color: "#fff" }} itemStyle={{ color: "#fff" }} cursor={false} />
-                        <Line type="monotone" dataKey="cost" stroke="#ff8080" strokeWidth="4" dot={{ fill: "#bf3f3f", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
-                        <Line type="monotone" dataKey="income" stroke="#80ff86" strokeWidth="4" dot={{ fill: "#3fbf41", stroke: "#8884d8", strokeWidth: 2, r: 5 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 5, r: 10 }} />
+                        <Line type="monotone" dataKey="cost" stroke="#ff4d4d" strokeWidth="4" dot={{ fill: "#bf3f3f", stroke: "#8884d8", strokeWidth: 1, r: 3 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 3, r: 5 }} />
+                        <Line type="monotone" dataKey="income" stroke="#34ff3d" strokeWidth="4" dot={{ fill: "#3fbf41", stroke: "#8884d8", strokeWidth: 1, r: 3 }} activeDot={{ fill: "#2e4355", stroke: "#8884d8", strokeWidth: 3, r: 5 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </Box>

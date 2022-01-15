@@ -64,5 +64,14 @@ class DataService {
     getMonthDiagram(id: string, month: string) {
         return api.get(`/api/wallets/${id}/month/${month}`, { headers: authHeader() })
     }
+
+    getGeneral(id: string) {
+        return api.get(`/api/wallets/${id}/general`, { headers: authHeader() })
+    }
+
+    getCurrencyTable(id: string) {
+        return api.get(`/api/wallets/${id}/currency`, { headers: authHeader() })
+    }
+
 }
 export default new DataService();

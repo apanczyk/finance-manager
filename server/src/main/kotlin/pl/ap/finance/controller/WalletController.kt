@@ -8,6 +8,8 @@ import pl.ap.finance.model.Operation
 import pl.ap.finance.model.Wallet
 import pl.ap.finance.model.dto.ReturnOperationDto
 import pl.ap.finance.model.dto.WalletDto
+import pl.ap.finance.model.response.CurrencyTable
+import pl.ap.finance.model.response.GroupedGeneral
 import pl.ap.finance.model.response.GroupedOperation
 import pl.ap.finance.model.response.MonthDiagram
 import pl.ap.finance.repository.UserRepository
@@ -97,5 +99,20 @@ class WalletController(
         return ResponseEntity.ok(createdWallets)
     }
 
+    @GetMapping("/{id}/general")
+    fun getGroupedGeneral(
+        @PathVariable("id") id: Long): ResponseEntity<List<GroupedGeneral>> {
 
+        val wallet = walletRepository.findById(id)
+        val groupedOperations = walletService.groupGeneral(wallet.get())
+        return ResponseEntity.ok(groupedOperations)
+    }
+
+    @GetMapping("/{id}/currency")
+    fun getCurrencyTable(
+        @PathVariable("id") id: Long): ResponseEntity<List<CurrencyTable>> {
+        val wallet = walletRepository.findById(id)
+        val groupedOperations = walletService.getCurrencyTable(wallet.get())
+        return ResponseEntity.ok(groupedOperations)
+    }
 }
