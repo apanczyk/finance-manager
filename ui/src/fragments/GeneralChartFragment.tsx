@@ -28,6 +28,7 @@ export default function GeneralChartFragment(props: ChartProps) {
                 setCountedOperations(response.data)
             }
             ).catch(e => {
+                setCountedOperations(undefined)
                 console.log(e);
             });
     }, [operations, diagramType]); // eslint-disable-line react-hooks/exhaustive-deps
