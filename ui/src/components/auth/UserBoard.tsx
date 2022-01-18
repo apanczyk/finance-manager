@@ -57,10 +57,7 @@ export default class UserBoard extends Component<Props, State> {
 
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
+      <div >
         {this.state.currentUser && (
           <UserBoardView currentUser={this.state.currentUser} />
         )}

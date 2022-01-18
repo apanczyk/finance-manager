@@ -43,7 +43,7 @@ export default function NavBar(props: React.PropsWithChildren<Props>) {
                         </Button>
                         {currentUser && (
                             <Button component={Link} to="/user" color="inherit">
-                                User
+                                Summary
                             </Button>
                         )}
                         {showAdminBoard && (
