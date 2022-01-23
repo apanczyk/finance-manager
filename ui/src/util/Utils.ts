@@ -14,15 +14,15 @@ export const categoryTypes = [
 export const currencies = [
     {
         key: 'EUR',
-        value: 'Euro',
+        value: 'EUR',
     },
     {
         key: 'USD',
-        value: 'Dolar',
+        value: 'USD',
     },
     {
         key: 'PLN',
-        value: 'Złoty',
+        value: 'PLN',
     },
 ];
 export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
